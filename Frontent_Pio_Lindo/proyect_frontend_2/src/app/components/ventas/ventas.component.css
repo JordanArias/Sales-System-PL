@@ -1,0 +1,511 @@
+
+
+.container-principal-agregar {
+  display: flex;
+  height: calc(100vh - 8vh); /* Altura total menos el header */
+  width: 100%;
+  gap: 10px;
+  overflow: hidden; /* Evita que se desborde */
+}
+
+
+/************************************** MENSAJE TOAST ****************************************/
+#toast {
+  max-width: 30%;
+  min-width: 25%;
+  position: fixed;
+  bottom: -3%;
+  right: 22%;
+  transform: translate(-50%, -50%); /* Alinea al centro de la pantalla */
+  user-select: none;
+  /* visibility: visible;
+  display: block;  */
+}
+#toast .toast-body{
+  display: flex;
+  font-weight: 500;
+  color: #f3f3f3;
+  font-size: 18px;
+  letter-spacing: 1px;
+  align-items: center;
+}
+#toast img{
+  width: 30px;
+}
+
+/************************************** STYLES LISTA VENTAS ****************************************/
+.container-agregar button,.container-buscador button, .modificar {
+  font-weight: 500;
+  font-size: 16px;
+  background: #004d81;
+  border: none;
+  height: 36px;
+  padding: 0 15px;
+}
+.container-opciones img{
+  width: 20px;
+}
+.container-opciones{
+  background: #212837;
+  width: 100%;
+  height: 6vh;
+}
+
+/* LISTAS GENERAL*/
+.container-lista {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start; /* Alinea las tarjetas al principio */
+  gap: 10px; /* Espaciado entre las tarjetas */
+  min-height: 81vh;
+  max-height: 100vh; /* Ajusta el contenedor al tamaño de la pantalla */
+  overflow-y: auto; /* Habilita el scrollbar solo en el eje Y si es necesario */
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.container-lista .card {
+  flex: 1 1 calc(33.3333% - 10px); /* Mantén tres tarjetas por fila */
+  max-width: calc(33.3333% - 10px); /* Establece un ancho máximo */
+  background: #252d3c;
+  color: #f4f4f4;
+  font-size: 15px;
+  height: 37vh; /* Altura fija para las tarjetas */
+  margin-bottom: 10px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.custom-pagination{
+  height: 12vh;
+}
+
+/************************************** 1.- STYLES SELECCIONAR PRODUCTOS ****************************************/
+/****************************************************************************************************************/
+.container-seleccionar-productos {
+  /*flex: 0 0 55%; /* Ocupa el 60% del ancho disponible */
+  /* min-height: 78vh; */
+  width: 55%;
+}
+
+.container-venta {
+  /*flex: 0 0 45%; /* Ocupa el 40% del ancho disponible */
+  /* min-height: 78vh; */
+  width: 45%;
+}
+
+
+/************ CATEGORIAS STYLES *************/
+.seleccionar-categorias {
+  padding: 10px 5px 0px 5px; /* Espaciado opcional */
+  background: #262f40;
+  color: #f3f3f3;
+  /* border-bottom: 1px solid #7d7b7b; */
+}
+.categorias-container {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  height: max-content;
+  width: 100%;
+  gap: 10px;
+}
+
+.categorias-container button {
+  flex-shrink: 0; /* Evita que los botones se encojan */
+  min-width: 22%;
+  min-height: 54px;
+  margin-bottom: 2px;
+  border: none;
+  background-color:#6d571c; /* Color de fondo */
+  color: white; /* Color del texto */
+  cursor: pointer;
+  border-radius: 5px; /* Bordes redondeados opcionales */
+}
+.categorias-container button:hover {
+  background-color:#8a6e23; /* Color de fondo */
+}
+/************ CATEGORIAS STYLES *************/
+.container-subcategorias {
+  padding: 10px 5px; /* Espaciado opcional */
+  width: 20%;
+  /* background: #262f40; */
+  color: #f3f3f3;
+  /* border-right: 1px solid #7d7b7b; */
+}
+.subcategorias {
+  height: 69vh;
+  display: flex;
+  flex-direction: column; /* Organiza los botones verticalmente */
+  overflow-y: auto; /* Permite el desplazamiento vertical */
+  gap: 10px; /* Espacio entre los botones */
+}
+
+.subcategorias button {
+  flex-shrink: 0; /* Evita que los botones se encojan */
+  padding: 15px 10px;
+  margin: 0 3px;
+  border: none;
+  background-color:#854e1b; /* Color de fondo */
+  color: white; /* Color del texto */
+  cursor: pointer;
+  border-radius: 5px; /* Bordes redondeados opcionales */
+}
+.subcategorias button:hover {
+  background-color:#a76424; 
+}
+/************ PRODUCTOS STYLES *************/
+
+.container-productos {
+  padding: 10px; /* Espaciado opcional */
+  width: 80%;
+  color: #f4f4f4;
+  /* background: #212837; */
+}
+.productos {
+  display: flex;
+  flex-direction: row;
+  overflow-y: auto;
+  gap: 10px;
+  flex-wrap: wrap;
+  max-height: 68vh;
+}
+.productos button {
+  flex-shrink: 0;
+  padding: 10px 15px;
+  min-width: 32%;
+  max-width: 32%;
+  border: none;
+  background-color: #217994;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  width: max-content;
+}
+.productos button:hover {
+  background-color: #2ca1c4;
+}
+
+
+
+
+
+
+/**************************************** 2.- AGREGAR VENTA ***********************************************/
+/**********************************************************************************************************/
+
+.form-detalle-venta{
+  display: flex;
+  height: 86vh;
+  flex-direction: column;
+  justify-content: space-between;
+}
+/* CHECK - BOX GRANDE */
+.checkbox-grande {
+  transform: scale(1.5); /* Ajusta el valor según el tamaño que desees */
+  -webkit-transform: scale(2);
+  background-color: #555F6D;
+  border: none;
+  margin: 0 5px 0px 18px;
+}
+
+.body-form{
+  position: relative;
+}
+.body-form form{
+  position: relative;
+  /* background: #212837;  */
+  height: 62vh; 
+  overflow-y: auto;
+}
+
+
+.body-form .container-producto{
+  cursor: pointer; 
+}
+
+
+.botones-venta div{
+  display: flex;
+  gap: 10px;
+}
+.botones-venta button{
+  border: none;
+}
+
+
+
+
+/************************* MODALES ************************/
+.content-modal{
+  background: #202e41;
+  color: #f3f3f3;
+  width: 100%;
+  font-size: 18px;
+  font-weight: 500;
+}
+.content-modal .modal-header{
+  border-bottom: 1px solid #727272;
+}
+.content-modal .modal-footer{
+  border-top: 1px solid #727272;
+}
+
+
+#modalSelectFecha .modal-lg-custom {
+  max-width: 55vw; 
+  margin: auto;
+}
+#modalSelectFecha .atajos button{
+  border: none;
+  background: #156680;
+  border-radius: 4px;
+  margin: 3px 0;
+  width: 100%;
+
+}
+/* MODAL DETALLE PRODUCTO */
+#modalDetalleProducto .modal-lg-custom{
+  max-width: 50%;
+}
+#modalDetalleProducto .producto button{
+  padding: 0;
+  width: 35px;
+  height: 35px;
+  background: #018181;
+  border: none;
+}
+
+#modalDetalleProducto ul li{
+  font-weight: 400;
+  border: 1px solid #394453;
+  color: #f3f3f3;
+  background: #243347;
+}
+#modalDetalleProducto  .btn-complemento-mas{
+  border: none;
+  background: #277e1b;
+}
+#modalDetalleProducto  .btn-complemento-menos{
+  border: none;
+  background: #973a3a;
+}
+
+
+#modalFacturaVenta label{
+  font-weight: 100;
+}
+#modalFacturaVenta .modal-lg-custom{
+  max-width: 80%;
+}
+#modalFacturaVenta ul li{
+  background: #24334600;
+  color: #f3f3f3;
+  border: none;
+  letter-spacing: 1px;
+}
+
+#modalPagar .modal-lg-custom{
+  max-width: 70%;
+}
+#modalPagar ul li{
+  background: #243346;
+  color: #f3f3f3;
+  border: none;
+  /* border-bottom: 1px solid #404c5d;   */
+  letter-spacing: 1px;
+}
+#modalPagar .btn-divisa button{
+  color: #f3f3f3;
+  font-weight: bold;
+  padding: 0;
+  width: 20%;
+  background: #293b52;
+}
+#modalPagar .bs-atajo-monto-positivo button, #modalPagar .ps-atajo-monto-positivo button{
+  background: #347952;
+  margin-right: 7px;
+  padding: 3px 0px;
+  color: #f3f3f3;
+  font-size: 16px;
+  width: 47px;
+}
+#modalPagar .bs-atajo-monto-negativo button, #modalPagar .ps-atajo-monto-negativo button{
+  background: #832e2e;
+  margin-right: 7px;
+  padding: 3px 0px;
+  color: #f3f3f3;
+  font-size: 16px;
+  width: 47px;
+}
+#modalPagar .ps-atajo-monto-positivo button, #modalPagar .ps-atajo-monto-negativo button{
+  width: 60px;
+}
+
+/************************* FORMS(INPUTS - OPTIONS) ************************/
+.custom-select{
+  width: 100%;
+  border-radius: 7px;
+  padding: 3px 7px;
+}
+form input[type="text"],
+form input[type="password"],
+input[type="number"],
+input[type="date"],
+.custom-select{
+  color: #cdcccc;
+  font-size: 16px;
+  background: #30445f;
+  border: none;
+  padding: 3px 12px;
+}
+/* Estilos para el select option */
+.custom-select option{
+  color: #eaeaea;
+  background: #3c4756;
+}
+form input[type="text"]::placeholder,
+form input[type="password"]::placeholder,
+input[type="number"]::placeholder{
+  font-size: 15px;
+  color: #c0c0c04b; /* Cambia el color según tu preferencia */
+}
+
+.container-buscador input[type="text"]::placeholder{
+  font-size: 15px;
+  color: #d6d6d6a2;
+}
+
+/* Ocultar flechas en navegadores basados en WebKit (Chrome, Safari) */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Ocultar flechas en navegadores basados en Gecko (Firefox) */
+
+/* Opcional: Para IE y Edge, a veces es necesario aplicar un estilo adicional */
+input[type="number"] {
+    appearance: none;
+}
+
+
+/* INPUT CHEXBOX A BUTTON */
+.btn-checkbox {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  background-color: #616161; /* Fondo del botón */
+  color: #fff; /* Color del texto */
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+.btn-checkbox input {
+  display: none; /* Ocultamos el checkbox */
+}
+.btn-checkbox:hover {
+  background-color: #555; /* Cambio de color al pasar el cursor */
+}
+
+/* SELECT LISTA CLIENTES */
+.custom-ng-select {
+  color: #cdcccc;
+  font-size: 16px;
+  background: #30445f;
+  border: none;
+  padding: 3px 12px;
+  width: 100%;
+  border-radius: 5px;
+}
+/* OPCIONES NGSELECT */
+::ng-deep .custom-ng-select .ng-option {
+  background-color: #273a53; 
+  color: #f4f4f4;
+  padding: 2px;
+}
+/********************************************* ADVERTENCIAS ******************************************/
+/*****************************************************************************************************/
+
+/*Estilo de advertencias para la validacion de formulario*/
+.advertencias {
+  margin-top: 4px;
+  color: salmon;
+  font-size: 15px;
+  font-family: Arial, Helvetica, sans-serif;
+  display: flex;
+  align-items: center;
+  line-height: 1; /* Asegura que el texto no tenga espacio extra */
+}
+.advertencias img {
+  display: inline-block;
+  vertical-align: middle; /* Asegura que la imagen esté alineada verticalmente */
+}
+.advertencias p {
+  margin: 0; /* Elimina el margen extra que podría desalinear el texto */
+  line-height: 1.2; /* Ajusta la altura de línea para el texto */
+}
+
+.is-invalid {
+  border-color: #c77e76  !important; /* Color del borde */
+  border: 1px solid #c77e76 !important;
+  /* box-shadow: 0 0 5px rgba(250, 128, 114, 0.5); Sombra del borde difusa */
+}
+
+/********************************************* PAGINACION *******************************************/
+
+
+:host ::ng-deep .custom-pagination a:focus,
+:host ::ng-deep .custom-pagination a:hover {
+  background-color: #3a7693 !important;
+  color: #ffffff !important;
+  /* border: 1px solid #5a5a5a !important; */
+  outline: none !important;
+}
+
+::ng-deep .ngx-pagination {
+  margin-bottom: 0 !important; /* Elimina el margen inferior */
+  color: #ffffff !important;
+}
+
+/* ****************** Scrool Bar ****************** */
+/* Asegúrate de que el contenedor tenga un área de desplazamiento */
+.container-lista .card .card-body {
+  max-height: 400px; /* Ajusta la altura según tus necesidades */
+  overflow-y: auto; /* Habilita el desplazamiento vertical */
+}
+
+/* Scrollbar base */
+.container-lista .card .card-body::-webkit-scrollbar { 
+  width: 5px; /* Ancho de la barra de desplazamiento */
+}
+
+/* Fondo del scrollbar */
+.container-lista .card .card-body::-webkit-scrollbar-track {
+  background-color: #676666; /* Color de fondo del track */
+
+}
+
+/* Thumb del scrollbar */
+.container-lista .card .card-body::-webkit-scrollbar-thumb {
+  background-color: #e1dede; /* Color del thumb */
+}
+
+
+
+
+
+
+
+
+
+::-webkit-scrollbar {
+  width: 0.4em;
+  height: 0.5em;
+  background-color: #333333; /* Cambia el color de fondo del scroll */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #8888888c; /* Cambia el color del thumb del scroll */
+}

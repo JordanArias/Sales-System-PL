@@ -1,0 +1,1163 @@
+
+<!-- **************************** INSUMOS - NAV HORIZONTAL **************************** -->
+<!-- ********************************************************************************************* -->
+<div class="container-principal-Insumos">
+  <!-- OPCIONES: VOLVER - BUSCAR - AGREGAR -->
+  <div class="d-flex align-items-center justify-content-between px-3 container-opciones">
+      <!-- Boton Volver -->
+      <!-- <div class="container_volver px-5">
+          <div class="btn p-0" routerLink="/inventario">
+              <img src="../../../assets/images/icons/icon-menus/atras.png" alt="">
+          </div>
+      </div> -->
+        <!-- Buscador -->
+        <div class="container-buscador px-2">
+          <button class="btn btn-secondary"  title="Filtrar Movimientos" (click)="showModalSelectFecha_Todo()"> 
+            <span class="px-0 d-flex align-items-center">
+              <img src="../assets/images/icons/icon-options/buscar.png" class="me-1">Filtrar Movimientos
+            </span>
+          </button>
+        </div>
+
+
+        <div class="d-flex">
+          <!-- CORREGIR MOVIMIENTOS -->
+          <div class="modificar-movimiento px-2">
+            <button class="btn btn-secondary modificar" (click)="openMenu()">
+              <span class="px-0 d-flex align-items-center">
+                <img src="../assets/images/icons/icon-options/modificar.png" class="me-1">
+                Modificar Movimiento
+              </span>
+            </button>
+            <div class="menu-desplegable" id="venta-menu" [ngStyle]="{'display':corregirMovimiento ? 'block' : 'none'}">
+                <button ngbDropdownItem (click)="obtener_ultimos_Movimientos_y_Detalles(1)">Modificar Ultima Entrada</button>
+                <button ngbDropdownItem (click)="obtener_ultimos_Movimientos_y_Detalles(2)">Modificar Ultima Salida</button>
+                <!-- <button ngbDropdownItem (click)="obtener_ultimos_Movimientos_y_Detalles(3)">Modificar Ultima Merma</button> -->
+            </div>
+          </div>
+
+          <!-- BOTON NUEVO MOVIMIENTO -->
+          <div class="container-agregar px-2">
+            <button class="btn btn-secondary" (click)="showModalMovimiento(modalAgregarInsumo)">
+              <span class="px-0 d-flex align-items-center">
+                <img src="../assets/images/icons/icon-options/agregar.png" class="me-1">
+                Agregar Movimiento
+              </span>
+            </button>
+          </div>
+        </div>
+  </div>
+
+  <!-- ********* LISTA INSUMOS *********  -->
+  <div class="container-lista">
+
+    <ul class="list-group p-0" style="border: none;">
+      <!-- Titulo Principal -->
+      <li class="list-group-item d-flex justify-content-between">
+        <h3 class="m-0 px-2 py-2">Insumos</h3>
+        <div class="m-0 px-2 d-flex">
+          <button class="btn px-3" type="button" style="color: #f4f4f4;font-size: 17px;" (click)="seleccionarOpcion(2)">Todo</button>
+          <button class="btn px-3" type="button" style="color: #f4f4f4;font-size: 17px;" (click)="seleccionarOpcion(0)">Activos</button>
+          <button class="btn px-3" type="button" style="color: #f4f4f4;font-size: 17px;" (click)="seleccionarOpcion(1)">Inactivos</button>
+       </div>
+        <div class="d-flex">
+          <!-- Buscador -->
+          <div class="container-buscador m-0 px-2 py-2">
+            <input type="text" class="form-control" placeholder="Buscar Insumo" name="filterPost" [(ngModel)]="filterPost" style="background: #39404a;color: #f4f4f4; border: none;">
+          </div>
+          <!-- Boton Agregar -->
+          <div class="container-agregar m-0 px-2 py-2">
+            <button class="btn btn-secondary" (click)="showModalAgregar(modalAgregarInsumo)">Agregar Insumo</button>
+          </div>
+        </div>
+
+      </li>        
+      <!-- Titulos -->
+      <li class="list-group-item">
+        <div class="row mx-0 d-flex align-items-center" style="min-height: 45px;">
+          <div class="col-2 cell">Nombre</div>
+          <div class="col-2 cell">Medida</div>
+          <div class="col-2 cell">Existencia</div>
+          <div class="col-3 cell">Descripcion</div>
+          <div class="col-1 cell">Activo</div>
+          <div class="col-2 text-center">Opciones</div>
+        </div>
+      </li>
+      <!-- Lista Cajas -->
+      <li class="list-group-item" *ngFor="let ins of lista_insumos_filtrados | paginate: { itemsPerPage: 8, currentPage: page } | filter:filterPost: ['nombre']; let i = index">
+        <div class="row mx-0 d-flex align-items-center" style="min-height: 45px;">
+          <!-- Nombre -->
+          <div class="col-2 cell">
+                <div class="col-12 px-0" style="color: #d4da8f">{{ins.nombre}}</div>
+          </div>
+          <!-- Medida -->
+          <div class="col-2 cell">
+                <div class="col-12 px-0">{{ins.nom_medida}}</div>    
+          </div>
+          <!-- Existencia -->
+          <div class="col-2 cell">{{ins.existencia}}</div>
+          <!-- Descripcion -->
+          <div class="col-3 cell">{{ins.descripcion}}</div>
+          <!-- Estado -->
+          <div class="col-1 cell">
+            <div class="btn" style="color: #f4f4f4;background: #335843; width: 90%; padding: 2px 5px;" *ngIf="ins.estado==0" (click)="showModalEstado(ins)">Activo</div>
+            <div class="btn" style="color: #f4f4f4;background: #583333; width: 90%; padding: 2px 5px;" *ngIf="ins.estado==1" (click)="showModalEstado(ins)">Inactivo</div>
+          </div>
+          <!-- Opciones -->
+          <div class="col-2 d-flex justify-content-evenly container-btn">
+            <button class="btn p-0" > <span class="px-0" (click)="showModalModificar(modalModificarInsumo,ins)"><img src="../assets/images/icons/icon-options/editar.png"></span></button>
+            <button class="btn p-0" > <span class="px-0" (click)="showModalEliminar(ins)"><img src="../assets/images/icons/icon-options/eliminar.png"></span></button>
+            <button class="btn p-0" > <span class="px-0" (click)="showModalSelectFecha(ins)"><img src="../assets/images/icons/icon-options/ver_reporte.png"></span></button>
+              <!-- <div class="menu-desplegable" id="venta-menu" [ngStyle]="{'display': currentCardIndex === i && ventaMenuVisible ? 'block' : 'none'}">
+                <button ngbDropdownItem>Registrar Entrada</button>
+                <button ngbDropdownItem >Registrar Salida</button>
+                <button ngbDropdownItem >Registrar Merma</button>
+              </div> -->
+          </div>
+        </div>
+      </li>
+
+      <li class="list-group-item custom-pagination py-2" *ngIf="paginacionActiva">
+        <!-- Controles de paginación -->
+        <pagination-controls 
+        (pageChange)="page = $event" 
+        previousLabel="Anterior" 
+        nextLabel="Siguiente"        
+        style="text-align: center;">
+       </pagination-controls>
+      </li>
+
+    </ul>
+    
+  </div>
+</div>
+
+
+
+
+<!-- ****************************** MENSAJE TOAST ***************************************** -->
+<div class="toast" id="toast" role="alert" aria-live="assertive" aria-atomic="true">
+
+  <div id="toast-body" class="toast-body">
+    <span class="px-2" *ngIf="toast_tipo == 1"><img src="../assets/images/icons/icon-options/correcto.png"></span> 
+    <span class="px-2" *ngIf="toast_tipo == 2"><img src="../assets/images/icons/icon-options/error.png"></span> 
+    <span>{{mensaje_toast}}</span>
+  </div>
+</div>
+
+
+
+
+
+<!-- ************************************************************************************************************************************************************ -->
+<!-- ************************************************************** MODALES - INSUMOS *************************************************************************** -->
+
+<!-- ****************************** MODAL AGREGAR NUEVO INSUMO *****************************************  -->
+<div #modalAgregarInsumo id="modalAgregarInsumo" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" (hidden.bs.modal)="resetearFormularioInsumo()">
+  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom">
+    <div class="modal-content content-modal">
+      <div class="modal-header">
+        <h1 class="modal-title fs-4" id="exampleModalLabel">Nuevo Insumo</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <form #formInsumo="ngForm" class="row g-3" (ngSubmit)="Agregar_Insumo()">
+          <div class="col-6 mb-1 mt-0">
+            <label class="form-label">Nombre:</label>
+            <input type="text" #nombre="ngModel" [(ngModel)]="insumoForm.nombre"  [class.is-invalid]="mostrarAdvertenciasInsumo && insumoForm.nombre.length == 0" name="nombre" class="form-control" placeholder="Nombre" required>
+            <div class="advertencias" *ngIf="mostrarAdvertenciasInsumo && insumoForm.nombre.length == 0">
+              <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+              <p class="m-0">Agregar Nombre</p>
+            </div>
+          </div>
+          <div class="col-6 mb-0 mt-0">
+            <label class="form-label">Medida:</label>
+            <select class="custom-select" #medida="ngModel" [(ngModel)]="insumoForm.medida" [class.is-invalid]="mostrarAdvertenciasInsumo && medida.value == 0" name="medida" [value]="0" required>
+              <option value=0>Seleccionar</option>
+              <option value=1>Unidad</option>
+              <option value=2>Kilogramos</option>
+              <option value=3>Miligramos</option>
+              <option value=4>Litros</option>
+              <option value=5>Mililitros</option>
+            </select>
+            <div class="advertencias" *ngIf="mostrarAdvertenciasInsumo && medida.value==0">
+              <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+              <p class="m-0">Seleccione una medida</p>
+            </div>
+          </div>
+          <div class="mb-2 mt-0">
+            <label class="form-label">Descripción:</label>
+            <input type="text" #descripcion="ngModel" [(ngModel)]="insumoForm.descripcion" [class.is-invalid]="mostrarAdvertenciasInsumo && insumoForm.descripcion.length == 0" name="descripcion" class="form-control" placeholder="descripcion">
+            <div class="advertencias" *ngIf="mostrarAdvertenciasInsumo  && insumoForm.descripcion.length == 0">
+              <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+              <p class="m-0">Agregar Descripción</p>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="submit" class="btn btn-secondary" style="border: none;background: #006bb0;">Agregar</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ****************************** MODAL MODIFICAR NUEVO INSUMO *****************************************  -->
+<div #modalModificarInsumo id="modalModificarInsumo" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" (hidden.bs.modal)="resetearFormularioInsumo()">
+  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom">
+    <div class="modal-content content-modal">
+      <div class="modal-header">
+        <h1 class="modal-title fs-4" id="exampleModalLabel">Modificar Insumo</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <form #formInsumo="ngForm" class="row g-3" (ngSubmit)="Modificar_Insumo()">
+          <div class="col-6 mb-1 mt-0">
+            <label class="form-label">Nombre:</label>
+            <input type="text" #nombre="ngModel" [(ngModel)]="insumoForm.nombre"  [class.is-invalid]="mostrarAdvertenciasInsumo && insumoForm.nombre.length == 0" name="nombre" class="form-control" placeholder="Nombre" required>
+            <div class="advertencias" *ngIf="mostrarAdvertenciasInsumo && insumoForm.nombre.length == 0">
+              <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+              <p class="m-0">Agregar Nombre</p>
+            </div>
+          </div>
+          <div class="col-6 mb-0 mt-0" *ngIf="insumoForm.existencia==0">
+            <label class="form-label">Medida:</label>
+            <select class="custom-select" #medida="ngModel" [(ngModel)]="insumoForm.medida" [class.is-invalid]="mostrarAdvertenciasInsumo && medida.value == 0" name="medida" [value]="0" required>
+              <option value=0>Seleccionar</option>
+              <option value=1>Unidad</option>
+              <option value=2>Kilogramos</option>
+              <option value=3>Miligramos</option>
+              <option value=4>Litros</option>
+              <option value=5>Mililitros</option>
+            </select>
+            <div class="advertencias" *ngIf="mostrarAdvertenciasInsumo && medida.value==0">
+              <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+              <p class="m-0">Seleccione una medida</p>
+            </div>
+          </div>
+          <div class="mb-2 mt-0">
+            <label class="form-label">Descripción:</label>
+            <input type="text" #descripcion="ngModel" [(ngModel)]="insumoForm.descripcion" [class.is-invalid]="mostrarAdvertenciasInsumo && insumoForm.descripcion.length == 0" name="descripcion" class="form-control" placeholder="descripcion">
+            <div class="advertencias" *ngIf="mostrarAdvertenciasInsumo  && insumoForm.descripcion.length == 0">
+              <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+              <p class="m-0">Agregar Descripción</p>
+            </div>
+          </div>
+          <!-- Habilitar Stock -->
+          <!-- <div class="col-12 mb-2 mt-0">
+            <label class="form-label">Habilitar Stock:</label>
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" #habilitar_stock="ngModel" [(ngModel)]="insumoForm.habilitar_stock" name="habilitar_stock">
+            </div>
+          </div> -->
+          <!-- Vender en Negativo -->          
+          <!-- <div class="col-12 mb-1 mt-0">
+            <label class="form-label">Vender en Negativo:</label>
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" #vender_negativo="ngModel" [(ngModel)]="insumoForm.vender_negativo" name="vender_negativo">
+            </div>
+          </div> -->
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="submit" class="btn btn-secondary" style="border: none;background: #006bb0;">Modificar</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ****************************** MODAL CAMBIAR ESTADO DE INSUMO *****************************************  -->
+<div #modalEstadoInsumo id="modalEstadoInsumo" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom">
+    <div class="modal-content content-modal">
+      <div class="modal-header">
+        <h1 class="modal-title fs-4" id="exampleModalLabel">
+          <span *ngIf="estado == 0">Activar</span>
+          <span *ngIf="estado == 1">Desactivar</span>
+          : {{insumoForm.nombre}}</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button *ngIf="estado == 0" class="btn btn-secondary" style="border: none;background: #006bb0;" (click)="cambiarEstado_Insumo()">Activar</button>
+        <button *ngIf="estado == 1" class="btn btn-secondary" style="border: none;background: #006bb0;" (click)="cambiarEstado_Insumo()">Desactivar</button>
+      </div>
+    </div>
+  </div>
+</div>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+
+<!-- ****************************** MODAL CAMBIAR ESTADO DE INSUMO *****************************************  -->
+<div #modalEliminarInsumo id="modalEliminarInsumo" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom">
+    <div class="modal-content content-modal">
+      <div class="modal-header">
+        <h1 class="modal-title fs-4" id="exampleModalLabel">Eliminar: {{insumoForm.nombre}}</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-secondary" [disabled]="!formInsumo.form.valid" style="border: none;background: #006bb0;" (click)="Eliminar_Insumo()">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>     
+
+
+
+
+<!-- **************************************************************************************************************************************************************** -->
+<!-- ************************************************************** MODALES - MOVIMIENTOS *************************************************************************** -->
+
+<!-- ************************************************** MODAL REGISTRAR NUEVO MOVIMIENTO *************************************************************************  -->
+<div #modalMovimiento id="modalMovimiento" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" (hidden.bs.modal)="resetearFormularioMovimiento()">
+  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom">
+    <div class="modal-content content-modal">
+      <div class="modal-header">
+        <h1 class="modal-title fs-4" id="exampleModalLabel">Nuevo Movimiento</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body mt-2">
+        <form #formMovimento="ngForm" class="row g-3">
+          <!-- SELECCIONAR FECHA -->
+          <div class="col-2 mb-1 mt-0">
+            <label class="form-label">Fecha:</label>
+            <input type="date" #fecha="ngModel" [(ngModel)]="fecha_movimiento" [max]="today" [class.is-invalid]="mostrarAdvertenciaMovimiento && !fecha_movimiento" name="fecha" class="form-control" placeholder="--/--/--" required>
+            <div class="advertencias" *ngIf="mostrarAdvertenciaMovimiento && !fecha_movimiento" title="Cantidad debe ser > 0 ">
+              <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+              <p class="m-0">Agregar Fecha</p>
+            </div>
+          </div>
+          <!-- SELECCIONAR MOVIMIENTO -->
+          <div class="col-3 mb-0 mt-0">
+            <label class="form-label">Movimiento:</label>
+            <select class="custom-select" #movimiento="ngModel" [(ngModel)]="movimientoForm.movimiento" [class.is-invalid]="mostrarAdvertenciaMovimiento && !movimientoForm.movimiento" name="movimiento" required>
+              <option value="">Seleccionar</option>
+              <option value=1>Entrada</option>
+              <option value=2>Salida</option>
+              <option value=3>Merma</option>
+            </select>
+            <div class="advertencias" *ngIf="mostrarAdvertenciaMovimiento && !movimientoForm.movimiento" title="Cantidad debe ser > 0 ">
+              <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+              <p class="m-0">Seleccionar Movimiento</p>
+            </div>
+          </div>
+          <!-- DESCRIPCIÓN -->
+          <div class="col-7 mb-2 mt-0">
+            <label class="form-label">Descripción:</label>
+            <input type="text" #descripcion="ngModel" [(ngModel)]="movimientoForm.descripcion" [class.is-invalid]="mostrarAdvertenciaMovimiento && movimientoForm.descripcion.length==0" name="descripcion" class="form-control" placeholder="descripcion">
+            <div class="advertencias" *ngIf="mostrarAdvertenciaMovimiento && movimientoForm.descripcion.length==0" title="Cantidad debe ser > 0 ">
+              <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+              <p class="m-0">Agregar Descripción</p>
+            </div>
+          </div>
+          <!-- SELECCIONAR PROVEEDOR -->
+          <!-- <div class="col-3 mb-0 mt-0">
+            <label class="form-label">Proveedor:</label>
+            <ng-select class="custom-ng-select" 
+                      [items]="proveedores"
+                      bindLabel="nombre"
+                      bindValue="cod_proveedor"
+                      [(ngModel)]="movimientoForm.cod_proveedor"
+                      placeholder=""
+                      [searchable]="true"
+                      #proveedor="ngModel"
+                      name="proveedor"
+                      required
+                      [class.is-invalid]="mostrarAdvertenciaMovimiento && !movimientoForm.cod_proveedor">
+            </ng-select>
+            <div class="advertencias" *ngIf="mostrarAdvertenciaMovimiento && !movimientoForm.cod_proveedor" title="Cantidad debe ser > 0 ">
+              <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+              <p class="m-0">Seleccionar Proveedor</p>
+            </div>
+          </div> -->
+          <!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
+          <hr>
+          <!-- TITULO INSUMOS -->
+          <div class="d-flex mb-3 justify-content-between">
+              <h4 class="m-0">Insumos</h4>
+              <!-- TIPO DE CAMBIO -->
+              <div class="m-0 ms-5">
+                <div class="d-flex align-items-center" *ngIf="movimientoForm.movimiento==1">
+                  <label class="form-label m-0 px-2">Tipo de Cambio</label>
+                  <input type="number" style="width: 35%;" #tipo_cambio="ngModel" [(ngModel)]="movimientoForm.tipo_cambio" name="v" class="form-control" [disabled]="detalleMovimientoForm.length>0">
+                </div>
+                <div class="advertencias" *ngIf="mostrarAdvertenciaSeleccionado && (movimientoForm.tipo_cambio!=null && movimientoForm.tipo_cambio<=0)" title="Tipo de Cambio debe ser > 0 ">
+                  <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+                  <p class="m-0">Tipo de Cambio Invalido</p>
+                </div>
+              </div>  
+          </div>
+          <!-- FORMULARIO ADICIONAR INSUMO -->
+          <form #formInsumoSelected="ngForm" class="row">
+            <!-- SELECCIONAR INSUMO -->
+            <div class="col-5 mb-0 mt-0">
+              <div class="d-flex">
+                <label class="form-label m-0 px-2 text-center">Insumo:</label>
+                <ng-select class="custom-ng-select" 
+                          [items]="listaInsumos"
+                          [(ngModel)]="insumoSeleccionado"
+                          placeholder=""
+                          [searchable]="true"
+                          [bindLabel]="'nombre'"
+                          [virtualScroll]="true"
+                          #insumo="ngModel"
+                          name="insumoSeleccionado"
+                          required
+                          style="height: 30px;">
+                                                                  <!-- Plantilla personalizada para mostrar las etiquetas -->
+                          <ng-template ng-label-tmp let-item="item">
+                              <span> 
+                                <span [ngStyle]="{'color': '#d4da8f', 'font-weight': 'bold'}">{{ item.nombre }}</span> (existencia = {{ item.existencia }})
+                              </span>
+                          </ng-template>
+                          <!-- Plantilla personalizada para mostrar las opciones -->
+                          <ng-template ng-option-tmp let-item="item">
+                              <span>
+                                <span [ngStyle]="{'color': '#d4da8f', 'font-weight': 'bold'}">{{ item.nombre }}</span> (existencia = {{ item.existencia }})
+                              </span>
+                          </ng-template>
+                </ng-select>
+              </div>  
+              <!-- ADVERTENCIA -->        
+              <div class="advertencias" *ngIf="mostrarAdvertenciaSeleccionado && !insumoSeleccionado" title="Cantidad debe ser > 0 ">
+                <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px; margin-left: 84px;">
+                <p class="m-0">Seleccionar Insumo</p>
+              </div>
+              <!-- ADVERTENCIA -->
+              <div class="col-12 advertencias" *ngIf="existeInsumoSeleccionado()">
+                  <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px; margin-left: 84px;">
+                  <p class="m-0">Insumo Repetido</p>
+              </div>
+            </div>
+            <!-- CANTIDAD -->
+            <div class="col-2 mb-2 mt-0">
+              <div class="d-flex">
+                <label class="form-label m-0 px-2">Cantidad:</label>
+                <input type="number" #cantidad="ngModel" [(ngModel)]="insumo_adicionar.cantidad" name="cantidad" class="form-control">
+              </div>
+              <div class="advertencias" *ngIf="mostrarAdvertenciaSeleccionado && (insumo_adicionar.cantidad ?? 0) <= 0" title="Cantidad debe ser > 0 ">
+                <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+                <p class="m-0">Cantidad Invalida</p>
+              </div>
+              <div class="advertencias" *ngIf="mostrarAdvertenciaSeleccionado && movimientoForm.movimiento>1 && insumoSeleccionado && (((insumo_adicionar.cantidad ?? 0) <= 0) || ((insumo_adicionar.cantidad ?? 0) > (insumoSeleccionado.existencia ?? 0)))"  title="Cantidad debe ser > 0">
+                <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+                <p class="m-0">La cantidad supera la existencia del insumo</p>
+              </div>
+        
+            </div>
+            <!-- PRECIO -->
+            <div class="col-3 mb-2 mt-0" *ngIf="movimientoForm.movimiento==1">
+              <div class="d-flex">
+                <label class="form-label m-0 px-2" *ngIf="movimientoForm.tipo_cambio==null">Precio Bol</label>
+                <label class="form-label m-0 px-2" *ngIf="movimientoForm.tipo_cambio!=null">Precio Arg</label>
+                <input type="number" style="width: 50%;" #precio="ngModel" [(ngModel)]="insumo_adicionar.precio" name="precio" class="form-control" [disabled]="movimientoForm.movimiento>1">
+              </div>
+              <div class="advertencias" *ngIf="mostrarAdvertenciaSeleccionado && (insumo_adicionar.precio ?? 0) <= 0" title="El precio debe ser > 0 ">
+                <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+                <p class="m-0">Precio Invalido</p>
+              </div>
+            </div>    
+            <!-- BOTON ADICIONAR ENTRADA   -->
+            <div class="col-2 mb-2 mt-0" *ngIf="movimientoForm.movimiento==1">
+              <button type="button" class="btn btn-secondary" style="border: none;background: #2b5480; width: 100%;" (click)="adicionar_Insumo_Movimiento()">
+                  Adicionar
+              </button>
+            </div>
+            <!-- BOTON ADICIONAR SALIDA O MERMA   -->
+            <div class="col-2 mb-2 mt-0" *ngIf="movimientoForm.movimiento>1">
+              <button type="button" class="btn btn-secondary" style="border: none;background: #2b5480; width: 100%;" (click)="adicionar_Insumo_Movimiento()">
+                  Adicionar S/M
+              </button>
+            </div>
+          </form>
+
+      <!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
+      <!-- LISTA DE INSUMO - MOVIMIENTO ADICIONADOS -->
+          <div class="container-lista movimiento-lista">
+            <ul class="list-group p-0" style="border: none;"> 
+              <li class="list-group-item">
+                <div class="row mx-0 d-flex align-items-center">
+                  <div class="col-3 cell">Nombre</div>
+                  <div class="col-2 cell">Medida</div>
+                  <div class="col-3 cell" *ngIf="movimientoForm.movimiento>1">Existencia Actual</div>
+                  <div class="col-2 cell">Cantidad</div>
+                  <div class="col-2 cell" *ngIf="movimientoForm.movimiento==1">Precio Compra</div>
+                  <div class="col-2 cell" *ngIf="movimientoForm.movimiento==1">Precio c/u</div>
+                  <div class="col-1 text-center">El</div>
+                </div>
+              </li>
+              <li class="list-group-item" *ngFor="let ins of detalleMovimientoForm; let i = index">
+                <div class="row mx-0 d-flex align-items-center" style="min-height: 55px;">
+                  <!-- NOMBRE -->
+                  <div class="col-3 cell">
+                    <div class="col-12 px-0" style="color: #d4da8f">{{ins.nombre}}</div>
+                  </div>
+                  <!-- MEDIDA -->
+                  <div class="col-2 cell">
+                    <div class="col-12 px-0">{{ins.nom_medida}}</div>    
+                  </div>
+                  <!-- EXISTENCIA ACTUAL -->
+                  <div class="col-3 cell" *ngIf="movimientoForm.movimiento>1">
+                    <div class="col-12 px-0">{{ins.existencia_actual}}</div>    
+                  </div>
+                  <!-- CANTIDAD ENTRADA-->
+                  <div class="col-2 cell" *ngIf="movimientoForm.movimiento==1">
+                    <!-- <div class="col-12 px-0">{{ins.cantidad}}</div>   -->
+                    <input type="number" #cantidad="ngModel" [(ngModel)]="ins.cantidad" [name]="'cantidad' + i" class="form-control" placeholder="cantidad">
+                    <div class="advertencias" *ngIf="ins.cantidad==0 || !ins.cantidad" title="Cantidad debe ser > 0 ">
+                      <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+                      <p class="m-0">Cantidad invalida</p>
+                    </div>
+                  </div>
+                  <!-- CANTIDAD SALIDA O MERMA-->
+                  <div class="col-2 cell" *ngIf="movimientoForm.movimiento>1">
+                    <!-- <div class="col-12 px-0">{{ins.cantidad}}</div>   -->
+                    <input type="number" #cantidad="ngModel" [(ngModel)]="ins.cantidad" [name]="'cantidad' + i" class="form-control" placeholder="cantidad">
+                    <div class="advertencias" *ngIf="ins.cantidad>ins.existencia_actual" title="Cantidad debe ser > 0 ">
+                      <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+                      <p class="m-0">No puede ser Mayor a Existencia</p>
+                    </div>
+                    <div class="advertencias" *ngIf="ins.cantidad<=0 || !ins.cantidad" title="Cantidad debe ser > 0 ">
+                      <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+                      <p class="m-0">Cantidad Invalida</p>
+                    </div>
+                  </div>
+                  <!-- PRECIO -->
+                  <div class="col-2 cell" *ngIf="movimientoForm.movimiento==1">
+                    <!-- <div class="col-12 px-0">{{(ins.precio).toFixed(3)}}</div>   -->
+                    <input type="number" #precio="ngModel" [(ngModel)]="ins.precio" [name]="'precio' + i" class="form-control" placeholder="precio" *ngIf="movimientoForm.movimiento==1" [attr.disabled]="movimientoForm.movimiento>1">
+
+                    <div class="advertencias" *ngIf="ins.precio==0 || !ins.precio" title="Cantidad debe ser > 0 ">
+                      <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+                      <p class="m-0">Precio invalido</p>
+                    </div>
+                  </div>
+                  <!-- PRECIO UNITARIO -->
+                  <div class="col-2 cell" *ngIf="movimientoForm.movimiento==1">
+                    <div *ngIf="movimientoForm.movimiento==1">
+                      {{ (ins.precio / ins.cantidad).toFixed(3) }}
+                    </div>
+                  </div>
+                  <!-- BOTON ELIMINAR -->
+                  <div class="col-1 d-flex justify-content-evenly container-btn">
+                    <button type="button" class="btn p-0" (click)="eliminar_Insumo(i)"> <span class="px-0"><img src="../assets/images/icons/icon-options/eliminar.png"></span></button>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <!-- BOTON REGISTRAR -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-secondary" style="border: none;background: #006bb0;" (click)="Registrar_Movimiento()">
+              Registrar
+            </button>
+            <!-- <button type="submit" class="btn btn-secondary" *ngIf="movimientoForm.movimiento>1"
+                    [disabled]="!insumosValidos_Salida_Merma() || detalleMovimientoForm.length==0 " 
+                    style="border: none;background: #2b5480;">Registrar
+          </button> -->
+          </div>
+        </form>
+        
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ****************************** MODAL MODIFICAR(CORREGIR) ULTIMO MOVIMIENTO *****************************************  -->
+<div #modalModificarMovimiento id="modalModificarMovimiento" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" (hidden.bs.modal)="resetearFormularioMovimiento()">
+  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom">
+  <div class="modal-content content-modal">
+    <div class="modal-header">
+      <h1 class="modal-title fs-4" id="exampleModalLabel">Modificar Movimiento</h1>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+  
+    <div class="modal-body mt-2">
+      <form #formInsumo="ngForm" class="row g-3">
+          <!-- SELECCIONAR FECHA -->
+          <div class="col-2 mb-1 mt-0">
+            <label class="form-label">Fecha:</label>
+            <input type="date" #fecha="ngModel" [(ngModel)]="fecha_movimiento" [max]="today" [class.is-invalid]="mostrarAdvertenciaMovimiento && !fecha_movimiento" name="fecha" class="form-control" placeholder="--/--/--" required>
+            <div class="advertencias" *ngIf="mostrarAdvertenciaMovimiento && !fecha_movimiento" title="Cantidad debe ser > 0 ">
+              <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+              <p class="m-0">Agregar Fecha</p>
+            </div>
+          </div>
+          <!-- SELECCIONAR MOVIMIENTO -->
+          <div class="col-3 mb-0 mt-0">
+            <label class="form-label">Movimiento:</label>
+            <select class="custom-select" #movimiento="ngModel" [(ngModel)]="movimientoForm.movimiento" [class.is-invalid]="mostrarAdvertenciaMovimiento && !movimientoForm.movimiento" name="movimiento" required>
+              <option value="">Seleccionar</option>
+              <option value=1>Entrada</option>
+              <option value=2>Salida</option>
+              <option value=3>Merma</option>
+            </select>
+            <div class="advertencias" *ngIf="mostrarAdvertenciaMovimiento && !movimientoForm.movimiento" title="Cantidad debe ser > 0 ">
+              <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+              <p class="m-0">Seleccionar Movimiento</p>
+            </div>
+          </div>
+          <!-- DESCRIPCIÓN -->
+          <div class="col-7 mb-2 mt-0">
+            <label class="form-label">Descripción:</label>
+            <input type="text" #descripcion="ngModel" [(ngModel)]="movimientoForm.descripcion" [class.is-invalid]="mostrarAdvertenciaMovimiento && movimientoForm.descripcion.length==0" name="descripcion" class="form-control" placeholder="descripcion">
+            <div class="advertencias" *ngIf="mostrarAdvertenciaMovimiento && movimientoForm.descripcion.length==0" title="Cantidad debe ser > 0 ">
+              <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+              <p class="m-0">Agregar Descripción</p>
+            </div>
+          </div>
+          <!-- SELECCIONAR PROVEEDOR -->
+          <!-- <div class="col-3 mb-0 mt-0">
+            <label class="form-label">Proveedor:</label>
+            <ng-select class="custom-ng-select" 
+                      [items]="proveedores"
+                      bindLabel="nombre"
+                      bindValue="cod_proveedor"
+                      [(ngModel)]="movimientoForm.cod_proveedor"
+                      placeholder=""
+                      [searchable]="true"
+                      #proveedor="ngModel"
+                      name="proveedor"
+                      required
+                      [class.is-invalid]="mostrarAdvertenciaMovimiento && !movimientoForm.cod_proveedor">
+            </ng-select>
+            <div class="advertencias" *ngIf="mostrarAdvertenciaMovimiento && !movimientoForm.cod_proveedor" title="Cantidad debe ser > 0 ">
+              <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+              <p class="m-0">Seleccionar Proveedor</p>
+            </div>
+          </div> -->
+          <!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
+          <hr>
+          <!-- TITULO INSUMOS -->
+          <div class="d-flex mb-3 justify-content-between">
+              <h4 class="m-0">Insumos</h4>
+              <!-- TIPO DE CAMBIO -->
+              <div class="m-0 ms-5">
+                <div class="d-flex align-items-center" *ngIf="movimientoForm.movimiento==1">
+                  <label class="form-label m-0 px-2">Tipo de Cambio</label>
+                  <input type="number" style="width: 35%;" #tipo_cambio="ngModel" [(ngModel)]="movimientoForm.tipo_cambio" name="v" class="form-control" [disabled]="detalleMovimientoForm.length>0">
+                </div>
+                <div class="advertencias" *ngIf="mostrarAdvertenciaSeleccionado && (movimientoForm.tipo_cambio!=null && movimientoForm.tipo_cambio<=0)" title="Tipo de Cambio debe ser > 0 ">
+                  <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+                  <p class="m-0">Tipo de Cambio Invalido</p>
+                </div>
+              </div>  
+          </div>
+          <!-- FORMULARIO ADICIONAR INSUMO -->
+          <form #formInsumoSelected="ngForm" class="row">
+            <!-- SELECCIONAR INSUMO -->
+            <div class="col-5 mb-0 mt-0">
+              <div class="d-flex">
+                <label class="form-label m-0 px-2 text-center">Insumo:</label>
+                <ng-select class="custom-ng-select" 
+                          [items]="listaInsumos"
+                          [(ngModel)]="insumoSeleccionado"
+                          placeholder=""
+                          [searchable]="true"
+                          #insumo="ngModel"
+                          name="insumoSeleccionado"
+                          required
+                          style="height: 30px;">
+                                                                  <!-- Plantilla personalizada para mostrar las etiquetas -->
+                          <ng-template ng-label-tmp let-item="item">
+                              <span> 
+                                <span [ngStyle]="{'color': '#d4da8f', 'font-weight': 'bold'}">{{ item.nombre }}</span> (existencia = {{ item.existencia }})
+                              </span>
+                          </ng-template>
+                          <!-- Plantilla personalizada para mostrar las opciones -->
+                          <ng-template ng-option-tmp let-item="item">
+                              <span>
+                                <span [ngStyle]="{'color': '#d4da8f', 'font-weight': 'bold'}">{{ item.nombre }}</span> (existencia = {{ item.existencia }})
+                              </span>
+                          </ng-template>
+                </ng-select>
+              </div>  
+              <!-- ADVERTENCIA -->        
+              <div class="advertencias" *ngIf="mostrarAdvertenciaSeleccionado && !insumoSeleccionado" title="Cantidad debe ser > 0 ">
+                <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;  margin-left: 84px;">
+                <p class="m-0">Seleccionar Insumo</p>
+              </div>
+              <!-- ADVERTENCIA -->
+              <div class="col-12 advertencias" *ngIf="existeInsumoSeleccionado()">
+                  <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px; margin-left: 84px;">
+                  <p class="m-0">Insumo Repetido</p>
+              </div>
+            </div>
+            <!-- CANTIDAD -->
+            <div class="col-2 mb-2 mt-0">
+              <div class="d-flex">
+                <label class="form-label m-0 px-2">Cantidad:</label>
+                <input type="number" #cantidad="ngModel" [(ngModel)]="insumo_adicionar.cantidad" name="cantidad" class="form-control">
+              </div>
+              <div class="advertencias" *ngIf="mostrarAdvertenciaSeleccionado && (insumo_adicionar.cantidad ?? 0) <= 0" title="Cantidad debe ser > 0 ">
+                <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+                <p class="m-0">Cantidad Invalida</p>
+              </div>
+              <div class="advertencias" *ngIf="mostrarAdvertenciaSeleccionado && insumoSeleccionado && (((insumo_adicionar.cantidad ?? 0) <= 0) || ((insumo_adicionar.cantidad ?? 0) > (insumoSeleccionado.existencia ?? 0)))"  title="Cantidad debe ser > 0">
+                <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+                <p class="m-0">La cantidad supera la existencia del insumo</p>
+              </div>
+        
+            </div>
+            <!-- PRECIO -->
+            <div class="col-3 mb-2 mt-0" *ngIf="movimientoForm.movimiento==1">
+              <div class="d-flex">
+                <label class="form-label m-0 px-2" *ngIf="movimientoForm.tipo_cambio==null">Precio Bol</label>
+                <label class="form-label m-0 px-2" *ngIf="movimientoForm.tipo_cambio!=null">Precio Arg</label>
+                <input type="number" style="width: 50%;" #precio="ngModel" [(ngModel)]="insumo_adicionar.precio" name="precio" class="form-control" [disabled]="movimientoForm.movimiento>1">
+              </div>
+              <div class="advertencias" *ngIf="mostrarAdvertenciaSeleccionado && (insumo_adicionar.precio ?? 0) <= 0" title="El precio debe ser > 0 ">
+                <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+                <p class="m-0">Precio Invalido</p>
+              </div>
+            </div>    
+            <!-- BOTON ADICIONAR ENTRADA   -->
+            <div class="col-2 mb-2 mt-0" *ngIf="movimientoForm.movimiento==1">
+              <button type="button" class="btn btn-secondary" style="border: none;background: #2b5480; width: 100%;" (click)="adicionar_Insumo_Movimiento()">
+                  Adicionar
+              </button>
+            </div>
+            <!-- BOTON ADICIONAR SALIDA O MERMA   -->
+            <div class="col-2 mb-2 mt-0" *ngIf="movimientoForm.movimiento>1">
+              <button type="button" class="btn btn-secondary" style="border: none;background: #2b5480; width: 100%;" (click)="adicionar_Insumo_Movimiento()">
+                  Adicionar S/M
+              </button>
+            </div>
+          </form>
+    <!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
+    <!-- LISTA DE INSUMO - MOVIMIENTO ADICIONADOS -->
+        <div class="container-lista movimiento-lista">
+          <ul class="list-group p-0" style="border: none;"> 
+            <li class="list-group-item">
+              <div class="row mx-0 d-flex align-items-center">
+                <div class="col-3 cell">Nombre</div>
+                <div class="col-2 cell">Medida</div>
+                <div class="col-3 cell" *ngIf="movimientoForm.movimiento>1">Existencia Actual</div>
+                <div class="col-2 cell">Cantidad</div>
+                <div class="col-2 cell" *ngIf="movimientoForm.movimiento==1">Precio Compra</div>
+                <div class="col-2 cell" *ngIf="movimientoForm.movimiento==1">Precio c/u</div>
+                <div class="col-1 text-center">El</div>
+              </div>
+            </li>
+            <li class="list-group-item" *ngFor="let ins of detalleMovimientoForm; let i = index">
+              <div class="row mx-0 d-flex align-items-center" style="min-height: 55px;">
+                <!-- NOMBRE -->
+                <div class="col-3 cell">
+                  <div class="col-12 px-0" style="color: #d4da8f">{{ins.nombre}}</div>
+                </div>
+                <!-- MEDIDA -->
+                <div class="col-2 cell">
+                  <div class="col-12 px-0">{{ins.nom_medida}}</div>    
+                </div>
+                <!-- EXISTENCIA ACTUAL -->
+                <div class="col-3 cell" *ngIf="movimientoForm.movimiento>1">
+                  <div class="col-12 px-0">{{ins.existencia_actual}}</div>    
+                </div>
+                <!-- CANTIDAD ENTRADA-->
+                <div class="col-2 cell" *ngIf="movimientoForm.movimiento==1">
+                  <!-- <div class="col-12 px-0">{{ins.cantidad}}</div>   -->
+                  <input type="number" #cantidad="ngModel" [(ngModel)]="ins.cantidad" [name]="'cantidad' + i" class="form-control" placeholder="cantidad">
+                  <div class="advertencias" *ngIf="ins.cantidad==0 || !ins.cantidad" title="Cantidad debe ser > 0 ">
+                    <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+                    <p class="m-0">Cantidad invalida</p>
+                  </div>
+                </div>
+                <!-- CANTIDAD SALIDA O MERMA-->
+                <div class="col-2 cell" *ngIf="movimientoForm.movimiento>1">
+                  <!-- <div class="col-12 px-0">{{ins.cantidad}}</div>   -->
+                  <input type="number" #cantidad="ngModel" [(ngModel)]="ins.cantidad" [name]="'cantidad' + i" class="form-control" placeholder="cantidad">
+                  <div class="advertencias" *ngIf="ins.cantidad>ins.existencia_actual" title="Cantidad debe ser > 0 ">
+                    <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+                    <p class="m-0">No puede ser Mayor a Existencia</p>
+                  </div>
+                  <div class="advertencias" *ngIf="ins.cantidad<=0 || !ins.cantidad" title="Cantidad debe ser > 0 ">
+                    <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+                    <p class="m-0">Cantidad Invalida</p>
+                  </div>
+                </div>
+                <!-- PRECIO -->
+                <div class="col-2 cell" *ngIf="movimientoForm.movimiento==1">
+                  <!-- <div class="col-12 px-0">{{(ins.precio).toFixed(3)}}</div>   -->
+                  <input type="number" #precio="ngModel" [(ngModel)]="ins.precio" [name]="'precio' + i" class="form-control" placeholder="precio" *ngIf="movimientoForm.movimiento==1" [attr.disabled]="movimientoForm.movimiento>1">
+
+                  <div class="advertencias" *ngIf="ins.precio==0 || !ins.precio" title="Cantidad debe ser > 0 ">
+                    <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+                    <p class="m-0">Precio invalido</p>
+                  </div>
+                </div>
+                <!-- PRECIO UNITARIO -->
+                <div class="col-2 cell" *ngIf="movimientoForm.movimiento==1">
+                  <div *ngIf="movimientoForm.movimiento==1">
+                    {{ (ins.precio / ins.cantidad).toFixed(3) }}
+                  </div>
+                </div>
+                <!-- BOTON ELIMINAR -->
+                <div class="col-1 d-flex justify-content-evenly container-btn">
+                  <button type="button" class="btn p-0" (click)="eliminar_Insumo(i)" *ngIf="detalleMovimientoForm.length>1"> 
+                    <span class="px-0"><img src="../assets/images/icons/icon-options/eliminar.png"></span>
+                  </button>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <!-- BOTON REGISTRAR -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background: #814d4d; border:none" (click)="eliminar_Movimiento()">Eliminar Movimiento</button>
+          <button type="submit" class="btn btn-secondary" style="border: none;background: #006bb0;" (click)="modificar_Movimiento()">
+            Modificar
+          </button>
+          <!-- <button type="submit" class="btn btn-secondary" *ngIf="movimientoForm.movimiento==1"
+                  [disabled]="!insumosValidos_Entrada()" 
+                  style="border: none;background: #2b5480;">Modificar
+          </button>
+          <button type="submit" class="btn btn-secondary" *ngIf="movimientoForm.movimiento>1"
+                  [disabled]="!insumosValidos_Salida_Merma() || detalleMovimientoForm.length==0 " 
+                  style="border: none;background: #2b5480;">Modificar
+        </button> -->
+        </div>
+      </form>
+      
+    </div>
+  
+  </div>
+  </div>
+</div>
+
+<!-- ****************************** 1.- MODAL ESCOGER FECHA DETALLE INSUMO *****************************************  -->
+<div #modalSelectFecha id="modalSelectFecha" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom">
+    <div class="modal-content content-modal">
+      <div class="modal-header">
+        <h1 class="modal-title fs-4" id="exampleModalLabel">Seleccionar Fecha</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form #formInsumo="ngForm" class="row g-3">
+
+          <div class="col-8 row m-0 mt-4">
+            <!-- FECHA INICIAL -->
+            <div class="col-6 mb-1 mt-0">
+              <label class="form-label">Fecha Inicial:</label>
+              <input type="date" #fechaIni="ngModel" [(ngModel)]="selectFecha.fechaI" name="fechaIni" [max]="today" [class.is-invalid]="mostrarAdvertenciasFechaI && !isFormValid_Fecha()" required style="width: 100%;" class="form-control">
+              <div class="advertencias" *ngIf="mostrarAdvertenciasFechaI && !isFormValid_Fecha()">
+                <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+                <p class="m-0">Fecha Invalida</p>
+              </div>
+            </div>
+            <!-- FECHA FINAL -->
+            <div class="col-6 mb-1 mt-0">
+              <label class="form-label">Fecha Final:</label>
+              <input type="date" #fechaFin="ngModel" [(ngModel)]="selectFecha.fechaF" [max]="today" [class.is-invalid]="mostrarAdvertenciasFecha && !isFormValid_Fecha()" name="fechaFin" class="form-control"  required style="width: 100%;">
+              <div class="advertencias" *ngIf="mostrarAdvertenciasFecha && !isFormValid_Fecha()">
+                <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+                <p class="m-0">Fecha Invalida</p>
+              </div>
+            </div>
+         </div>
+
+          <!-- ATAJOS -->
+          <div class="col-4 m-0 atajos mt-4">
+            <button type="button" class="btn btn-secondary" (click)="seleccionar_Atajo(7)">Últimos 7 días</button>
+            <button type="button" class="btn btn-secondary" (click)="seleccionar_Atajo(15)">Últimos 15 días</button>
+            <button type="button" class="btn btn-secondary" (click)="seleccionar_Atajo(30)">Últimos 30 días</button>
+          </div>
+
+          <!-- BOTONES -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-secondary" style="border: none;background: #006bb0;" (click)="showModalDetalleMovimiento()">Filtrar</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ****************************** 2.- MODAL DETALLE MOVIMIENTO INSUMO *****************************************  -->
+<div #modalDetalleMovimiento id="modalDetalleMovimiento" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" (hidden.bs.modal)="cerrarModal_Reporte()">
+  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom">
+    <div class="modal-content content-modal" style="background: #414b56; min-height: max-content; max-height: 90vh;">
+      <div class="modal-header">
+        <h1 class="modal-title fs-4" id="exampleModalLabel">Reporte Movimientos del Insumo "{{nombre_insumo}}" </h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+  
+        <!-- Container Lista -->
+        <div class="container-lista-movimientos">
+          <ng-container *ngFor="let movimiento of listaMovimientos | paginate: { itemsPerPage: 1, currentPage: page_m } ; let i = index">
+
+            <!-- Lista Movimientos -->
+            <div class="container-cards m-2" id="element-{{i}}">
+              <!-- Card -->
+              <div class="card" [attr.data-index]="i" style="width: 100%; background: #4a5561; color: #f4f4f4; letter-spacing: 1px;">
+                <!-- Card Header -->
+                <div class="card-header fs-5 d-flex justify-content-between py-1 px-1">
+                    <div class="fecha px-2">
+                      {{movimiento.fecha_comun}}
+                    </div>
+
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                  <!-- Titulos -->
+                  <div class="titles-mov row m-0 p-0 d-flex align-items-center" style="border-bottom: 1px solid #646464; height: 45px;">
+                    <!-- HORA - USUARIO -->
+                    <div class="col-2 row mx-0 px-0">
+                      <div class="col-4 p-0"><b>Hora</b></div>
+                      <div class="col-8 p-0"><b>Usuario</b></div>
+                    </div>
+                    <!-- OBSERVACIÓN -->
+                    <div class="col-5 p-0"><b>Observacion</b></div>
+                    <!-- LOTE - CANTIDAD , CANTIDAD - SALDO  -->
+                    <div class="col-5 row mx-0 px-0">
+                      <div class="col-3 p-0"><b>Lote</b></div>
+                      <div class="col-3 p-0"><b>Precio</b></div>
+                      <div class="col-3 p-0"><b>Cantidad</b></div>
+                      <div class="col-3 p-0"><b>Saldo</b></div>
+                    </div>
+                  </div>
+
+                  <!-- FILAS DETALLES -->
+                  <div class="row m-0 p-0 d-flex align-items-center" style="font-size: 17px; font-weight: 400; border-bottom: 1px solid #646464; min-height: 45px;" *ngFor="let mov of movimiento.detalles; let i = index">
+                    <!-- HORA - USUARIO -->
+                    <div class="col-2 row mx-0 px-0">
+                      <div class="col-4 p-0">{{mov.hora}}</div>
+                      <div class="col-8 p-0">{{mov.ci_usuario}}</div>
+                    </div>
+
+                    <!-- OBSERVACIÓN -->
+                    <div class="col-5 p-0">
+                      <span [ngStyle]="{ color: mov.movimiento === 1 ? '#5fbc5f' : (mov.movimiento === 2 ? '#8fc5e2' : '#db8989') }"> 
+                        {{mov.nom_movimiento}}
+                      </span>
+                      <span *ngIf="mov.tipo_cambio != null" style="color: #d1d1d1;">
+                        (Cambio: {{mov.tipo_cambio}})
+                      </span>
+                      <!-- <br> -->
+                      <span>
+                        {{mov.descripcion}}
+                      </span>
+                    </div>
+                    
+
+                    <!-- LOTE - PRECIO , CANTIDAD - SALDO -->
+                    <div class="col-5 row mx-0 px-0">
+                      <div class="col-3 p-0">{{mov.lote}}</div>
+                      <div class="col-3 p-0">Bs. {{mov.precio}}</div>
+                      <div class="col-3 p-0">
+                        <span *ngIf="mov.movimiento==1" style="margin-right: 5px;">+</span>
+                        <span *ngIf="mov.movimiento!=1" style="margin-right: 5px;">-</span>
+                        {{mov.cantidad}}
+                      </div>
+                      <div class="col-3 p-0">{{mov.cantidad_nueva}}</div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </ng-container>
+          <div class="custom-pagination py-1">
+            <!-- Controles de paginación -->
+            <pagination-controls 
+            (pageChange)="page_m = $event" 
+            previousLabel="Anterior" 
+            nextLabel="Siguiente"        
+            style="text-align: center;">
+           </pagination-controls>
+          </div>
+        </div>  
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ****************************** 1.- MODAL ESCOGER FECHA DETALLE TODO *****************************************  -->
+<div #modalSelectFechaTodo id="modalSelectFechaTodo" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom">
+    <div class="modal-content content-modal">
+      <div class="modal-header">
+        <h1 class="modal-title fs-4" id="exampleModalLabel">Seleccionar Fecha</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form #formInsumo="ngForm" class="row g-3">
+
+          <div class="col-8 row m-0 mt-4">
+            <!-- FECHA INICIAL -->
+            <div class="col-6 mb-1 mt-0">
+              <label class="form-label">Fecha Inicial</label>
+              <input type="date" #fechaIni="ngModel" [(ngModel)]="selectFecha.fechaI" name="fechaIni" [max]="today" [class.is-invalid]="mostrarAdvertenciasFechaI && !isFormValid_Fecha()" required style="width: 100%;" class="form-control">
+              <div class="advertencias" *ngIf="mostrarAdvertenciasFechaI && !isFormValid_Fecha()">
+                <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+                <p class="m-0">Fecha Invalida</p>
+              </div>
+            </div>
+            <!-- FECHA FINAL -->
+            <div class="col-6 mb-1 mt-0">
+              <label class="form-label">Fecha Final</label>
+              <input type="date" #fechaFin="ngModel" [(ngModel)]="selectFecha.fechaF" [max]="today" [class.is-invalid]="mostrarAdvertenciasFecha && !isFormValid_Fecha()" name="fechaFin" class="form-control"  required style="width: 100%;">
+              <div class="advertencias" *ngIf="mostrarAdvertenciasFecha && !isFormValid_Fecha()">
+                <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+                <p class="m-0">Fecha Invalida</p>
+              </div>
+            </div>
+            <!-- SELECCIONAR MOVIMIENTO -->
+            <div class="col-12 mb-0 mt-2">
+              <label class="form-label w-100">Movimiento</label>
+              <select class="custom-select" #movimiento="ngModel" [(ngModel)]="selectFecha.movimiento" name="movimiento" style="width: 100%;">
+                <option value=0>Todo</option>
+                <option value=1>Entradas</option>
+                <option value=2>Salidas</option>
+                <option value=3>Merma</option>
+              </select>
+            </div>
+         </div>
+
+          <!-- ATAJOS -->
+          <div class="col-4 m-0 atajos mt-4">
+            <button type="button" class="btn btn-secondary" (click)="seleccionar_Atajo(7)">Últimos 7 días</button>
+            <button type="button" class="btn btn-secondary" (click)="seleccionar_Atajo(15)">Últimos 15 días</button>
+            <button type="button" class="btn btn-secondary" (click)="seleccionar_Atajo(30)">Últimos 30 días</button>
+          </div>
+
+          <!-- BOTONES -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-secondary" style="border: none;background: #006bb0;" (click)="showModalDetalleMovimientoTodo()">Filtrar</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ****************************** 2.- MODAL DETALLE MOVIMIENTO INSUMO *****************************************  -->
+<div #modalDetalleMovimientoTodo id="modalDetalleMovimientoTodo" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" (hidden.bs.modal)="cerrarModal_Reporte()">
+  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom">
+    <div class="modal-content content-modal" style="background: #414b56; min-height: max-content; max-height: 90vh;">
+      <div class="modal-header">
+        <h1 class="modal-title fs-4" id="exampleModalLabel">Reporte Movimientos</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Container Lista -->
+        <div class="container-lista-movimientos">
+          <ng-container *ngFor="let movimiento of listaMovimientos | paginate: { itemsPerPage: 1, currentPage: page_d } ; let i = index">
+
+            <!-- Lista Movimientos -->
+            <div class="container-cards m-2" id="element-{{i}}">
+              <!-- Card -->
+              <div class="card" [attr.data-index]="i" style="width: 100%; background: #4a5561; color: #f4f4f4; letter-spacing: 1px;">
+                <!-- Card Header -->
+                <div class="card-header fs-5 d-flex justify-content-between py-1 px-1">
+                    <div class="fecha px-2">
+                      {{movimiento.fecha_comun}}
+                    </div>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body py-2">
+                  <!-- Titulos -->
+                  <div class="titles-mov row m-0 p-0 d-flex align-items-center" style="border-bottom: 1px solid #646464; height: 45px;">
+                    <!-- HORA - USUARIO -->
+                    <div class="col-4 row mx-0 px-0">
+                      <div class="col-3 p-0"><b>Codigo</b></div>
+                      <div class="col-3 p-0"><b>Usuario</b></div>
+                      <div class="col-4 p-0"><b>Insumo</b></div>
+                      <div class="col-2 p-0"><b>Hora</b></div>
+                    </div>
+                    <!-- OBSERVACIÓN -->
+                    <div class="col-4 p-0"><b>Observacion</b></div>
+                    <!-- LOTE - CANTIDAD , CANTIDAD - SALDO  -->
+                    <div class="col-4 row mx-0 px-0">
+                      <div class="col-3 p-0"><b>Lote</b></div>
+                      <div class="col-3 p-0"><b>Precio</b></div>
+                      <div class="col-3 p-0"><b>Cantidad</b></div>
+                      <div class="col-3 p-0"><b>Saldo</b></div>
+                    </div>
+                  </div>
+
+                  <!-- Filas -->
+                  <div class="row m-0 p-0 d-flex align-items-center" style="font-size: 17px; font-weight: 400; border-bottom: 1px solid #646464; min-height: 45px;"  *ngFor="let mov of movimiento.detalles ;let j = index">
+                      <!-- <div class="row m-0 p-0" [ngClass]="obtenerClaseFondo(mov,i, j)"> -->
+                      <div class="row m-0 p-0 d-flex align-items-center">
+                          <!-- HORA - USUARIO -->
+                          <div class="col-4 row mx-0 px-0">
+                            <div class="col-3 p-0">{{mov.cod_mov}}</div>
+                            <div class="col-3 p-0">{{mov.ci_usuario}}</div>
+                            <div class="col-4 p-0">{{mov.nom_insumo}}</div>
+                            <div class="col-2 p-0">{{mov.hora}}</div>
+                          </div>
+
+                          <div class="col-4 p-0">
+                            <span [ngStyle]="{ color: mov.movimiento === 1 ? '#5fbc5f' : (mov.movimiento === 2 ? '#8fc5e2' : '#db8989') }"> 
+                              {{mov.nom_movimiento}}
+                            </span>
+                            <span *ngIf="mov.tipo_cambio != null" style="color: #d1d1d1;">
+                              (Cambio: {{mov.tipo_cambio}})
+                            </span>
+                            <!-- <br> -->
+                            <span>
+                              {{mov.descripcion}}
+                            </span>
+                          </div>
+
+                          <!-- LOTE - CANTIDAD , CANTIDAD - SALDO  -->
+                          <div class="col-4 row mx-0 px-0">
+                            <div class="col-3 p-0">{{mov.lote}}</div>
+                            <div class="col-3 p-0">Bs. {{mov.precio}}</div>
+                            <div class="col-3 p-0">
+                              <span *ngIf="mov.movimiento==1">+</span>
+                              <span *ngIf="mov.movimiento!=1">-</span>
+                              {{mov.cantidad}}
+                            </div>
+                            <div class="col-3 p-0">{{mov.cantidad_nueva}}</div>
+                          </div>   
+                      </div>
+                  </div>
+
+                </div>    
+              </div>
+            </div>
+          </ng-container>
+          <div class="custom-pagination py-1">
+            <!-- Controles de paginación -->
+            <pagination-controls 
+            (pageChange)="page_d = $event" 
+            previousLabel="Anterior" 
+            nextLabel="Siguiente"        
+            style="text-align: center;">
+           </pagination-controls>
+          </div>
+        </div>  
+      </div>
+
+    </div>
+  </div>
+</div>
+
+

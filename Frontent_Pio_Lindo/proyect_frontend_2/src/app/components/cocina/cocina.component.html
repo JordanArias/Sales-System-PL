@@ -1,0 +1,184 @@
+
+<!-- *************************************************************** LISTA - NAV HORIZONTAL ************************************************************** -->
+<!-- ***************************************************************************************************************************************************** -->
+<!-- ********************************************************************************************* -->
+<div class="container-principal-listas">
+    <!-- ********************************************* OPCIONES:BUSCAR - AGREGAR **********************************************************-->
+    <div class="d-flex align-items-center justify-content-between px-3 container-opciones">
+
+          <!-- SELECCIONAR FECHA -->
+           <div class="container-agregar">
+              <!-- <button class="btn btn-secondary" (click)="showModal_SelectFecha()">Elegir Fecha</button>  [min]="min_totay" -->
+              <!-- <input type="date" #fecha="ngModel" [(ngModel)]="select_Fecha" name="fecha"  [max]="today"  required style="width: 100%;" class="form-control"> -->
+           </div>
+          <!-- FILTRAR -->
+          <div class="container-filtrar d-flex">
+            <div class="btn-ventas_finalizadas">
+              <button class="btn" type="button" style="color: #f3f3f3;" [ngStyle]="{'background-color': vista_ventas === 3 ? '#667c8e' : ''}" (click)="LISTAR_VENTAS_FINALIZADAS()">
+                <span class="px-0 d-flex align-items-center">
+                  Finalizadas
+                </span>
+              </button>
+            </div>
+            <div class="btn-ventas_proceso">
+              <button class="btn" type="button" style="color: #f3f3f3;" [ngStyle]="{'background-color': vista_ventas === 2 ? '#667c8e' : ''}" (click)="LISTAR_VENTAS_EN_PROCESO()">
+                <span class="px-0 d-flex align-items-center">
+                  En proceso
+                </span>
+              </button>
+            </div>
+            <div class="btn-ventas_nuevas">
+              <button class="btn" type="button" style="color: #f3f3f3;" [ngStyle]="{'background-color': vista_ventas === 1 ? '#667c8e' : ''}" (click)="LISTAR_VENTAS_NUEVAS()">
+                <span class="px-0 d-flex align-items-center">
+                  Nuevas
+                </span>
+              </button>
+            </div>
+          </div>
+  
+    </div>
+  
+    <!-- **************************************************** LISTA VENTAS ****************************************************************  -->
+    <div class="container-lista">
+  
+      <ng-container *ngFor="let v of lista_Ventas | paginate: { itemsPerPage: 6, currentPage: page_v } ; let i = index">
+        <!--******************************** CARD VENTA PRINCIPAL **************************-->
+        <div class="card" [ngClass]="{'selected-card': selectedCardIndex === i}">
+          <!-- *********** TITULO CARD VENTA **************-->
+          <div class="card-header d-flex justify-content-between p-0" [ngStyle]="{'background-color': v.venta.estado_documento === 2 ? '#592f34' : v.venta.estado === 0 ? '#28526b' : (v.venta.estado === 1 ? '#835e32' : '#333c4e')}">
+              <!-- TICKET -->
+              <div class="numero-ticket px-1">
+                T - <strong> {{v.venta.ticket}} </strong>
+              </div>
+              <!-- NUMERO DE MESA - VENTA LLEVAR -->
+              <div class="numero-mesa d-flex"  *ngIf="v.venta.estado_documento!=2">
+                <p class="m-0 p-0 px-2" *ngIf="v.venta.venta_llevar == false">Mesa : {{ v.venta.mesa }}</p>
+                <p class="m-0 p-0 px-2" *ngIf="v.venta.venta_llevar == true"><span style="color: #d0842e;font-weight: 500;">Para Llevar </span> <span *ngIf="v.venta.mesa!=null"> #{{ v.venta.mesa }}</span></p>
+              </div>
+              <!-- ANULADO -->
+              <div class="numero-mesa d-flex" *ngIf="v.venta.estado_documento==2">
+                <p class="m-0 p-0" *ngIf="v.venta.venta_llevar == false">ANULADO</p>
+              </div>
+              <!-- <div class="btn-editar">
+                <button class="btn btn-primary" style="height: max-content; padding: 0 15px; background: #333c4e00; border: none; border-radius: 0px;" (click)="VISUALIZAR_VENTA(v)">Ver</button>
+              </div> -->
+            
+          </div>
+          <!--************** BODY CARD VENTA **************-->
+          <div class="card-body p-0" style="overflow: auto;">
+            <ng-container *ngFor="let detalle of v.detalle_venta; let i = index">
+              <!-- Contenedor flex para organizar el producto y complementos en fila -->
+              <div style="border-bottom: 1px solid #636363; padding:4px 10px;">
+                <!-- Contenedor flex para producto y complementos -->
+                <div class="d-flex align-items-start">
+                  <!-- Producto Nombre -->
+                  <p class="producto m-0 me-2" style="font-weight: bold; letter-spacing: 1px;" [ngStyle]="{ 'width': detalle.detalle_opcion.length === 0 ? '100%' : '35%' }">
+                    {{detalle.cantidad_item}} {{ detalle.nombre }}
+                    <span *ngIf="detalle.item_llevar" style="color: #c17927;"> P/LL</span>
+                  </p>
+          
+                  <!-- Contenedor de complementos en una fila -->
+                  <div class="d-flex flex-wrap" style="width: 75%;">
+                    <ng-container *ngFor="let opcion of detalle.detalle_opcion">
+                      <!-- Iterar sobre cada complemento -->
+                      <div class="complemento-col me-3">
+                        <p class="detalle-producto m-0" *ngFor="let o of opcion">
+                          <span>{{o.cantidad_op}} {{ o.nombre }}</span> 
+                        </p>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+  
+            </ng-container>
+            <div class="mx-1" *ngIf="v.venta.descripcion.length>0">
+              Obs: {{v.venta.descripcion}}
+            </div>
+          </div>
+          
+      
+          <!--************** FOOTER CARD VENTA **************-->
+          <div class="card-footer d-flex justify-content-between p-0">
+              <div class="finalizar">
+                <button class="btn btn-danger" *ngIf="v.venta.estado == 0 || v.venta.estado == 1" (click)="showModal_Finalizar(v,i)">Finalizar</button>
+                <!-- <button class="btn btn-primary" *ngIf="v.venta.estado == 1" (click)="showModal_Finalizar(v,i)">Finalizar</button> -->
+              </div>
+              <div class="no-pagado d-flex align-items-center px-1" style="font-weight: 700; color: #b64848;" *ngIf="v.venta.estado_transaccion == 1">
+                NO CANCELADO
+              </div>
+              <div class="iniciar">
+                <button class="btn btn-success" *ngIf="v.venta.estado == 0" (click)="MODIFICAR_SOLO_DATOS_VENTA(v, 1, i)">Iniciar</button>
+                <button class="btn btn-success" *ngIf="v.venta.estado == 1" (click)="MODIFICAR_SOLO_DATOS_VENTA(v, 3, i)">Nuevo -></button>
+              </div>
+          </div>
+        </div>
+      </ng-container>     
+  
+    </div>
+
+    <div class="custom-pagination" style="height: 13vh;">
+      <!-- Controles de paginación -->
+      <pagination-controls 
+        (pageChange)="page_v = $event"
+        previousLabel="Anterior" 
+        nextLabel="Siguiente"        
+        style="text-align: center;">
+     </pagination-controls>
+    </div>
+</div>
+
+
+
+
+
+
+<!-- ****************************** MENSAJE TOAST ***************************************** -->
+<div class="toast" id="toast" role="alert" aria-live="assertive" aria-atomic="true">
+
+  <div id="toast-body" class="toast-body">
+    <span class="px-2" *ngIf="toast_tipo == 1"><img src="../assets/images/icons/icon-options/correcto.png"></span> 
+    <span class="px-2" *ngIf="toast_tipo == 2"><img src="../assets/images/icons/icon-options/error.png"></span> 
+    <span>{{mensaje_toast}}</span>
+  </div>
+</div>
+
+
+<!-- ***************************************************************  MODAL FINALIZAR VENTA **************************************************************  -->
+<!-- ***************************************************************************************************************************************************** -->
+<div #modalFinalizarVenta id="modalFinalizarVenta" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom">
+    <div class="modal-content content-modal">
+      <div class="modal-header">
+        <h1 class="modal-title fs-4" id="exampleModalLabel">Finalizar Venta</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- FOOTER : BOTON CERRAR -->
+      <div class="modal-footer btn-principal" *ngIf="ventaF">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button class="btn btn-primary" *ngIf="ventaF.venta.estado == 0" (click)="MODIFICAR_SOLO_DATOS_VENTA(this.ventaF, 2, indexF)">Finalizar</button>
+        <button class="btn btn-primary" *ngIf="ventaF.venta.estado == 1" (click)="MODIFICAR_SOLO_DATOS_VENTA(this.ventaF, 4, indexF)">Finalizar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

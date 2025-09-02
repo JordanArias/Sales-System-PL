@@ -1,0 +1,94 @@
+
+.container-signin{
+    height: 100vh;
+    /* background: #242424; */
+    background: linear-gradient(to right, #36404e, #242424); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */    
+}
+.container-form{
+    min-height: 48%;
+    min-width: 60%;
+    max-width: 85%;
+    border-radius: 15px; /* Ajusta el valor según tus preferencias */
+    overflow: hidden;
+}
+.fondo-welcome{
+    background: #2a384c;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    justify-content: space-evenly;
+}
+.fondo-welcome .descripcion{
+    color: #f3f3f3;
+    text-align: center;
+}
+.fondo-welcome .titulo{
+    color: #2a384c;
+    background: aliceblue;
+    border-radius: 24px;
+    padding: 3% 4%;
+}
+.fondo-welcome .titulo h3{
+    font-weight: 800;
+    font-size: 45px;
+}
+
+
+
+.fondo-signin{
+    background: aliceblue;
+    padding: 7%;
+}
+
+
+.fondo-signin label{
+    font-weight: 400;
+    font-size: 18px;
+    color:#484848;
+}
+.fondo-signin input{
+    outline: none;
+    border: none;
+    border-radius: 0px;
+    border-bottom: 2px solid #2a384c;
+    background: #f0f8ff;
+}
+
+.container-btn button{
+    width: 100%;
+    color: #f3f3f3;
+    background: #2a384c;
+}
+
+
+
+
+@media(max-width:767px){
+    .fondo-welcome p,h4{
+        display: none;
+    }
+    .fondo-welcome .titulo h3{
+        font-size: 20px;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+#toast {
+    width: 225px;
+    position: fixed;
+    top: 90px; /* Centra verticalmente */
+    left: 70%; /* Centra horizontalmente */
+    transform: translate(-50%, -50%); /* Alinea al centro de la pantalla */
+  }
+  

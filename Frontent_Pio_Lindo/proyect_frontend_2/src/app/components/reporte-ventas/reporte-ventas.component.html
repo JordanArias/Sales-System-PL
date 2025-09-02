@@ -1,0 +1,341 @@
+<!-- *******************************  LISTA PRODUCTOS - NAV HORIZONTAL ****************************** -->
+<!-- ********************************************************************************************* -->
+<div class="container-principal-Stock">
+    <!-- OPCIONES: VOLVER - BUSCAR - AGREGAR -->
+    <div class="d-flex justify-content-end align-items-center px-3 py-2 container-opciones">
+        <!-- Buscador -->
+        <div class="container-buscador">
+            <button class="btn btn-secondary"  style="background: #3e4451;"  title="Filtrar Movimientos" (click)="showModalSelectFecha()"> 
+                  Seleccionar Fecha
+            </button>
+        </div>
+        <div class="d-flex mx-2">
+            <select class="custom-select" [(ngModel)]="vista_select" name="vista_select" style="height: 34px;">
+              <option [ngValue]="1">Reporte Ventas</option>
+              <option [ngValue]="2">Reporte Productos</option>
+              <option [ngValue]="3">Reporte Opciones</option>
+            </select>
+        </div>
+
+        <!-- Boton Agregar -->
+        <div class="container-agregar">
+          <button class="btn btn-secondary" (click)="FILTRAR_CAJA()" style="font-weight: 500; color: #f4f4f4;"> 
+            <span class="px-0 d-flex align-items-center">
+              <img src="../assets/images/icons/icon-options/buscar.png" class="me-1">Filtrar
+            </span>
+          </button>
+        </div>
+  
+    </div>
+
+    <!-- ********* LISTA VENTAS *********  -->
+    <div class="container-lista" *ngIf="reporte_vista == 1">
+      <ul class="list-group p-0" style="border: none;">
+        <!-- TITULO PRINCIPAL -->
+        <li class="list-group-item d-flex" style="flex-direction: row; justify-content: space-between;">
+          <h4 class="m-0 px-2 py-2" style="font-weight: 400;">Reporte Ventas</h4>
+          <h6 class="m-0 px-2 py-0 d-flex align-items-center" style="font-size: 18px; font-weight: 100; letter-spacing: 2px;">De {{fecha_inicial}} a {{fecha_final}}</h6>
+           <!-- <div class="m-0 px-2 d-flex">
+              <button class="btn px-3" type="button" style="color: #f4f4f4;font-size: 17px;" (click)="seleccionarOpcion(2)">Todo</button>
+              <button class="btn px-3" type="button" style="color: #f4f4f4;font-size: 17px;" (click)="seleccionarOpcion(0)">Activos</button>
+              <button class="btn px-3" type="button" style="color: #f4f4f4;font-size: 17px;" (click)="seleccionarOpcion(1)">Inactivos</button>
+           </div> -->
+        </li>        
+        <!-- TITULOS -->
+        <li class="list-group-item">
+          <div class="row mx-0 d-flex align-items-center">
+            <div class="col-3 row mx-0 px-0">
+              <div class="col-4">Venta</div>
+              <div class="col-4">Usuario</div>
+              <div class="col-4">Cliente</div>
+            </div>
+            <div class="col-6 row mx-0 px-0">
+              <div class="col-4">Bolvianos</div>
+              <div class="col-4">Pesos</div>
+              <div class="col-4">Detalle Productos</div>
+            </div>
+            <div class="col-3 row mx-0 px-0">
+              <div class="col-7">Utilidad bs.</div>
+              <div class="col-5">Factura</div>
+            </div>
+          </div>
+        </li>
+        <!-- LISTA DE VENTAS -->
+        <li class="list-group-item" *ngFor="let v of lista_ventas | paginate: { itemsPerPage: 5, currentPage: page }; let i = index" style="font-size: 16px; height: 95px;">
+          <div class="row mx-0 d-flex align-items-center">
+            <!-- VENTA, FECHA, USUARIO, CLIENTE -->
+            <div class="col-3 row mx-0 px-0">
+                  <!-- VENTA -->
+                  <div class="col-4">
+                    <div class="col-12 px-0" style="color: #73b574">v. {{v.cod_venta}}</div>
+                    <div class="col-12 px-0">{{v.fecha}}</div>
+                    <div class="col-12 px-0">{{v.hora}}</div>
+                  </div>
+                  <!-- USUARIO -->
+                  <div class="col-4">{{v.ci_usuario}}</div>
+                  <!-- CLIENTE -->
+                  <div class="col-4">{{v.identificacion}} <br> {{v.nombre}}</div>
+            </div>
+            <!-- MONTOS -->
+            <div class="col-6 row mx-0 px-0">
+                <!-- BOLIVNAOS -->
+                <div class="col-4">
+                  <div class="px-0 d-flex" [ngClass]="{'valor-cero': !(v.bs_total > 0)}"> <span class="moneda">total: </span> {{v.bs_total}} </div>
+                  <div class="px-0 d-flex" [ngClass]="{'valor-cero': !(v.bs_pagado > 0)}"><span class="moneda">pagado: </span> {{v.bs_pagado || 0}} </div>
+                  <div class="px-0 d-flex" [ngClass]="{'valor-cero': !(v.bs_cambio > 0)}"><span class="moneda">cambio: </span> {{v.bs_cambio || 0}}</div>
+                  <div class="px-0 d-flex" *ngIf="v.bs_banca_pagado!=null" [ngClass]="{'valor-cero': !(v.bs_banca_pagado > 0)}"><span class="moneda">banca: </span> {{v.bs_banca_pagado || 0}}</div>
+                </div>
+                <!-- ARGENTINOS -->
+                <div class="col-4">
+                  <div class="px-0 d-flex" [ngClass]="{'valor-cero': !(v.ps_total > 0)}"> <span class="moneda">total: </span> {{v.ps_total}}</div>
+                  <div class="px-0 d-flex" [ngClass]="{'valor-cero': !(v.ps_pagado > 0)}"> <span class="moneda">Pagado: </span> {{v.ps_pagado || 0}}</div>
+                  <div class="px-0 d-flex" [ngClass]="{'valor-cero': !(v.ps_cambio > 0)}"> <span class="moneda">cambio: </span> {{v.ps_cambio || 0}}</div>
+                </div>
+                <!-- DETALLE  -->
+                <div class="col-4">
+                  <div class="px-0 d-flex"><span class="detalle">Cant. Prod:</span> {{v.cantidad_total_vendida || 0}}</div>
+                  <div class="px-0 d-flex"><span class="detalle">Precio bs:</span> {{v.total_precio_vendido || 0}}</div>   
+                  <div class="px-0 d-flex"><span class="detalle">Costo bs:</span> {{v.total_costo_insumo || 0}}</div>    
+                </div>
+            </div>
+
+            <div class="col-3 row mx-0 px-0">
+              <!-- BRUTO -->
+              <div class="col-7">
+                <div *ngIf="v.bs_total_descuento>0" style="color: #cc7365;">Descuento: <span style="font-weight: 400;">{{v.bs_total_descuento}} </span></div>
+                <div *ngIf="v.estado_documento==1" style="color: #cc7365;">Iva: <span style="font-weight: 400;">{{(v.bs_total_pagado*0.13).toFixed(2) || 0}} </span></div>
+                <div *ngIf="v.estado_documento==1">Neto: <span style="font-weight: 400;">{{(v.bs_total_pagado - v.total_costo_insumo - (v.bs_total_pagado*0.13)).toFixed(2)}}</span></div>
+                <div *ngIf="v.estado_documento==0">Neto: <span style="font-weight: 400;">{{(v.bs_total_pagado - v.total_costo_insumo - v.bs_total_descuento).toFixed(2)}}</span></div>
+              </div>
+              <!-- FACTURA -->
+              <div class="col-5 d-flex align-items-center">
+                <span *ngIf="v.estado_documento==0" style="color: #757575;">N/A</span>
+                <span *ngIf="v.estado_documento==1" style="color: #73b574;">Emitido</span>
+                <span *ngIf="v.estado_documento==2" style="color: #cc7365;">Anulado</span>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="list-group-item custom-pagination py-2">
+            <!-- Controles de paginación -->
+            <pagination-controls 
+            (pageChange)="page = $event" 
+            previousLabel="Anterior" 
+            nextLabel="Siguiente"        
+            style="text-align: center;">
+          </pagination-controls>
+        </li>
+      </ul>
+    </div>
+
+    <!-- ********* LISTA PRODUCTOS *********  -->
+    <div class="container-lista" *ngIf="reporte_vista == 2">
+      <ul class="list-group p-0">
+          <!-- Titulo Principal -->
+        <li class="list-group-item d-flex" style="flex-direction: row; justify-content: space-between;">
+          <h4 class="m-0 px-2 py-2" style="font-weight: 400;">Reporte Productos</h4>
+          <h6 class="m-0 px-2 py-0 d-flex align-items-center" style="font-size: 18px; font-weight: 100; letter-spacing: 2px;">De {{fecha_inicial}} a {{fecha_final}}</h6>
+           <!-- <div class="m-0 px-2 d-flex">
+              <button class="btn px-3" type="button" style="color: #f4f4f4;font-size: 17px;" (click)="seleccionarOpcion(2)">Todo</button>
+              <button class="btn px-3" type="button" style="color: #f4f4f4;font-size: 17px;" (click)="seleccionarOpcion(0)">Activos</button>
+              <button class="btn px-3" type="button" style="color: #f4f4f4;font-size: 17px;" (click)="seleccionarOpcion(1)">Inactivos</button>
+           </div> -->
+        </li>        
+        <!-- Titulos -->
+        <li class="list-group-item">
+          <div class="row mx-0 d-flex align-items-center">
+            <div class="col-5 row m-0 p-0">
+              <div class="col-2">N°</div>
+              <div class="col-6">Producto</div>
+              <div class="col-4">Precio Venta</div>
+            </div>
+
+            <div class="col-5 row m-0 p-0">
+              <div class="col-4">Cant. Vendida</div>
+              <div class="col-4">Ganancia</div>
+              <div class="col-4">Costo</div>
+            </div>
+
+            <div class="col-2">Utilidad</div>
+          </div>
+        </li>
+        <!-- Lista Opciones -->
+        <!-- <li class="list-group-item" *ngFor="let op of lista_opciones | paginate: { itemsPerPage: 5, currentPage: p }"> -->
+        <li class="list-group-item" *ngFor="let pro of lista_productos | paginate: { itemsPerPage: 8, currentPage: page } | filter:filterPost: ['nombre']; let i = index">
+          <div class="row mx-0 d-flex align-items-center">
+            <div class="col-5 row m-0 p-0">
+                <!-- CODIGO -->
+                <div class="col-2 cell">
+                  {{i+1}}
+                </div>
+                <!-- NOMBRE -->
+                <div class="col-6 cell">
+                    {{pro.nombre}}
+                </div>
+                <!-- PRECIO -->
+                <div class="col-4 cell" style="color: #c2b980;">
+                    bs. {{ pro.precio}}
+                </div>
+            </div>
+
+            <div class="col-5 row m-0 p-0">
+                <!-- CANTIDAD TOTAL -->
+                <div class="col-4 cell">
+                  {{pro.cantidad_total_vendida}} 
+                </div>
+                <!-- GANANCIA TOTAL -->
+                <div class="col-4 cell" style="color: #9ed2a9;">
+                    bs. {{ pro.precio_total_vendido}} 
+                </div>
+                <!-- COSTO INSUMO TOTAL -->
+                <div class="col-4 cell" style="color:#cca09a;">
+                    bs. {{ pro.costo_total_insumos | number:'1.2-2'}} 
+                </div>
+            </div>
+
+            <!-- COSTO INSUMO TOTAL -->
+            <div class="col-2 cell">
+              bs. {{ (pro.precio_total_vendido - pro.costo_total_insumos) | number:'1.2-2' }}
+            </div>
+          </div>
+        </li>
+        <li class="list-group-item custom-pagination pt-2">
+          <!-- Controles de paginación -->
+          <pagination-controls 
+          (pageChange)="page = $event" 
+          previousLabel="Anterior" 
+          nextLabel="Siguiente"        
+          style="text-align: center;">
+         </pagination-controls>
+        </li>
+      </ul>
+      <!-- Paginación -->
+      <!-- <pagination-controls (pageChange)="p = $event"></pagination-controls> -->
+    </div>
+
+    <!-- ********* LISTA OPCIONES *********  -->
+    <div class="container-lista" *ngIf="reporte_vista == 3">
+      <ul class="list-group p-0">
+          <!-- Titulo Principal -->
+        <li class="list-group-item d-flex" style="flex-direction: row; justify-content: space-between;">
+          <h4 class="m-0 px-2 py-2" style="font-weight: 400;">Reporte Opciones</h4>
+          <h6 class="m-0 px-2 py-0 d-flex align-items-center" style="font-size: 18px; font-weight: 100; letter-spacing: 2px;">De {{fecha_inicial}} a {{fecha_final}}</h6>
+           <!-- <div class="m-0 px-2 d-flex">
+              <button class="btn px-3" type="button" style="color: #f4f4f4;font-size: 17px;" (click)="seleccionarOpcion(2)">Todo</button>
+              <button class="btn px-3" type="button" style="color: #f4f4f4;font-size: 17px;" (click)="seleccionarOpcion(0)">Activos</button>
+              <button class="btn px-3" type="button" style="color: #f4f4f4;font-size: 17px;" (click)="seleccionarOpcion(1)">Inactivos</button>
+           </div> -->
+        </li>        
+        <!-- Titulos -->
+        <li class="list-group-item">
+          <div class="row mx-0 d-flex align-items-center">
+
+              <div class="col-1">N°</div>
+              <div class="col-3">Opción</div>
+              <div class="col-4">Descripción</div>
+              <div class="col-2">Cant. Vendida</div>
+              <div class="col-2">Costo Insumo</div>
+
+          </div>
+        </li>
+        <!-- Lista Opciones -->
+        <!-- <li class="list-group-item" *ngFor="let op of lista_opciones | paginate: { itemsPerPage: 5, currentPage: p }"> -->
+        <li class="list-group-item" *ngFor="let op of lista_opciones | paginate: { itemsPerPage: 8, currentPage: page } | filter:filterPost: ['nombre']; let i = index">
+          <div class="row mx-0 d-flex align-items-center">
+              <!-- CODIGO -->
+              <div class="col-1 cell" style="color: #d4da8f">
+                {{i+1}}
+              </div>
+              <!-- NOMBRE -->
+              <div class="col-3 cell">
+                  {{op.nombre}}
+              </div>
+              <!-- DESCRIPCION -->
+              <div class="col-4 cell">
+                  {{op.descripcion}}
+              </div>
+              <!-- CANTIDAD TOTAL -->
+              <div class="col-2 cell" style="color: #9ed2a9;">
+                  {{op.cantidad_total_vendida}}
+              </div>
+              <!-- COSTO INSUMO -->
+              <div class="col-2 cell" style="color:#cca09a;">
+                  bs. {{op.costo_total_insumos}}
+              </div>
+          </div>
+        </li>
+        <li class="list-group-item custom-pagination pt-2">
+          <!-- Controles de paginación -->
+          <pagination-controls 
+          (pageChange)="page = $event" 
+          previousLabel="Anterior" 
+          nextLabel="Siguiente"        
+          style="text-align: center;">
+         </pagination-controls>
+        </li>
+      </ul>
+      <!-- Paginación -->
+      <!-- <pagination-controls (pageChange)="p = $event"></pagination-controls> -->
+    </div>
+</div>  
+
+
+
+
+
+
+
+
+
+
+<!-- ***************************************************************** MODAL ESCOGER FECHA ****************************************************************  -->
+<!-- ***************************************************************************************************************************************************** -->
+<div #modalSelectFecha id="modalSelectFecha" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+    <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom">
+      <div class="modal-content content-modal">
+        <div class="modal-header">
+          <h1 class="modal-title fs-4" id="exampleModalLabel">Seleccionar Fecha</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+      
+          <form #formFecha="ngForm" class="row g-3">
+            <div class="col-8 row m-0 mt-4">
+                <!-- FECHA INICIAL -->
+                <div class="col-6 mb-1 mt-0">
+                  <label class="form-label">Fecha Inicial:</label>
+                  <input type="date" #fechaIni="ngModel" [(ngModel)]="selectFecha.fechaI" name="fechaIni" [max]="today" [class.is-invalid]="mostrarAdvertenciasFechaI && !isFormValid_Fecha()" required style="width: 100%;" class="form-control">
+                  <div class="advertencias" *ngIf="mostrarAdvertenciasFechaI && !isFormValid_Fecha()">
+                    <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+                    <p class="m-0">Fecha Invalida</p>
+                  </div>
+                </div>
+                <!-- FECHA FINAL -->
+                <div class="col-6 mb-1 mt-0">
+                  <label class="form-label">Fecha Final:</label>
+                  <input type="date" #fechaFin="ngModel" [(ngModel)]="selectFecha.fechaF" [max]="today" [class.is-invalid]="mostrarAdvertenciasFecha && !isFormValid_Fecha()" name="fechaFin" class="form-control"  required style="width: 100%;">
+                  <div class="advertencias" *ngIf="mostrarAdvertenciasFecha && !isFormValid_Fecha()">
+                    <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+                    <p class="m-0">Fecha Invalida</p>
+                  </div>
+                </div>
+            </div>
+  
+  
+  
+            <div class="col-4 m-0 atajos mt-4">
+              <button type="button" class="btn btn-secondary" (click)="seleccionar_Atajo(7)">Últimos 7 días</button>
+              <button type="button" class="btn btn-secondary" (click)="seleccionar_Atajo(15)">Últimos 15 días</button>
+              <button type="button" class="btn btn-secondary" (click)="seleccionar_Atajo(30)">Últimos 30 días</button>
+            </div>
+  
+            <!-- BOTONES -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+          </form>
+        </div>
+      
+      </div>
+    </div>
+</div>

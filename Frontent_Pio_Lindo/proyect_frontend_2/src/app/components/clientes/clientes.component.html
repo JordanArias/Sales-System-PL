@@ -1,0 +1,224 @@
+<!-- **********************************************  OPCIONES - NAV HORIZONTAL ************************************ -->
+<!-- ************************************************************************************************************** -->
+<div class="container-principal-Stock">
+  <!-- OPCIONES: VOLVER - BUSCAR - AGREGAR -->
+  <div class="d-flex justify-content-around align-items-center px-3 py-2 container-opciones">
+
+      <!-- Buscador -->
+      <div class="container-buscador">
+        <input type="text" class="form-control" placeholder="Buscar" name="filterPost" [(ngModel)]="filterPost">
+      </div>
+      <!-- Boton Agregar -->
+      <div class="container-agregar">
+        <button class="btn btn-secondary" (click)="showModalFormulario_Cliente('',1)">Agregar Cliente</button>
+      </div>
+
+  </div>
+
+  <!-- ********* LISTA OPCIONES *********  -->
+  <div class="container-lista">
+    <ul class="list-group p-0">
+        <!-- Titulo Principal -->
+      <li class="list-group-item d-flex" style="flex-direction: row; justify-content: space-between;">
+        <h3 class="m-0 px-2 py-2">Clientes</h3>
+         <div class="m-0 px-2 d-flex">
+            <button class="btn px-3" type="button" style="color: #f4f4f4;font-size: 17px;" (click)="seleccionarOpcion(2)">Todo</button>
+            <button class="btn px-3" type="button" style="color: #f4f4f4;font-size: 17px;" (click)="seleccionarOpcion(0)">Activos</button>
+            <button class="btn px-3" type="button" style="color: #f4f4f4;font-size: 17px;" (click)="seleccionarOpcion(1)">Inactivos</button>
+         </div>
+      </li>        
+      <!-- Titulos -->
+      <li class="list-group-item" style="font-weight: 500;">
+        <div class="row mx-0 d-flex align-items-center">
+          <div class="col-3 cell">Nombre</div>
+          <div class="col-4 row m-0 p-0">
+            <div class="col-2 cell">Doc.</div>
+            <div class="col-6 cell">N° Identidad</div>
+            <div class="col-4 cell">Celular</div>
+          </div>
+          <div class="col-3 cell">Correo</div>
+          <div class="col-1 cell">Estado</div>
+          <div class="col-1 text-center">Op</div>
+        </div>
+      </li>
+      <!-- Lista Opciones -->
+      <!-- <li class="list-group-item" *ngFor="let op of lista_opciones | paginate: { itemsPerPage: 5, currentPage: p }"> -->
+      <li class="list-group-item" *ngFor="let c of lista_clientes_filtradas | paginate: { itemsPerPage: 9, currentPage: page } | filter:filterPost: ['nombre']; let i = index">
+        <div class="row mx-0 d-flex align-items-center">
+          <!-- NOMBRE -->
+          <div class="col-3 cell">
+              <div class="col-12 px-0" style="color: #d4da8f">{{c.nombre}}</div>
+          </div>
+          <div class="col-4 row m-0 p-0">
+            <!-- DOCUMENTO -->
+            <div class="col-2 cell">
+              <span *ngIf="c.documento == 1">CI</span>
+              <span *ngIf="c.documento == 2">NIT</span>
+              <span *ngIf="c.documento == 3">DNI</span>
+              <span *ngIf="c.documento == 4">S/N</span>
+            </div>
+            <!-- CODIGO -->
+            <div class="col-6 cell" style="color: #d4da8f">
+              {{c.identificacion}}
+            </div>
+            <!-- CELULAR -->
+            <div class="col-4 cell">
+              {{c.celular}}    
+            </div>
+          </div>
+
+          <!-- CORREO -->
+          <div class="col-3 cell">
+              {{c.correo}}  
+          </div>
+          <!-- ESTADO -->
+          <div class="col-1 cell">
+            <div class="btn py-1" title="Desactivar Opcion" style="color: #f4f4f4;background: #335843;width: 100%; padding: 5px 0;" *ngIf="c.estado==0" (click)="showModal_EstadoCliente(c)">Activo</div>
+            <div class="btn" title="Activar Opcion" style="color: #f4f4f4;background: #583333;width: 100%; padding: 5px 0;" *ngIf="c.estado==1" (click)="showModal_EstadoCliente(c)">Inactivo</div> 
+          </div>
+          <!-- Opciones -->
+          <div class="col-1 d-flex justify-content-evenly container-btn">
+            <button class="btn p-0" > <span class="px-0" title="Modificar Opción"><img src="../assets/images/icons/icon-options/editar.png" (click)="showModalFormulario_Cliente(c,2)"></span></button>
+            <button class="btn p-0" > <span class="px-0" title="Eliminar Opción"><img src="../assets/images/icons/icon-options/eliminar.png" (click)="showModal_EliminarCliente(c)"></span></button>
+          </div>
+        </div>
+      </li>
+      <li class="list-group-item custom-pagination pt-2">
+        <!-- Controles de paginación -->
+        <pagination-controls 
+        (pageChange)="page = $event" 
+        previousLabel="Anterior" 
+        nextLabel="Siguiente"        
+        style="text-align: center;">
+       </pagination-controls>
+      </li>
+    </ul>
+    <!-- Paginación -->
+    <!-- <pagination-controls (pageChange)="p = $event"></pagination-controls> -->
+  </div>
+
+</div>  
+
+
+<!-- ****************************** MENSAJE TOAST ***************************************** -->
+<div class="toast" id="toast" role="alert" aria-live="assertive" aria-atomic="true">
+
+  <div id="toast-body" class="toast-body">
+    <span class="px-2" *ngIf="toast_tipo == 1"><img src="../assets/images/icons/icon-options/correcto.png"></span> 
+    <span class="px-2" *ngIf="toast_tipo == 2"><img src="../assets/images/icons/icon-options/error.png"></span> 
+    <span>{{mensaje_toast}}</span>
+  </div>
+</div>
+
+<!-- ***************************************************************  MODAL FORMULARIO CLIENTE  ********************************************************  -->
+<!-- *************************************************************************************************************************************************** -->
+<div #modalFormularioCliente id="modalFormularioCliente" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" (hidden.bs.modal)="resetForm()">
+  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom">
+    <div class="modal-content content-modal">
+      <div class="modal-header">
+        <h1 *ngIf="proceso == 1" class="modal-title fs-4" id="exampleModalLabel">Nuevo Cliente</h1>
+        <h1 *ngIf="proceso == 2" class="modal-title fs-4" id="exampleModalLabel">Modificar Cliente</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+          <form #formCliente="ngForm" class="row g-3">
+            <!-- NOMBRE CLIENTE -->
+            <div class="col-4 mb-1 mt-2">
+              <label class="form-label">Nombre</label>
+              <input type="text" #nombre="ngModel" [(ngModel)]="clienteForm.nombre" name="nombre" placeholder="" [class.is-invalid]="mostrarAdvertencias && clienteForm.nombre.length==0" class="form-control" required>
+              <div class="advertencias" *ngIf="mostrarAdvertencias && clienteForm.nombre.length==0">
+                <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+                <p class="m-0">Agregar Nombre</p>
+              </div>
+            </div> 
+            <!-- SELECCIONAR DOCUMENTO -->
+            <div class="col-4 mb-1 mt-2">
+              <label class="form-label">Documento</label>
+              <select class="custom-select" #documento="ngModel" [(ngModel)]="clienteForm.documento" [class.is-invalid]="mostrarAdvertencias && !clienteForm.documento" name="documento" required>
+                <option value="">Seleccionar</option>
+                <option value=1>Cedula</option>
+                <option value=2>NIT</option>
+                <!-- <option value=3>DNI</option> -->
+                <option value=5>NIT GENERICO</option>
+              </select>
+              <div class="advertencias" *ngIf="mostrarAdvertencias && !clienteForm.documento" title="Seleccionar tipo de documento">
+                <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+                <p class="m-0">Seleccionar Documento</p>
+              </div>
+            </div>
+
+            <!-- INDENTIDAD -->
+            <div class="col-4 mb-1 mt-2">
+              <label class="form-label">Nro Identificación</label>
+              <input type="text" #identificacion="ngModel" [(ngModel)]="clienteForm.identificacion" name="identificacion" placeholder="" [class.is-invalid]="mostrarAdvertencias && clienteForm.identificacion==null" class="form-control" required>
+              <div class="advertencias" *ngIf="mostrarAdvertencias && clienteForm.identificacion==null">
+                <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+                <p class="m-0">Agregar Nro Identificación</p>
+              </div>
+            </div>
+
+            <!-- CORREO -->
+            <div class="col-4 mb-1 mt-2">
+              <label class="form-label">Correo</label>
+              <input type="text" #correo="ngModel" [(ngModel)]="clienteForm.correo" name="correo" class="form-control">
+            </div>
+            <!-- CELULAR -->
+            <div class="col-4 mb-1 mt-2">
+              <label class="form-label">Celular</label>
+              <input type="number" #celular="ngModel" [(ngModel)]="clienteForm.celular" name="celular" class="form-control">
+            </div>  
+      <!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->      
+            <!-- BOTONES AGREGAR Y MODIFICAR -->
+            <div class="modal-footer btn-principal">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <button *ngIf="proceso == 1" type="button" class="btn btn-secondary" style="background: #006bb0;" (click)="AGREGAR_CLIENTE()">Agregar</button>
+              <button *ngIf="proceso == 2" type="button" class="btn btn-secondary" style="background: #006bb0;" (click)="MODIFICAR_CLIENTE()">Modificar</button>
+            </div>
+          </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- *************************************************************  MODAL ESTADO CLIENTE  *****************************************************************  -->
+<!-- ****************************************************************************************************************************************************** -->
+<div #modalEstadoCliente id="modalEstadoCliente" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom">
+    <div class="modal-content content-modal">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">
+          <span *ngIf="clienteForm.estado == 1">Activar</span>
+          <span *ngIf="clienteForm.estado == 0">Desactivar</span>
+           {{clienteForm.nombre}}</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- FOOTER : BOTON CERRAR -->
+      <div class="modal-footer btn-principal">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button *ngIf="clienteForm.estado == 1" class="btn btn-secondary" style="border: none;background: #006bb0;" (click)="MODIFICAR_ESTADO_CLIENTE()">Activar</button>
+        <button *ngIf="clienteForm.estado == 0" class="btn btn-secondary" style="border: none;background: #006bb0;" (click)="MODIFICAR_ESTADO_CLIENTE()">Desacivar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ****************************** MODAL DELETE USUARIO ***************************************** -->
+<div #modalEliminarCliente id="modalEliminarCliente" class="modal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom">
+    <div class="modal-content content-modal">
+      <div class="modal-header">
+        <h5 class="modal-title fs-5">Eliminar Cliente {{clienteForm.nombre}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-footer btn-principal">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" (click)="ELIMINAR_CLIENTE()" style="background: #006bb0;">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>

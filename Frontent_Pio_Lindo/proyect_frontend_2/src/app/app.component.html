@@ -1,0 +1,277 @@
+
+<div class="main-container d-flex">
+  <!-- MENU MOVIL -->
+  <div class="movil-bar sidebar" id="side_nav"  [ngStyle]="{'margin-left.px': sidebarActiva ? 0 : -250}" *ngIf="authService.loggedIn()"> <!--si sidebarActiva es true despliega el menu sino lo oculta*/-->
+
+    <div class="header-box px-3 pt-3 pb-4 d-flex justify-content-between">
+      <h1 class="fs-4"> <span class="bg-white text-dark rounded shadow px-2">PL</span> <span class="text-white">Pio Lindo</span></h1>
+      <button class="btn d-md-none d-block close-btn px-1 py-0 text-white" (click)="closeMenu()">  <span class=""><img src="../assets/images/icons/icon-menus/menu.png" alt="" style="width: 25%;"></span> </button>
+    </div>
+
+    <!-- LISTA DE COMPONENTES -->
+    <ul class="list-unstyled px-2">
+        <li class="icon-menu d-flex" [ngClass]="{ 'active': opcionSeleccionada === 1 }" >
+          <a href="" class="text-decoration-none d-block py-3" [routerLink]="Ausuario ? '/usuario' : '/'" (click)="seleccionarMenu(1)">
+            <span class="px-4"><img src="../assets/images/icons/icon-menus/usuarios.png" alt=""></span>
+            Usuarios
+          </a>
+        </li>
+        <li class="icon-menu d-flex" [ngClass]="{ 'active': opcionSeleccionada === 2 }">
+          <a href="" class="text-decoration-none d-block py-3" [routerLink]="Aproducto ? '/producto' : '/'" (click)="seleccionarMenu(2)">
+            <span class="px-4"><img src="../assets/images/icons/icon-menus/productos.png" alt=""></span>
+            Productos
+          </a>
+        </li>
+        <li class="icon-menu d-flex" [ngClass]="{ 'active': opcionSeleccionada === 3 }">
+          <a href="" class="text-decoration-none d-block  py-3" [routerLink]="Aventa ? '/venta' : '/'" (click)="seleccionarMenu(3)">
+            <span class="px-4"><img src="../assets/images/icons/icon-menus/ventas.png" alt=""></span>
+            Ventas
+          </a>
+        </li>
+        <li class="icon-menu d-flex" [ngClass]="{ 'active': opcionSeleccionada === 4 }">
+          <a href="" class="text-decoration-none d-block  py-3" [routerLink]="Acaja ? '/caja' : '/'" (click)="seleccionarMenu(4)">
+            <span class="px-4"><img src="../assets/images/icons/icon-menus/caja.png" alt=""></span>
+            Caja
+          </a>
+        </li>
+        <li class="icon-menu d-flex" [ngClass]="{ 'active': opcionSeleccionada === 5 }">
+          <a href="" class="text-decoration-none d-block py-3" [routerLink]="Acocina ? '/cocina' : '/'" (click)="seleccionarMenu(5)">
+            <span class="px-4"><img src="../assets/images/icons/icon-menus/cocina.png" alt=""></span>
+            Cocina
+          </a>
+        </li>
+        <li class="icon-menu d-flex" [ngClass]="{ 'active': opcionSeleccionada === 6 }">
+          <a href="" class="text-decoration-none d-block py-3" [routerLink]="Ainventario ? '/inventario' : '/'" (click)="seleccionarMenu(6)">
+            <span class="px-4"><img src="../assets/images/icons/icon-menus/insumos.png" alt=""></span>
+            Inventario
+          </a>
+        </li>
+        <li class="icon-menu d-flex" [ngClass]="{ 'active': opcionSeleccionada === 7 }">
+          <a href="" class="text-decoration-none d-block py-3" [routerLink]="Acliente ? '/cliente' : '/'" (click)="seleccionarMenu(7)">
+            <span class="px-4"><img src="../assets/images/icons/icon-menus/cocina.png" alt=""></span>
+            Clientes
+          </a>
+        </li>
+    </ul>
+    <hr class="h-color">
+    <ul class="list-unstyled px-2">
+      <li class="text-white text-center px-2">
+        {{this.usuario[0].nom_usu}} {{this.usuario[0].ap_usu}}
+        <a class="text-decoration-none" (click)="authService.logout()">
+        <span><img src="../assets/images/icons/icon-menus/logout.png" style="width: 25px; cursor: pointer;">
+        </span>
+        </a>
+    </li>
+    </ul>
+  </div>
+
+  <!-- MENU LAPTOP -->
+  <div class="laptop-bar sidebar" id="side_nav" *ngIf="authService.loggedIn() && mostrarSidebar"> <!--si sidebarActiva es true despliega el menu sino lo oculta*/-->
+
+    <div class="header-box px-3 pt-3 pb-1 d-flex justify-content-between">
+      <h1 class="fs-4"> <span class="bg-white text-dark rounded shadow px-2">PL</span> <span class="text-white">Pio Lindo</span></h1>
+      <!-- <button class="btn d-md-none d-block close-btn px-1 py-0 text-white" (click)="closeMenu()"></button> -->
+    </div>
+
+    <!-- BOTON OCULTAR Y MOSTRAR -->
+    <button (click)="toggleSidebar()" class="toggle-btn">
+      &lt; <!-- Este es el símbolo '<' -->
+    </button>
+
+    <!-- LISTA DE COMPONENTES -->
+    <ul class="list-unstyled px-2">
+
+      <li class="icon-menu d-flex" [ngClass]="{ 'active': opcionSeleccionada === 1 }" >
+        <a href="" class="text-decoration-none d-block py-3" [routerLink]="Ausuario ? '/usuario' : '/'" (click)="seleccionarMenu(1)">
+          <span class="px-3"><img src="../assets/images/icons/icon-menus/usuarios.png" alt=""></span>
+          Usuarios
+        </a>
+      </li>
+      <li class="icon-menu d-flex" [ngClass]="{ 'active': opcionSeleccionada === 2 }">
+        <a href="" class="text-decoration-none d-block py-3" [routerLink]="Aproducto ? '/producto' : '/'" (click)="seleccionarMenu(2)">
+          <span class="px-3"><img src="../assets/images/icons/icon-menus/productos.png" alt=""></span>
+          Productos
+        </a>
+      </li>
+      <li class="icon-menu d-flex" [ngClass]="{ 'active': opcionSeleccionada === 3 }">
+        <a href="" class="text-decoration-none d-block  py-3" [routerLink]="Aventa ? '/venta' : '/'" (click)="seleccionarMenu(3)">
+          <span class="px-3"><img src="../assets/images/icons/icon-menus/ventas.png" alt=""></span>
+          Ventas
+        </a>
+      </li>
+      <li class="icon-menu d-flex" [ngClass]="{ 'active': opcionSeleccionada === 4 }">
+        <a href="" class="text-decoration-none d-block  py-3" [routerLink]="Acaja ? '/caja' : '/'" (click)="seleccionarMenu(4)">
+          <span class="px-3"><img src="../assets/images/icons/icon-menus/caja.png" alt=""></span>
+          Caja
+        </a>
+      </li>
+      <li class="icon-menu d-flex" [ngClass]="{ 'active': opcionSeleccionada === 5 }">
+        <a href="" class="text-decoration-none d-block py-3" [routerLink]="Acocina ? '/cocina' : '/'" (click)="seleccionarMenu(5)">
+          <span class="px-3"><img src="../assets/images/icons/icon-menus/cocina.png" alt=""></span>
+          Cocina
+        </a>
+      </li>
+      <li class="icon-menu d-flex" [ngClass]="{ 'active': opcionSeleccionada === 6 }">
+        <a href="" class="text-decoration-none d-block py-3" [routerLink]="Ainventario ? '/inventario' : '/'" (click)="seleccionarMenu(6)">
+          <span class="px-3"><img src="../assets/images/icons/icon-menus/insumos.png" alt=""></span>
+          Inventario
+        </a>
+      </li>
+      <li class="icon-menu d-flex" [ngClass]="{ 'active': opcionSeleccionada === 7 }">
+        <a href="" class="text-decoration-none d-block py-3" [routerLink]="Acliente ? '/cliente' : '/'" (click)="seleccionarMenu(7)">
+          <span class="px-3"><img src="../assets/images/icons/icon-menus/clientes.png" alt=""></span>
+          Clientes
+        </a>
+      </li>
+      <li class="icon-menu d-flex" [ngClass]="{ 'active': opcionSeleccionada === 8 }">
+        <a href="" class="text-decoration-none d-block py-3" [routerLink]="Areporte ? '/reporte-ventas' : '/'" (click)="seleccionarMenu(8)">
+          <span class="px-3"><img src="../assets/images/icons/icon-menus/egreso.png" alt=""></span>
+          Reporte Ventas
+        </a>
+      </li>
+
+    </ul>
+    <!-- <hr class="h-color">
+    <ul class="list-unstyled px-2">
+      <li class=""><a href="" class="text-decoration-none">Logout</a></li>
+    </ul> -->
+  </div>
+  <!-- MENU LAPTOP LOGOS -->
+  <div class="laptop-bar sidebar" id="side_nav_logo" *ngIf="authService.loggedIn() && !mostrarSidebar"> <!--si sidebarActiva es true despliega el menu sino lo oculta*/-->
+
+    <div class="header-box px-1 pt-3 pb-1 d-flex justify-content-between">
+      <h4> <span class="bg-white text-dark rounded shadow px-1">PL</span></h4>
+      <!-- <button class="btn d-md-none d-block close-btn px-1 py-0 text-white" (click)="closeMenu()"></button> -->
+    </div>
+
+        <!-- BOTON OCULTAR Y MOSTRAR -->
+    <button (click)="toggleSidebar()" class="toggle-btn">
+      &gt; <!-- Este es el símbolo '<' -->
+    </button>
+    <!-- LISTA DE COMPONENTES -->
+    <ul class="list-unstyled px-2">
+
+      <li class="icon-menu d-flex my-3" [ngClass]="{ 'active': opcionSeleccionada === 1 }" title="Usuarios">
+        <a href="" class="text-decoration-none d-block py-1" [routerLink]="Ausuario ? '/usuario' : '/'" (click)="seleccionarMenu(1)">
+          <span class="px-1"><img src="../assets/images/icons/icon-menus/usuarios.png" alt=""></span>
+        </a>
+      </li>
+      <li class="icon-menu d-flex my-3" [ngClass]="{ 'active': opcionSeleccionada === 2 }" title="Productos">
+        <a href="" class="text-decoration-none d-block py-1" [routerLink]="Aproducto ? '/producto' : '/'" (click)="seleccionarMenu(2)">
+          <span class="px-1"><img src="../assets/images/icons/icon-menus/productos.png" alt=""></span>
+        </a>
+      </li>
+      <li class="icon-menu d-flex my-3" [ngClass]="{ 'active': opcionSeleccionada === 3 }" title="Ventas">
+        <a href="" class="text-decoration-none d-block py-1" [routerLink]="Aventa ? '/venta' : '/'" (click)="seleccionarMenu(3)">
+          <span class="px-1"><img src="../assets/images/icons/icon-menus/ventas.png" alt=""></span>
+        </a>
+      </li>
+      <li class="icon-menu d-flex my-3" [ngClass]="{ 'active': opcionSeleccionada === 4 }" title="Caja">
+        <a href="" class="text-decoration-none d-block py-1" [routerLink]="Acaja ? '/caja' : '/'" (click)="seleccionarMenu(4)">
+          <span class="px-1"><img src="../assets/images/icons/icon-menus/caja.png" alt=""></span>
+        </a>
+      </li>
+      <li class="icon-menu d-flex my-3" [ngClass]="{ 'active': opcionSeleccionada === 5 }" title="Cocina">
+        <a href="" class="text-decoration-none d-block py-1" [routerLink]="Acocina ? '/cocina' : '/'" (click)="seleccionarMenu(5)">
+          <span class="px-1"><img src="../assets/images/icons/icon-menus/cocina.png" alt=""></span>
+        </a>
+      </li>
+      <li class="icon-menu d-flex my-3" [ngClass]="{ 'active': opcionSeleccionada === 6 }" title="Inventario">
+        <a href="" class="text-decoration-none d-block py-1" [routerLink]="Ainventario ? '/inventario' : '/'" (click)="seleccionarMenu(6)">
+          <span class="px-1"><img src="../assets/images/icons/icon-menus/insumos.png" alt=""></span>
+        </a>
+      </li>
+      <li class="icon-menu d-flex my-3" [ngClass]="{ 'active': opcionSeleccionada === 7 }" title="Clientes">
+        <a href="" class="text-decoration-none d-block py-1" [routerLink]="Acliente ? '/cliente' : '/'" (click)="seleccionarMenu(7)">
+          <span class="px-1"><img src="../assets/images/icons/icon-menus/clientes.png" alt=""></span>
+        </a>
+      </li>
+      <li class="icon-menu d-flex my-3" [ngClass]="{ 'active': opcionSeleccionada === 8 }" title="Reporte de Ventas">
+        <a href="" class="text-decoration-none d-block py-1" [routerLink]="Areporte ? '/reporte-ventas' : '/'" (click)="seleccionarMenu(8)">
+          <span class="px-1"><img src="../assets/images/icons/icon-menus/egreso.png" alt=""></span>
+        </a>
+      </li>
+
+    </ul>
+    <!-- <hr class="h-color">
+    <ul class="list-unstyled px-2">
+      <li class=""><a href="" class="text-decoration-none">Logout</a></li>
+    </ul> -->
+  </div>
+
+  <!-- CONTENIDO DE COMPONENTES -->
+  <div class="content">
+    <!-- NAV HORIZONTAL -->
+    <div class="d-flex justify-content-between align-items-center ps-1 pe-3 navbar-horizontal" *ngIf="authService.loggedIn()">
+      <!-- Boton Abrir Menu Movil -->
+      <div class="d-md-none d-flex align-items-center">
+        <h4 class="m-0" style="font-size: 17px;">Coding</h4>
+        <a class="text-decoration-none" (click)="openMenu()">
+          <span class="px-3">
+            <img src="../assets/images/icons/icon-menus/menu-black.png" alt="" style="max-width: 15%; cursor: pointer;">
+          </span>     
+        </a>
+      </div>
+
+      <h4 class="m-0 titulo-gestion">{{gestion}}</h4>
+     <!-- PERFIL LOGOUT -->
+     <div id="logout">
+        <div class="d-flex justify-content-end align-items-center" style="font-size: 20px;">
+          <!-- Icon Usuario Coneccted -->
+          <div class="mx-2">
+            <span><img src="../assets/images/icons/icon-menus/usuario-active.png" style="width: 35px;">
+            </span>
+          </div>
+          <!-- Datos Usuario Coneccted -->
+          <div class="usuario-conected mx-2">
+            <p class="m-0">{{usuario[0].nom_usu}} {{usuario[0].ap_usu}}
+            </p>
+            <span *ngIf="usuario[0].cargo == 0"> Administrador</span>
+            <span *ngIf="usuario[0].cargo == 1"> Cajero</span>
+            <span *ngIf="usuario[0].cargo == 2"> Cocinero</span>
+
+          </div>
+          <!-- Menu Desplegable -->
+          <div ngbDropdown class="d-inline-block">
+            <button class="btn" id="dropdownBasic1" ngbDropdownToggle style="background: #f3f3f3; margin-left: 10px; padding: 0px; width: 30px; height: 29px;"></button>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1" style="min-width: 190px; background: #3c4a64; color: #fff; font-size: 17px; letter-spacing: 1px;">
+              
+              <div class="px-3">
+                <p class="m-0" style="color: #d4da8f">{{usuario[0].nom_usu}} {{usuario[0].ap_usu}}</p>
+                <span style="color: #d4da8f">{{usuario[0].ci_usuario}}</span>
+                <span *ngIf="usuario[0].cargo == 0"> Administrador</span>
+                <span *ngIf="usuario[0].cargo == 1"> Cajero</span>
+                <span *ngIf="usuario[0].cargo == 2"> Cocinero</span>
+              </div>
+
+              <hr class="h-color">
+          <!-- Boton Salir   -->
+              <div class="text-end px-3">
+                <span>
+                  Salir
+                 <img src="../assets/images/icons/icon-menus/logout.png" style="width: 25px;cursor: pointer;" (click)="authService.logout()">
+                </span>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+     </div>
+     
+
+    </div>
+    
+    
+
+ <!-- CONTENIDO DE LAS GETIONES -->
+    <div class="container-fluid" style="padding: 0; height: 92vh; overflow: hidden;">
+      <router-outlet></router-outlet>
+    </div>
+  
+
+
+  </div>
+</div>
+
+
+

@@ -1,0 +1,306 @@
+
+/************************************** MENSAJE TOAST ****************************************/
+#toast {
+  width: 25%;
+  position: fixed;
+  bottom: 0%; /* Centra verticalmente */
+  right: -10%; /* Centra horizontalmente */
+  transform: translate(-50%, -50%); /* Alinea al centro de la pantalla */
+  user-select: none;
+  /* visibility: visible;
+  display: block;  */
+}
+#toast .toast-body{
+  display: flex;
+  font-weight: 500;
+  color: #f3f3f3;
+  font-size: 18px;
+  letter-spacing: 1px;
+  align-items: center;
+}
+#toast img{
+  width: 30px;
+}
+
+/************************************** STYLES EN COMUN ****************************************/
+.container-opciones{
+  background: #212837;
+  width: 100%;
+  height: 45px;
+}
+.container_volver img{
+  width: 35px;
+}
+/* LISTAS GENERAL*/
+.container-lista{
+  display: flex;
+  /* flex-direction: column; */
+  justify-content: center;
+  overflow: auto;
+  max-height: 77vh;
+  min-height: 50vh;
+  margin: 18px 0px;
+  letter-spacing: 1px;
+}
+
+
+.container-lista ul{
+  border: none;
+  width: 95%;
+}
+.container-lista ul li{
+  font-size: 18px;
+  font-weight: 400;
+  padding: 0px;
+  color: #dcdcdc;
+  background: #252d3c;
+  border: none;
+  border-bottom: 1px solid #545252ee;
+}
+.container-lista .cell{
+  /* border-right: 1px solid #424347; */
+  padding: 3px 0px 2px 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.container-lista .cell-t{
+  /* border-right: 1px solid #424347; */
+  padding: 3px 0px 2px 5px;
+  height: 68px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.container-lista .container-btn img{
+  width: 30px;
+}
+
+.container-agregar button,.container-buscador button, .modificar {
+  font-weight: 500;
+  font-size: 16px;
+  background: #004d81;
+  border: none;
+  height: 36px;
+  padding: 0 15px;
+}
+.container-opciones img{
+  width: 20px;
+}
+/* .container-buscador button{
+  background: #28526b;
+  display: flex;
+  color: #f4f4f4;
+  font-size: 16px;
+  font-weight: 500;
+  width: max-content;;
+  height: 39px;
+  align-items: center;
+  justify-content: center;
+} */
+/* MENU DESPLEGABLE DE MOVIMIENTOS */
+.menu-desplegable{
+  position: absolute;
+  z-index: 100;
+  top: 53px;
+  right: 464px;
+  display: block;
+  background: #01568f;
+  color: #f4f4f4;
+  border-radius: 10px;
+  padding: 0px;
+  width: max-content;
+ }
+ .menu-desplegable button{
+  padding: 9px 13px;
+  font-size: 16px;  
+  font-weight: 600;
+}
+.menu-desplegable button:hover{
+  background: #0764a1;
+  /* transition: 0.5s; */
+}
+/*************************** CONTAINER PRINCIPAL INSUMOS ****************************/
+/* ******************************************************************************** */
+
+.movimiento-lista{
+  min-height: 15vh;
+}
+.movimiento-lista ul li{
+  background: #21252b63;
+}
+
+/* Intercalar background segun cod_mov en la lista de movimientos */
+.background-default {
+  background-color: #293444;
+  color: #f4f4f4;
+}
+
+.background-alternate {
+  background-color: #3c4b6096;
+  color: #f4f4f4;
+}
+
+
+
+
+/************************* MODALES ************************/
+.content-modal{
+  background: #303e51;
+  color: #f3f3f3;
+  width: 80%;
+  font-size: 18px;
+  font-weight: 500;
+}
+.content-modal .modal-header{
+  border-bottom: 1px solid #727272;
+}
+.content-modal .modal-footer{
+  border-top: 1px solid #727272;
+}
+
+.custom-ng-select {
+  color: #cdcccc;
+  font-size: 16px;
+  background: #ffffff21;
+  border: none;
+  padding: 3px 12px;
+  width: 100%;
+  border-radius: 5px;
+}
+/* OPCIONES NGSELECT */
+::ng-deep .custom-ng-select .ng-option {
+  background-color: #2c3037; 
+  color: #f4f4f4;
+  padding: 2px;
+}
+
+/* MODAL MOVIMIENTO */
+#modalMovimiento .modal-lg-custom, #modalModificarMovimiento .modal-lg-custom {
+  max-width: 80%;
+}
+#modalMovimiento ul li, #modalModificarMovimiento ul li{
+  background: #293648;
+}
+/* MODAL DETALLE-MOVIMIENTO INSUMO*/
+#modalDetalleMovimiento .modal-lg-custom {
+  max-width: 95%; 
+}
+/* MODAL DETALLE-MOVIMIENTO TODO*/
+#modalDetalleMovimientoTodo .modal-lg-custom {
+  max-width: 95%; 
+}
+#modalModificarInsumo .modal-lg-custom, #modalAgregarInsumo .modal-lg-custom{
+  max-width: 80%; 
+}
+#modalEstadoInsumo .modal-lg-custom, #modalEliminarInsumo .modal-lg-custom{
+  max-width: 40%; 
+}
+/* Diseño para centrear los modales
+#modalMovimiento .modal-dialog-centered, #modalModificarMovimiento .modal-dialog-centered, #modalDetalleMovimiento .modal-dialog-centered ,#modalDetalleMovimientoTodo .modal-dialog-centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100% - 1rem);
+} */
+#modalMovimiento .modal-content, #modalModificarMovimiento .modal-content, #modalDetalleMovimiento .modal-content, #modalDetalleMovimientoTodo .modal-content {
+  width: 100%;
+}
+
+#modalSelectFecha .modal-lg-custom,#modalSelectFechaTodo .modal-lg-custom {
+  max-width: 55vw; 
+  margin: auto;
+}
+#modalSelectFecha .atajos button, #modalSelectFechaTodo .atajos button{
+  border: none;
+  background: #156680;
+  border-radius: 4px;
+  margin: 3px 0;
+  width: 100%;
+
+}
+/************************* FORMS(INPUTS - OPTIONS) ************************/
+.custom-select{
+  width: 100%;
+  border-radius: 7px;
+  padding: 3px 7px;
+}
+.content-modal form input[type="text"],
+.content-modal form input[type="password"],
+.content-modal form input[type="number"],
+.content-modal form input[type="date"],
+.custom-select{
+  color: #cdcccc;
+  font-size: 16px;
+  background: #ffffff21;
+  border: none;
+  padding: 3px 12px;
+}
+/* Estilos para el select option */
+.custom-select option{
+  color: #eaeaea;
+  background: #3c4756;
+}
+.content-modal form input[type="text"]::placeholder,
+.content-modal form input[type="password"]::placeholder,
+.content-modal form input[type="number"]::placeholder{
+  font-size: 15px;
+  color: #c0c0c04b; /* Cambia el color según tu preferencia */
+}
+
+.container-buscador input[type="text"]::placeholder{
+  font-size: 15px;
+  color: #d6d6d6a2;
+}
+/********************************************* ADVERTENCIAS ******************************************/
+/*****************************************************************************************************/
+
+/*Estilo de advertencias para la validacion de formulario*/
+.advertencias {
+  margin-top: 4px;
+  color: salmon;
+  font-size: 15px;
+  font-family: Arial, Helvetica, sans-serif;
+  display: flex;
+  align-items: center;
+  line-height: 1; /* Asegura que el texto no tenga espacio extra */
+}
+.advertencias img {
+  display: inline-block;
+  vertical-align: middle; /* Asegura que la imagen esté alineada verticalmente */
+}
+.advertencias p {
+  margin: 0; /* Elimina el margen extra que podría desalinear el texto */
+  line-height: 1.2; /* Ajusta la altura de línea para el texto */
+}
+
+.is-invalid {
+  border-color: #c77e76  !important; /* Color del borde */
+  border: 1px solid #c77e76 !important;
+  /* box-shadow: 0 0 5px rgba(250, 128, 114, 0.5); Sombra del borde difusa */
+}
+
+/********************************************* PAGINACION *******************************************/
+/* :host ::ng-deep .pagination-first::before,
+:host ::ng-deep .pagination-last::after {
+  content: '' !important;
+}
+
+:host ::ng-deep .pagination-previous::before,
+:host ::ng-deep .pagination-next::after {
+  content: '' !important;
+} */
+
+
+
+:host ::ng-deep .custom-pagination a:focus,
+:host ::ng-deep .custom-pagination a:hover {
+  background-color: #3a7693 !important;
+  color: #ffffff !important;
+  /* border: 1px solid #5a5a5a !important; */
+  outline: none !important;
+}
+
+::ng-deep .ngx-pagination {
+  margin-bottom: 0 !important; /* Elimina el margen inferior */
+}

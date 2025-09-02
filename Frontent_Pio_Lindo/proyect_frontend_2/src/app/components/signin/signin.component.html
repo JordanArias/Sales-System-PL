@@ -1,0 +1,81 @@
+<!-- <div class="container-fluid fondo-paisaje" *ngIf="!authService.loggedIn()">
+  <div class="d-flex justify-content-center content-signin">
+
+    <div class="card fondo">
+        <div class="card-header text-center fs-4">
+             Ingresar
+        </div>
+        <div class="card-body">
+            <form (submit)="signIn()" #formLogin="ngForm">
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label">Usuario</label>
+                  <input type="email" class="form-control" #ci_usuario="ngModel" [(ngModel)]="user.ci_usuario" name="ci_usuario" class="form-control" placeholder="usuario" required inputmode="numeric" pattern="[0-9]*">
+                  <span class="advertencias" *ngIf="ci_usuario.touched && !ci_usuario.valid" style="color: red;">** Insertar Usuario</span>
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputPassword1" class="form-label">Contraseña</label>
+                  <input type="password" class="form-control" #clave="ngModel" [(ngModel)]="user.clave" name="clave" class="form-control" placeholder="***" required>
+                  <span class="advertencias" *ngIf="clave.touched && user.clave.length==0" style="color: red;">** Insertar Contraseña </span>
+                  <span class="advertencias" *ngIf="clave.touched && user.clave.length<=3 && user.clave.length!=0" style="color: red;">** Contraseña debe ser mayor a 3</span>
+                </div>
+                <div class="d-flex justify-content-end">
+                  <button type="submit" class="btn button-color" [disabled]="!formLogin.form.valid || !formLogin.form.touched || user.clave.length<=3">Ingresar</button>
+                </div>   
+            </form>
+        </div>
+      </div>
+
+  </div>
+</div> -->
+
+<div class="container-signin d-flex justify-content-center align-items-center" *ngIf="!authService.loggedIn()">
+  <div class="container-form row m-0">
+
+    <div class="col-12 col-md-6 col-xl-6 fondo-welcome p-1">
+      <div class="titulo">
+        <h3>Pio Lindo <></h3>
+      </div>
+      <div class="descripcion">
+        <h4>Bienvenido!</h4>
+        <p>Ingresa tu cuenta para acceder al sistema</p>
+      </div>
+  
+    </div>
+    
+      <div class="col-12 col-md-6 col-xl-6 fondo-signin">
+        <h4 class="text-center pb-4">Ingresar</h4>
+        <form (submit)="signIn()" #formLogin="ngForm">
+          <div class="mb-3">
+            <label for="exampleInputEmail1" class="display-6 form-label">Usuario</label>
+            <input type="email" class="form-control" #ci_usuario="ngModel" [(ngModel)]="user.ci_usuario" name="ci_usuario"  required inputmode="numeric" pattern="[0-9]*">
+            <span class="advertencias" *ngIf="ci_usuario.touched && !ci_usuario.valid" style="color: red;">** Insertar Usuario</span>
+          </div>
+          <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Contraseña</label>
+            <input type="password" class="form-control" #clave="ngModel" [(ngModel)]="user.clave" name="clave" placeholder="***" required>
+            <span class="advertencias" *ngIf="clave.touched && user.clave.length==0" style="color: red;">** Insertar Contraseña </span>
+            <span class="advertencias" *ngIf="clave.touched && user.clave.length<=3 && user.clave.length!=0" style="color: red;">** Contraseña debe ser mayor a 3</span>
+          </div>
+          <div class="container-btn">
+            <button type="submit" class="btn" >Ingresar</button>
+          </div>   
+        </form>
+      </div>
+
+  </div>
+
+</div>
+
+
+
+<!-- ****************************** MENSAJE TOAST ***************************************** -->
+<div class="toast" id="toast" role="alert" aria-live="assertive" aria-atomic="true">
+  <div class="toast-header" style="background: #a66161; color: #eeee;">
+    <strong class="me-auto">Mensaje</strong>
+    <small>1 mins ago</small>
+    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
+  <div class="toast-body">
+    Usuario o Contraseña incorrecto
+  </div>
+</div>

@@ -1,0 +1,124 @@
+
+.toggle-btn {  
+    width: 100%;
+    background: #21283717;
+    color: white;
+    border: none;
+    padding: 0px;
+    font-size: 25px;
+  }
+  
+  .toggle-btn:hover {
+    background-color: #34495e3d;
+  }
+  
+#side_nav{
+    background: #212837;
+    min-width: 211px;
+    max-width: 208px;
+    transition: all 0.3s;
+    /* display: none; */
+}
+#side_nav_logo{
+    position: relative;
+    background: #212837;
+    width: 3%;
+    transition: all 0.3s;
+}
+#side_nav_logo .sidebar li a{
+    color: #fff;
+    width: 100%;
+    /* text-align: center; */
+}
+.usuario-conected{
+    display: flex;
+    flex-direction: column;
+}
+.usuario-conected p{
+    letter-spacing: 1px;
+    font-size: 15px;
+}
+.usuario-conected span{
+    letter-spacing: 1px;
+    color: #b8b8b8;
+    font-size: 14px;
+}
+
+.content{
+    min-height: 100vh;
+    width: 100%;
+}
+.h-color{
+    background: #fff;
+    border: 1px solid #fff;
+}
+
+.sidebar li.active{
+    background: #28526b;
+    border-radius: 8px;
+}
+.sidebar li:hover{
+    background: #28546b94;
+    border-radius: 8px;
+}
+.navbar-horizontal{
+    height: 8vh; 
+    background: #212837;
+    color: #fff;
+    border-bottom: 1px solid #505051;
+}
+.sidebar li a{
+    color: #fff;
+    width: 100%;
+}
+.icon-menu img{
+    width: 25px;
+}
+
+
+@media(min-width:768px){
+    #side_nav{
+        margin-left: 0;
+    }
+    .laptop-bar{
+        display: block;
+    }
+    .movil-bar{
+        display: none;
+    }
+}
+
+@media(max-width:767px){
+    .laptop-bar{
+        display: none;
+    }
+    .movil-bar{
+        display: block;
+    }
+    #side_nav{
+        margin-left: -250px;
+        position: fixed;
+        min-height: 100vh;
+        z-index: 5;
+    }
+    #side_nav .active{
+        margin-left: 0;
+    }
+    #logout{
+        display: none;
+    }
+    .titulo-gestion{
+        font-size: 17px;
+    }
+    .navbar-horizontal{
+        height: 40px;
+    }
+}
+
+#toast {
+    position: fixed;
+    top: 120px; /* Centra verticalmente */
+    left: 50%; /* Centra horizontalmente */
+    transform: translate(-50%, -50%); /* Alinea al centro de la pantalla */
+    user-select: none;
+  }

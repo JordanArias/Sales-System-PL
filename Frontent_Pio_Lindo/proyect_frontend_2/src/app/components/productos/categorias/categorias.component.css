@@ -1,0 +1,243 @@
+
+
+/************************************** MENSAJE TOAST ****************************************/
+#toast {
+  width: 22%;
+  position: fixed;
+  bottom: 0%; /* Centra verticalmente */
+  right: -10%; /* Centra horizontalmente */
+  transform: translate(-50%, -50%); /* Alinea al centro de la pantalla */
+  user-select: none;
+  /* visibility: visible;
+  display: block;  */
+}
+#toast .toast-body{
+  display: flex;
+  font-weight: 500;
+  color: #f3f3f3;
+  font-size: 18px;
+  letter-spacing: 1px;
+  align-items: center;
+}
+#toast img{
+  width: 30px;
+}
+
+  
+.container-agregar button,.container-buscador button, .modificar {
+  font-weight: 500;
+  font-size: 16px;
+  background: #004d81;
+  border: none;
+  height: 36px;
+  padding: 0 15px;
+}
+
+
+/* STYLES EN COMUN */
+.container-opciones{
+  background: #212837;
+  width: 100%;
+}
+.container_volver img{
+  width: 35px;
+}
+/****************************** LISTAS GENERAL *********************************/
+.container-lista{
+  display: flex;
+  justify-content: center;
+  overflow: auto;
+  max-height: 77vh;
+  min-height: 50vh;
+  margin: 18px 0px;
+}
+.container-lista ul{
+  border: none;
+  width: 95%;
+}
+.container-lista ul li{
+  font-size: 18px;
+  font-weight: 400;
+  padding: 0px;
+  color: #dcdcdc;
+  background: #252d3c;
+  border: none;
+  border-bottom: 1px solid #545252ee;
+}
+.container-lista .cell{
+  padding: 8px 8px;
+  /* border-right: 1px solid #424347; */
+}
+.container-lista .container-btn img{
+  width: 30px;
+}
+  
+  .container-agregar button,.container-buscador button, .modificar {
+    font-weight: 500;
+    font-size: 16px;
+    background: #004d81;
+    border: none;
+    height: 36px;
+    padding: 0 15px;
+  }
+
+/************************* MODALES ************************/
+/* GENERAL */
+.content-modal{
+  background: #202e41;
+  color: #f3f3f3;
+  width: 100%;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+.content-modal .modal-header{
+  border-bottom: 1px solid #727272;
+}
+.content-modal .modal-footer{
+  border-top: 1px solid #727272;
+}
+.custom-ng-select {
+  color: #cdcccc;
+  font-size: 16px;
+  background: #ffffff21;
+  border: none;
+  padding: 3px 12px;
+  width: 100%;
+  border-radius: 5px;
+}
+/* OPCIONES NGSELECT */
+::ng-deep .custom-ng-select .ng-option {
+  background-color: #2c3037; 
+  color: #f4f4f4;
+  padding: 2px;
+}
+
+#modalCategoria .modal-lg-custom{
+  max-width: 40%; /* Puedes ajustar este valor según lo necesites */
+}
+
+/* LISTA MODAL SUBCATEGORIAS */
+.lista-subcategorias{
+    padding: 0px;
+}
+.lista-subcategorias ul li{
+  background: #26364b;
+  border-bottom: 1px solid #424347;
+}
+.lista-subcategorias .cell{
+  border-right: 1px solid #424347;
+}
+
+#modalEliminarSubcategoria .modal-lg-custom{
+  max-width: 35%; /* Puedes ajustar este valor según lo necesites */
+}
+.btn-principal button{
+  border: none;
+  font-size: 18px;
+  font-weight: 600;  
+}
+
+
+
+/************************* FORMS(INPUTS - OPTIONS) ************************/
+.custom-select{
+  width: 100%;
+  border-radius: 7px;
+  padding: 3px 7px;
+}
+.content-modal form input[type="text"],
+.content-modal form input[type="password"],
+.content-modal form input[type="number"],
+.custom-select{
+  color: #cdcccc;
+  font-size: 18px;
+  background: #2a3c55;
+  border: none; /* Borde transparente por defecto */
+  padding: 3px 12px;
+  letter-spacing: 1px;
+}
+/* Estilos para el select option */
+.custom-select option{
+  color: #eaeaea;
+  background: #3c4756;
+}
+.content-modal form input[type="text"]::placeholder,
+.content-modal form input[type="password"]::placeholder,
+.content-modal form input[type="number"]::placeholder {
+  font-size: 15px;
+  color: #c0c0c04b; /* Cambia el color según tu preferencia */
+}
+
+.container-buscador input[type="text"]::placeholder{
+  font-size: 18px;
+  color: #d6d6d6a2;
+}
+.container-buscador input{
+  background: #39404a;
+  color: #f4f4f4;
+  border: none;
+}
+/********************************************* ADVERTENCIAS ******************************************/
+/*****************************************************************************************************/
+
+/*Estilo de advertencias para la validacion de formulario*/
+.advertencias {
+  margin-top: 4px;
+  color: salmon;
+  font-size: 15px;
+  font-family: Arial, Helvetica, sans-serif;
+  display: flex;
+  align-items: center;
+  line-height: 1; /* Asegura que el texto no tenga espacio extra */
+}
+.advertencias img {
+  display: inline-block;
+  vertical-align: middle; /* Asegura que la imagen esté alineada verticalmente */
+}
+.advertencias p {
+  margin: 0; /* Elimina el margen extra que podría desalinear el texto */
+  line-height: 1.2; /* Ajusta la altura de línea para el texto */
+}
+
+.is-invalid {
+  border-color: #c77e76  !important; /* Color del borde */
+  border: 1px solid #c77e76 !important;
+  /* box-shadow: 0 0 5px rgba(250, 128, 114, 0.5); Sombra del borde difusa */
+}
+
+
+
+
+/****************************** SCROLL BAR INVISIBBLE  **************************************/
+.container-lista::-webkit-scrollbar {
+  width: 0.2em;
+  background-color: #333333; /* Cambia el color de fondo del scroll */
+}
+
+.container-lista::-webkit-scrollbar-thumb {
+  background-color: #8888888c; /* Cambia el color del thumb del scroll */
+}
+
+
+
+/********************************************* PAGINACION *******************************************/
+/* :host ::ng-deep .pagination-first::before,
+:host ::ng-deep .pagination-last::after {
+  content: '' !important;
+}
+
+:host ::ng-deep .pagination-previous::before,
+:host ::ng-deep .pagination-next::after {
+  content: '' !important;
+} */
+
+
+
+:host ::ng-deep .custom-pagination a:focus,
+:host ::ng-deep .custom-pagination a:hover {
+  background-color: #3a7693 !important;
+  color: #ffffff !important;
+  /* border: 1px solid #5a5a5a !important; */
+  outline: none !important;
+}

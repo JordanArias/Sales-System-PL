@@ -1,0 +1,259 @@
+<div class="container-principal-Stock">
+    <!-- OPCIONES: VOLVER - BUSCAR - AGREGAR -->
+    <div class="d-flex justify-content-around align-items-center px-3 py-2 container-opciones">
+        <!-- Boton Volver -->
+        <div class="container_volver">
+            <div class="btn p-0" routerLink="/producto">
+                <img src="../../../assets/images/icons/icon-menus/atras.png" alt="">
+            </div>
+        </div>
+        <!-- Buscador -->
+        <div class="container-buscador">
+          <input type="text" class="form-control" placeholder="Buscar" name="filterPost" [(ngModel)]="filterPost">
+        </div>
+        <!-- Boton Agregar -->
+        <div class="container-agregar">
+          <button class="btn btn-secondary" (click)="showModal_Categoria(0,1)">Agregar Categoría</button>
+        </div>
+  
+    </div>
+  
+    <!-- ********* LISTA CATEGORIAS *********  -->
+    <div class="container-lista">
+   
+      <ul class="list-group p-0">
+          <!-- Titulo Principal -->
+        <li class="list-group-item d-flex justify-content-between">
+          <h3 class="m-0 px-2 py-2">Categorías</h3>
+        </li>        
+        <!-- Titulos -->
+        <li class="list-group-item">
+          <div class="row mx-0 d-flex align-items-center">
+            <div class="col-4 cell">Nombre</div>
+            <div class="col-4 cell text-center">Opciones</div>
+            <div class="col-4 text-center">Subcategorías</div>
+          </div>
+        </li>
+        <!-- Lista Opciones -->
+        <li class="list-group-item" *ngFor="let cat of lista_categorias | paginate: { itemsPerPage: 8, currentPage: page } | filter:filterPost: ['nombre']; let i = index">
+          <div class="row mx-0 d-flex align-items-center">
+            <!-- Nombre -->
+            <div class="col-4 cell">
+                  <div class="col-12 px-0" style="color: #d4da8f">{{cat.nombre}}</div>
+            </div>
+            <!-- Opciones -->
+            <div class="col-4 d-flex justify-content-evenly container-btn cell">
+              <button class="btn p-0" > <span class="px-0" (click)="showModal_Categoria(cat,2)"><img src="../assets/images/icons/icon-options/editar.png"></span></button>
+              <button class="btn p-0" > <span class="px-0" (click)="showModalEliminar_Categoria(cat)"><img src="../assets/images/icons/icon-options/eliminar.png"></span></button>
+            </div>
+            <!-- Subcategorias -->
+            <div class="col-4 d-flex justify-content-evenly container-btn">
+              <button class="btn p-0" > <span class="px-0" (click)="showModal_Subcategoria(cat)"><img src="../assets/images/icons/icon-options/subcategoria.png"></span></button>
+            </div>
+          </div>
+        </li>
+        <li class="list-group-item custom-pagination pt-2">
+          <!-- Controles de paginación -->
+          <pagination-controls 
+          (pageChange)="page = $event" 
+          previousLabel="Anterior" 
+          nextLabel="Siguiente"        
+          style="text-align: center;">
+         </pagination-controls>
+        </li>
+      </ul>
+      
+    </div>
+  
+</div>
+
+
+
+<!-- ****************************** MENSAJE TOAST ***************************************** -->
+<div class="toast" id="toast" role="alert" aria-live="assertive" aria-atomic="true">
+
+  <div id="toast-body" class="toast-body">
+    <span class="px-2" *ngIf="toast_tipo == 1"><img src="../assets/images/icons/icon-options/correcto.png"></span> 
+    <span class="px-2" *ngIf="toast_tipo == 2"><img src="../assets/images/icons/icon-options/error.png"></span> 
+    <span>{{mensaje_toast}}</span>
+  </div>
+</div>
+
+
+<!-- ******************************************************  MODAL AGREGAR (CATEGORIA)  *******************************************************  -->
+<!-- ********************************************************************************************************************************************* -->
+<div #modalCategoria id="modalCategoria" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" (hidden.bs.modal)="resetFormCategoria()">
+  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom">
+    <div class="modal-content content-modal">
+      <div class="modal-header">
+        <h1 *ngIf="categoria_proceso==1" class="modal-title fs-4" id="exampleModalLabel">Nueva Categoría</h1>
+        <h1 *ngIf="categoria_proceso==2" class="modal-title fs-4" id="exampleModalLabel">Modificar Categoría</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <!-- <form #formInsumo="ngForm" class="row g-3" (ngSubmit)="Agregar_Insumo()"> -->
+          <form #formCategoria="ngForm" class="row g-3">
+            <!-- MOMBRE PRODUCTO -->
+            <div class="col-12 mb-4 mt-1">
+              <label class="form-label">Nombre:</label>
+              <input type="text" #nombre="ngModel" [(ngModel)]="categoria_form.nombre" name="nombre" placeholder="Nombre" [class.is-invalid]="(nombre.touched || mostrarAdvertencias) && categoria_form.nombre.length == 0" class="form-control" required>
+              <div class="advertencias" *ngIf="(nombre.touched || mostrarAdvertencias) && categoria_form.nombre.length == 0">
+                <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+                <p class="m-0">Agregar Nombre</p>
+              </div>
+            </div>
+
+            <div class="modal-footer btn-principal">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <button *ngIf="categoria_proceso==1"  class="btn btn-secondary" style="border: none;background: #2b5480;" (click)="agregar_Categoria()">Agregar</button>
+              <button *ngIf="categoria_proceso==2" class="btn btn-secondary" style="border: none;background: #2b5480;" (click)="modificar_categoria()">Modificar</button>
+            </div>
+          </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- ***************************************************  MODAL ELIMINAR SUBCATEGORIA (CATEGORIA)  ****************************************************  -->
+<!-- ***************************************************************************************************************************************************** -->
+<div #modalEliminarCategoria id="modalEliminarCategoria" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom">
+    <div class="modal-content content-modal">
+      <div class="modal-header">
+        <h1 class="modal-title fs-4" id="exampleModalLabel">Eliminar {{categoria_form.nombre}}</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- FOOTER : BOTON CERRAR -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button class="btn btn-secondary" style="border: none;background: #2b5480;" (click)="eliminar_Categoria()">Eliminar</button>
+      </div>
+
+
+    </div>
+  </div>
+</div>
+
+<!-- ******************************************************  MODAL AGREGAR (SUBCATEGORIA)  *******************************************************  -->
+<!-- *********************************************************************************************************************************************** -->
+<div #modalSubcategoria id="modalSubcategoria" (hidden.bs.modal)="resetFormCategoria()" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom">
+    <div class="modal-content content-modal">
+      <div class="modal-header">
+        <h1 class="modal-title fs-4" id="exampleModalLabel">SubCategorías ({{nombre_categoria}})</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form #formCategoria="ngForm" class="row g-3">
+          <!-- AGREGAR SUBCATEGORIA -->
+          <div class="col-8 mt-3">
+            <input type="text" #nombre="ngModel" [(ngModel)]="subcategoria_form.nombre" name="nombre" [class.is-invalid]="(nombre.touched || mostrarAdvertencias) && subcategoria_form.nombre.length == 0" class="form-control" placeholder="Nombre" required>
+            <div class="advertencias" *ngIf="(nombre.touched || mostrarAdvertencias) && subcategoria_form.nombre.length == 0">
+              <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+              <p class="m-0">Agregar Nombre</p>
+            </div>
+          </div>
+          <div class="col-4 mt-3">
+            <button class="btn btn-secondary p-0" style="border: none;background: #006bb0; height: 30px; width: 87px" (click)="agregar_Subategoria()">Agregar</button>
+          </div>
+
+          <!-- LISTA DE SUBCATEGORIAS -->
+          <div class="col-12 mb-4 mt-2">
+            <div class="container-lista lista-subcategorias">
+              <ul class="list-group p-0" style="border: none;">     
+                <!-- Titulos -->
+                <li class="list-group-item">
+                  <div class="row mx-0 d-flex align-items-center">
+                    <div class="col-6 cell">Nombre</div>
+                    <div class="col-6 cell text-center">Opciones</div>
+                  </div>
+                </li>
+                <!-- Lista Opciones -->
+                <li class="list-group-item" *ngFor="let sub of subcategorias_categoria">
+                  <div class="row mx-0 d-flex align-items-center">
+                    <!-- Nombre -->
+                    <div class="col-6 cell">
+                          <div class="col-12 px-0" style="color: #d4da8f">{{sub.nombre}}</div>
+                    </div>
+                    <!-- Opciones -->
+                    <div class="col-6 d-flex justify-content-evenly container-btn cell">
+                      <button class="btn p-0" > <span class="px-0" (click)="showModal_Modificar_Subcategoria(sub)"><img src="../assets/images/icons/icon-options/editar.png"></span></button>
+                      <button class="btn p-0" > <span class="px-0" (click)="showModal_Eliminar_Subcategoria(sub)"><img src="../assets/images/icons/icon-options/eliminar.png"></span></button>
+                    </div>
+                  </div>
+                </li>
+              </ul>             
+            </div>
+          </div>
+
+          <!-- FOOTER : BOTON CERRAR -->
+          <div class="modal-footer btn-principal">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ******************************************************  MODAL MODIFICAR (SUBCATEGORIA)  *******************************************************  -->
+<!-- ********************************************************************************************************************************************* -->
+<div #modalModificarSubCategoria id="modalModificarSubCategoria"  (hidden.bs.modal)="resetFormSubcategoria()" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom">
+    <div class="modal-content content-modal">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Modificar Subcategoría</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <!-- <form #formInsumo="ngForm" class="row g-3" (ngSubmit)="Agregar_Insumo()"> -->
+          <form #formSubcategoriaMod="ngForm" class="row g-3">
+            <!-- MOMBRE PRODUCTO -->
+            <div class="col-12 mb-1 mt-3">
+              <!-- <label class="form-label">Nombre:</label> -->
+              <input type="text" #nombre="ngModel" [(ngModel)]="subcategoria_mod.nombre" name="nombre" [class.is-invalid]="mostrarAdvertenciasMod && subcategoria_mod.nombre.length == 0" class="form-control" placeholder="Nombre" required style="font-size: 15pt;">
+              <div class="advertencias" *ngIf="mostrarAdvertenciasMod && subcategoria_mod.nombre.length == 0">
+                <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+                <p class="m-0">Agregar Nombre</p>
+              </div>
+            </div>
+
+            <div class="modal-footer py-0 btn-principal">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+              <button class="btn btn-secondary" style="border: none;background: #006bb0;" (click)="modificar_Subcategoria()">Modificar</button>
+            </div>
+          </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ***************************************************  MODAL ELIMINAR SUBCATEGORIA (SUBCATEGORIA)  ****************************************************  -->
+<!-- ***************************************************************************************************************************************************** -->
+<div #modalEliminarSubcategoria id="modalEliminarSubcategoria" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom">
+    <div class="modal-content content-modal">
+      <div class="modal-header">
+        <h1 class="modal-title fs-4" id="exampleModalLabel">Eliminar {{subcategoria_del.nombre}}</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- FOOTER : BOTON CERRAR -->
+      <div class="modal-footer btn-principal">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <button class="btn btn-secondary" style="background: #006bb0;" (click)="eliminar_Subcategoria()">Eliminar</button>
+      </div>
+
+
+    </div>
+  </div>
+</div>
+
+
+

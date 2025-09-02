@@ -1,0 +1,22 @@
+{
+  "devDependencies": {
+    "@angular-builders/custom-webpack": "^16.0.1",
+    "@types/bootstrap": "^5.2.10",
+    "@types/cookie": "^1.0.0",
+    "@types/node": "^22.9.0",
+    "@types/wrap-ansi": "^8.1.0"
+  },
+  "dependencies": {
+    "@angular/common": "^18.2.11",
+    "@angular/core": "^18.2.11",
+    "@angular/forms": "^18.2.11",
+    "@angular/platform-browser": "^18.2.11",
+    "@angular/router": "^18.2.11",
+    "@ng-bootstrap/ng-bootstrap": "^17.0.1",
+    "@ng-select/ng-select": "^13.9.1",
+    "bootstrap": "^5.3.3",
+    "ngx-extended-pdf-viewer": "^22.0.0-alpha.8",
+    "ngx-pagination": "^6.0.3",
+    "ngx-slick-carousel": "^17.0.0"
+  }
+}

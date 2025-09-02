@@ -1,0 +1,273 @@
+<!-- **************************** PRODUCTOS UNICOS- NAV HORIZONTAL **************************** -->
+<!-- ********************************************************************************************* -->
+<div class="container-principal-Insumos">
+    <!-- OPCIONES: VOLVER - BUSCAR - AGREGAR -->
+    <div class="d-flex justify-content-around align-items-center px-3 py-2 container-opciones">
+      <!-- Boton Volver -->
+      <div class="container_volver">
+          <div class="btn p-0" routerLink="/producto">
+              <img src="../../../assets/images/icons/icon-menus/atras.png" alt="">
+          </div>
+      </div>
+      <!-- Buscador -->
+      <div class="container-buscador">
+        <input type="text" class="form-control" placeholder="Buscar" name="filterPost" [(ngModel)]="filterPost">
+      </div>
+      <!-- Boton Agregar -->
+      <div class="container-agregar">
+        <button class="btn btn-secondary" (click)="showModalAgregar_Producto()">Agregar Unico</button>
+      </div>
+
+    </div>
+
+    <!-- ********* LISTA PRODUCTOS *********  -->
+    <div class="container-lista">
+   
+      <ul class="list-group p-0">
+              <!-- Titulo Principal -->
+        <li class="list-group-item d-flex" style="flex-direction: row; justify-content: space-between;">
+          <h3 class="m-0 px-2 py-2">Productos Unicos</h3>
+          <div class="m-0 px-2 d-flex">
+            <button class="btn px-3" type="button" style="color: #f4f4f4;font-size: 17px;" (click)="seleccionarOpcion(2)">Todo</button>
+            <button class="btn px-3" type="button" style="color: #f4f4f4;font-size: 17px;" (click)="seleccionarOpcion(0)">Activos</button>
+            <button class="btn px-3" type="button" style="color: #f4f4f4;font-size: 17px;" (click)="seleccionarOpcion(1)">Inactivos</button>
+         </div>
+        </li>        
+        <!-- Titulos -->
+        <li class="list-group-item">
+          <div class="row mx-0 d-flex align-items-center">
+            <div class="col-4 cell">NOMBRE</div>
+            <div class="col-2 cell">PRECIO</div>
+            <div class="col-2 cell">PS PRECIO</div>
+            <div class="col-2 cell text-center">ACTIVO</div>
+            <div class="col-2 text-center">OP</div>
+          </div>
+        </li>
+        <!-- Lista Cajas -->
+        <li class="list-group-item" *ngFor="let pro of lista_productos_filtradas | paginate: { itemsPerPage: 8, currentPage: page } | filter:filterPost: ['nombre']; let i = index">
+          <div class="row mx-0 d-flex align-items-center">
+            <!-- Nombre -->
+            <div class="col-4 cell">
+                  <div class="col-12 px-0" style="color: #d4da8f">{{pro.nombre}}</div>
+            </div>
+            <!-- Precio -->
+            <div class="col-2 cell">
+                  <div class="col-12 px-0">Bs. {{pro.precio}}</div>    
+            </div>
+            <!--Ps. Precio -->
+            <div class="col-2 cell">
+                  <div class="col-12 px-0">Ps. {{pro.ps_precio}}</div>    
+            </div>
+            <!-- Estado -->
+            <div class="col-2 cell text-center">
+              <div class="btn" title="Desactivar Producto" style="color: #f4f4f4;background: #335843; width: 60%;" *ngIf="pro.estado==0" (click)="showModalEstado_Producto(pro)">Activo</div>
+              <div class="btn" title="Activar Producto" style="color: #f4f4f4;background: #583333; width: 60%;" *ngIf="pro.estado==1" (click)="showModalEstado_Producto(pro)">Inactivo</div>
+            </div>
+            <!-- Opciones -->
+            <div class="col-2 d-flex justify-content-evenly container-btn">
+              <button class="btn p-0" > <span class="px-0" (click)="showModalModificar_Producto(pro)"><img src="../assets/images/icons/icon-options/editar.png"></span></button>
+              <button class="btn p-0" > <span class="px-0" (click)="showModalEliminar_Producto(pro)"><img src="../assets/images/icons/icon-options/eliminar.png"></span></button>
+            </div>
+          </div>
+        </li>
+        <!-- PAGINACION -->
+        <li class="list-group-item custom-pagination pt-2">
+          <!-- Controles de paginación -->
+          <pagination-controls 
+          (pageChange)="page = $event" 
+          previousLabel="Anterior" 
+          nextLabel="Siguiente"        
+          style="text-align: center;">
+         </pagination-controls>
+      </li>
+      </ul>
+      
+    </div>
+
+</div>
+
+
+
+
+<!-- ****************************** MENSAJE TOAST ***************************************** -->
+<div class="toast" id="toast" role="alert" aria-live="assertive" aria-atomic="true">
+
+  <div id="toast-body" class="toast-body">
+    <span class="px-2" *ngIf="toast_tipo == 1"><img src="../assets/images/icons/icon-options/correcto.png"></span> 
+    <span class="px-2" *ngIf="toast_tipo == 2"><img src="../assets/images/icons/icon-options/error.png"></span> 
+    <span>{{mensaje_toast}}</span>
+  </div>
+</div>
+
+<!-- ******************************************************  MODAL AGREGAR (PRODUCTO UNICO)  *******************************************************  -->
+<!-- ********************************************************************************************************************************************* -->
+<div #modalProductoUnico id="modalProductoUnico" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" (hidden.bs.modal)="resetForm()">
+  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom">
+    <div class="modal-content content-modal">
+      <div class="modal-header">
+        <h1 *ngIf="proceso == 1" class="modal-title fs-4" id="exampleModalLabel">Nuevo Producto Unico</h1>
+        <h1 *ngIf="proceso == 2" class="modal-title fs-4" id="exampleModalLabel">Modificar Producto Unico</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <!-- <form #formInsumo="ngForm" class="row g-3" (ngSubmit)="Agregar_Insumo()"> -->
+          <form #formProducto="ngForm" class="row g-3">
+            <!-- MOMBRE PRODUCTO -->
+            <div class="col-6 mb-1 mt-1">
+              <label class="form-label mb-0">Nombre:</label>
+              <input type="text" #nombre="ngModel" [(ngModel)]="producto.nombre" name="nombre" placeholder="Nombre" [class.is-invalid]="(nombre.touched || mostrarAdvertencias) && producto.nombre.length == 0" class="form-control" required>
+              <div class="advertencias" *ngIf="(nombre.touched || mostrarAdvertencias) && producto.nombre.length == 0">
+                <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+                <p class="m-0">Agregar Nombre</p>
+              </div>
+            </div>
+            <!-- PRECIO DE VENTA -->
+            <div class="col-3 mb-6 mt-1">
+              <label class="form-label mb-0">Precio de venta:</label>
+              <input type="number" #precio="ngModel" [(ngModel)]="producto.precio" name="precio" placeholder="Precio" [class.is-invalid]="(precio.touched || mostrarAdvertencias) && (producto.precio==0 || producto.precio==null)" class="form-control" required>
+              <div class="advertencias" *ngIf="(precio.touched || mostrarAdvertencias) && (producto.precio==0 || producto.precio==null)">
+                <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+                <p class="m-0">Precio Invalido</p>
+              </div>
+            </div>
+            <!-- PS. PRECIO DE VENTA -->
+            <div class="col-3 mb-6 mt-1">
+              <label class="form-label mb-0">Precio Arg:</label>
+              <input type="number" #ps_precio="ngModel" [(ngModel)]="producto.ps_precio" name="ps_precio" placeholder="ps_Precio" [class.is-invalid]="(ps_precio.touched || mostrarAdvertencias) && (producto.ps_precio==0 || producto.ps_precio==null)" class="form-control" required>
+              <div class="advertencias" *ngIf="(ps_precio.touched || mostrarAdvertencias) && (producto.ps_precio==0 || producto.ps_precio==null)">
+                <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+                <p class="m-0">Precio Invalido</p>
+              </div>
+            </div>
+            <!-- VENDER EN NEGATIVO -->          
+            <div class="col-12 mb-6 mt-3 d-flex">
+              <label class="form-label mb-0">Para Cocina:</label>
+              <div class="form-check" style="margin-left: 15px;">
+                <input class="form-check-input checkbox-grande" type="checkbox" #cocina="ngModel" [(ngModel)]="producto.cocina" name="cocina">
+              </div>
+            </div>
+            <hr>
+            <!-- SELECCIONAR CATEGORIA -->
+           <div class="col-6 mb-0 mt-3">
+              <label class="form-label mb-0">Categoria:</label>
+              <ng-select class="custom-ng-select" 
+                        [items]="lista_categorias"
+                        bindLabel="nombre"
+                        [(ngModel)]="categoria_Seleccionada"
+                        placeholder=""
+                        [searchable]="true"
+                        #categoria="ngModel"
+                        name="categoria_Seleccionada"
+                        (change)="onCategoriaSeleccionada()"
+                        style="height: 30px;">
+              </ng-select>
+           </div>
+           <!-- SELECCIONAR SUB-CATEGORIA -->
+           <div class="col-6 mb-0 mt-3">
+            <label class="form-label mb-0">Subcategoria:</label>
+            <ng-select class="custom-ng-select"
+                      [items]="sub_categorias_filtradas"
+                      bindLabel="nombre"
+                      [(ngModel)]="subcategoria_Seleccionada"
+                      placeholder=""
+                      [searchable]="true"
+                      #subcategoria="ngModel"
+                      name="subcategoria_Seleccionada"
+                      style="height: 30px;">
+            </ng-select>
+           </div>
+
+           <!-- <div class="mt-1 pt-0">Seleccionar Insumo</div> -->
+           <!-- SELECCIONAR INSUMO -->
+          <div class="col-6 mb-0 mt-3">
+              <label class="form-label m-0 mb-0 p-0 text-center mb-0">Insumo:</label>
+              <ng-select #insumoDropdown class="custom-ng-select" 
+                         [items]="lista_Insumos"
+                         bindLabel="display"
+                         [(ngModel)]="insumo_Seleccionado"
+                         placeholder=""
+                         [searchable]="true"
+                         [bindLabel]="'nombre'"
+                         [virtualScroll]="true"
+                         #insumo="ngModel"
+                         name="insumo_Seleccionado"
+                         style="height: 30px;"
+                         [class.is-invalid]="mostrarAdvertencias && !insumo_Seleccionado && producto_insumo[0].cantidad"
+                         >
+              </ng-select>
+              <div class="advertencias" *ngIf="mostrarAdvertencias && !insumo_Seleccionado && producto_insumo[0].cantidad">
+                <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+                <p class="m-0">Seleccionar Insumo</p>
+              </div>
+          </div>
+          <div class="col-6 mb-0 mt-3">
+            <label class="form-label mb-0">Cantidad:</label>
+            <input type="number" #cantidad="ngModel" [(ngModel)]="producto_insumo[0].cantidad" name="cantidad"  [class.is-invalid]="mostrarAdvertencias && insumo_Seleccionado && (!producto_insumo[0].cantidad || producto_insumo[0].cantidad <= 0)" class="form-control" placeholder="Cantidad insumo">
+            <div class="advertencias" *ngIf="mostrarAdvertencias && insumo_Seleccionado && (!producto_insumo[0].cantidad || producto_insumo[0].cantidad <= 0)">
+              <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+              <p class="m-0">Cantidad Invalida</p>
+            </div>
+          </div>
+
+            <div class="modal-footer btn-principal">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <button *ngIf="proceso == 1" class="btn btn-secondary" style="background: #006bb0;" 
+              (click)="agregar_Producto_Unico()">Agregar</button>
+              <button *ngIf="proceso == 2" class="btn btn-secondary" style="background: #006bb0;"
+              (click)="modificar_Producto_Unico()">Modificar</button>
+            </div>
+          </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ***************************************************  MODAL ELIMINAR PRODUCTO UNICO  ****************************************************  -->
+<!-- ***************************************************************************************************************************************************** -->
+<div #modalEliminarProductoUnico id="modalEliminarProductoUnico" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom">
+    <div class="modal-content content-modal">
+      <div class="modal-header">
+        <h1 class="modal-title fs-4" id="exampleModalLabel">Eliminar {{producto.nombre}}</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- FOOTER : BOTON CERRAR -->
+      <div class="modal-footer btn-principal">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button class="btn btn-secondary" style="border: none;background: #006bb0;" (click)="eliminar_Producto_Unico()">Eliminar</button>
+      </div>
+
+
+    </div>
+  </div>
+</div>
+
+<!-- ***************************************************  MODAL ACTIVAR/DESACTIVAR PRODUCTO UNICO  ****************************************************  -->
+<!-- ***************************************************************************************************************************************************** -->
+<div #modalEstadoProductoUnico id="modalEstadoProductoUnico" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom">
+    <div class="modal-content content-modal">
+      <div class="modal-header">
+        <h1 class="modal-title fs-4" id="exampleModalLabel">
+          <span *ngIf="estado == 0">Activar</span>
+          <span *ngIf="estado == 1">Desactivar</span>
+          : {{producto.nombre}}</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- FOOTER : BOTON CERRAR -->
+      <div class="modal-footer btn-principal">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button *ngIf="estado == 0" class="btn btn-secondary" style="border: none;background: #006bb0;" (click)="estado_Producto_Unico()">Activar</button>
+        <button *ngIf="estado == 1" class="btn btn-secondary" style="border: none;background: #006bb0;" (click)="estado_Producto_Unico()">Desactivar</button>
+      </div>
+
+
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,880 @@
+
+<!-- *************************************************************** LISTA - NAV HORIZONTAL ************************************************************** -->
+<!-- ***************************************************************************************************************************************************** -->
+<!-- ********************************************************************************************* -->
+<div class="container-principal-listas" *ngIf="pantalla_principal==1">
+  <!-- ********************************************* OPCIONES:BUSCAR - AGREGAR **********************************************************-->
+  <div class="d-flex align-items-center justify-content-between px-3 container-opciones">
+        <!-- Buscador -->
+        <!-- <div class="container-buscador px-2">
+          <input type="text" class="form-control" placeholder="Buscar Ticket" name="filterPost" [(ngModel)]="filterPost" style="background: #39404a;color: #f4f4f4; border: none;">
+        </div> -->
+        <!-- SELECCIONAR FECHA -->
+         <div class="container-agregar">
+            <!-- <button class="btn btn-secondary" (click)="showModal_SelectFecha()">Elegir Fecha</button>  [min]="min_totay" -->
+            <input type="date" #fecha="ngModel" [(ngModel)]="select_Fecha" name="fecha"  [min]="min_totay" [max]="today"  required style="width: 100%;" class="form-control">
+         </div>
+        <!-- FILTRAR -->
+        <div class="container-filtrar d-flex">
+          <div class="btn-ventas_finalizadas">
+            <button class="btn" type="button" style="color: #f3f3f3;" [ngStyle]="{'background-color': vista_ventas === 3 ? '#191e2a' : ''}" (click)="LISTAR_VENTAS_FINALIZADAS()">
+              <span class="px-0 d-flex align-items-center">
+                Finalizadas
+              </span>
+            </button>
+          </div>
+          <div class="btn-ventas_proceso">
+            <button class="btn" type="button" style="color: #f3f3f3;" [ngStyle]="{'background-color': vista_ventas === 2 ? '#191e2a' : ''}" (click)="LISTAR_VENTAS_EN_PROCESO()">
+              <span class="px-0 d-flex align-items-center">
+                En proceso
+              </span>
+            </button>
+          </div>
+          <div class="btn-ventas_nuevas">
+            <button class="btn" type="button" style="color: #f3f3f3;" [ngStyle]="{'background-color': vista_ventas === 1 ? '#191e2a' : ''}" (click)="LISTAR_VENTAS_NUEVAS()">
+              <span class="px-0 d-flex align-items-center">
+                Nuevas
+              </span>
+            </button>
+          </div>
+        </div>
+
+         <!-- BOTON NUEVO MOVIMIENTO -->
+          <div class="container-agregar px-2">
+            <button class="btn btn-secondary" (click)="cambiar_Pantalla()">
+              <span class="px-0 d-flex align-items-center">
+                <img src="../assets/images/icons/icon-options/agregar.png" class="me-1">
+                Agregar Venta
+              </span>
+            </button>
+          </div>
+
+  </div>
+
+  <!-- **************************************************** LISTA VENTAS ****************************************************************  -->
+  <div class="container-lista">
+
+    <ng-container *ngFor="let v of lista_Ventas | paginate: { itemsPerPage: 6, currentPage: page_v } ; let i = index">
+      <!--******************************** CARD VENTA PRINCIPAL **************************-->
+      <div class="card">
+        <!-- *********** TITULO CARD VENTA **************-->
+        <div class="card-header d-flex justify-content-between p-0" style="background: #333c4e;" [ngStyle]="{
+          'background-color': v.venta.estado_documento === 2 ? '#592f34' :
+                              v.venta.estado === 0 ? '#28526b' : 
+                             (v.venta.estado === 1 ? '#835e32' : '#333c4e')}">
+          <div class="numero-ticket px-1" style="font-size: 16px;">
+            Ticket [<strong> {{v.venta.ticket}} </strong>]
+          </div>
+          <div class="numero-mesa d-flex"  style="font-weight: 700; font-size: 17px;" *ngIf="v.venta.estado_documento!=2">
+            <p class="m-0 p-0" *ngIf="v.venta.venta_llevar == false">Mesa # {{ v.venta.mesa }}</p>
+            <p class="m-0 p-0" *ngIf="v.venta.venta_llevar == true"><span style="color: #c17927;">Para Llevar </span> <span *ngIf="v.venta.mesa!=null"> #{{ v.venta.mesa }}</span></p>
+          </div>
+          <div class="numero-mesa d-flex"  style="font-weight: 700; font-size: 17px;" *ngIf="v.venta.estado_documento==2">
+            <p class="m-0 p-0" *ngIf="v.venta.venta_llevar == false">ANULADO</p>
+          </div>
+          <div class="btn-editar">
+            <button class="btn btn-primary" style="height: max-content; padding: 0 15px; background: #333c4e00; border: none; border-radius: 0px;" (click)="VISUALIZAR_VENTA(v)">Ver</button>
+          </div>
+          
+        </div>
+        <!--************** BODY CARD VENTA **************-->
+        <div class="card-body p-0" style="overflow: auto;">
+          <ng-container *ngFor="let detalle of v.detalle_venta; let i = index">
+            <!-- Contenedor flex para organizar el producto y complementos en fila -->
+            <div style="border-bottom: 1px solid #8e8d8d; padding: 3px 10px;">
+              <!-- Contenedor flex para producto y complementos -->
+              <div class="d-flex align-items-start">
+                <!-- Producto Nombre -->
+                <p class="producto m-0 me-2" style="font-weight: bold; letter-spacing: 1px;" [ngStyle]="{ 'width': detalle.detalle_opcion.length === 0 ? '100%' : '30%' }">
+                  {{detalle.cantidad_item}} {{ detalle.nombre }}
+                  <span *ngIf="detalle.item_llevar" style="color: #c17927;"> P/LL</span>
+                </p>
+        
+                <!-- Contenedor de complementos en una fila -->
+                <div class="d-flex flex-wrap" style="color: #c5c5c5; width: 70%;">
+                  <ng-container *ngFor="let opcion of detalle.detalle_opcion">
+                    <!-- Iterar sobre cada complemento -->
+                    <div class="complemento-col me-3">
+                      <p class="detalle-producto m-0" *ngFor="let o of opcion">
+                        <span>{{o.cantidad_op}} {{ o.nombre }}</span> 
+                      </p>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+
+          </ng-container>
+          <div class="mx-1" *ngIf="v.venta.descripcion.length>0">
+            Obs: {{v.venta.descripcion}}
+          </div>
+        </div>
+        
+    
+        <!--************** FOOTER CARD VENTA **************-->
+        <div class="card-footer d-flex justify-content-between p-0 px-1" [ngStyle]="{'background-color': v.venta.estado_transaccion == 1 ? '#463147' : ''}">
+            <div class="no-pagado px-1" *ngIf="v.venta.estado_transaccion == 1">
+              NO CANCELADO
+            </div>
+            <div class="total-venta px-1" *ngIf="v.venta.estado_transaccion == 2">
+              Total: 
+              <span class="mx-2" *ngIf="v.venta.bs_pagado>0"> Bs. {{v.venta.bs_pagado | number}}</span> 
+              <span class="me-2" *ngIf="v.venta.ps_pagado>0"> Ps. {{v.venta.ps_pagado | number}}</span>
+              <span *ngIf="v.venta.bs_banca_pagado>0"> Banca {{v.venta.bs_banca_pagado | number}}</span> 
+            </div>
+            <div class="hora px-1">
+              {{v.venta.hora}}
+            </div>
+        </div>
+      </div>
+    </ng-container>     
+
+  </div>
+
+  <div class="custom-pagination">
+    <!-- Controles de paginación -->
+    <pagination-controls 
+      (pageChange)="page_v = $event" 
+      previousLabel="Anterior" 
+      nextLabel="Siguiente"        
+      style="text-align: center;">
+   </pagination-controls>
+  </div>
+  
+</div>
+
+
+<!-- ******************************************************************* AGREGAR - VENTA ***************************************************************** -->
+<!-- ***************************************************************************************************************************************************** -->
+
+<div class="container-principal-agregar d-flex" *ngIf="pantalla_principal==2">
+  <!--************************************ CONTAINER PRINCIPAL SELECCIONAR PRODUCTO ************************************-->
+  <div class="container-seleccionar-productos">
+    <!-- CONTAINER: SELECCIONAR CATEGORIA -->
+    <div class="seleccionar-categorias">
+        <h5>Categorías</h5>
+        <div class="categorias-container">
+            <button *ngFor="let categoria of lista_categorias" type="button" (click)="seleccionar_Categoria(categoria.cod_categoria)" [ngClass]="{'selected': categoria.cod_categoria === cod_categoria}"
+            [ngStyle]="{'background-color': categoria.cod_categoria === cod_categoria ? '#a68017' : ''}">
+                {{ categoria.nombre }}
+            </button>
+        </div>
+    </div>
+
+    <!-- CONTAINER: SUBCATEGORIA - PRODUCTOS -->
+    <div class="container-subcategoria-productos d-flex">
+
+        <!-- CONTAINER - SUBCATEGORIAS -->
+        <div class="container-subcategorias">
+            <h5>Subcategorías</h5>
+            <div class="subcategorias">
+                <button *ngFor="let subcategoria of subcategoriasFiltradas" type="button" (click)="seleccionar_SubCategoria(subcategoria.cod_subcategoria)"
+                    [ngStyle]="{'background-color': subcategoria.cod_subcategoria === cod_subcategoria ? '#a96525' : ''}">
+                    {{ subcategoria.nombre }}
+                </button>
+            </div>
+        </div>
+
+        <!-- CONTAINER - PRODUCTOS -->
+        <div class="container-productos">
+            <div class="productos-titulo d-flex justify-content-between mb-2">
+                <h5 class="m-0">Productos</h5>
+                <!-- Buscador -->
+                <div class="container-buscador px-1">
+                    <input type="text" class="form-control" placeholder="Buscar..." 
+                           [(ngModel)]="filterPost" 
+                           (ngModelChange)="filtrarProductos()"
+                           style="background: #39404a;color: #f4f4f4; border: none; padding: 3px 5px;">
+                </div>
+            </div>
+
+            <div class="productos">
+                <button *ngFor="let producto of productosFiltrados" type="button" (click)="agregar_Producto(producto)">
+                    <span style="font-size: 17px; font-weight: 700;">{{ producto.nombre }}</span> <br>
+                    <span>Bs.{{ producto.precio }}</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+  </div>
+
+
+<!--************************************ CONTAINER PRINCIPAL REGISTRAR VENTA ************************************-->
+  <div class="container-venta">
+    <div class="formulario-venta" style="border-left: 2px solid #575757;">
+      <div class="p-2 d-flex justify-content-between" style="height: 6vh;">
+        <h5 class="m-0 d-flex align-items-center" style="color: #f3f3f3;">Venta</h5>
+        <button class="btn btn-danger p-0" style="width: 8%; background: #9d3030; border: none;" (click)="cambiar_Pantalla()">X</button>
+      </div>
+
+      <form #formVenta="ngForm" class="form-detalle-venta">
+        <!--****************** HEADER FORMULARIO ******************-->
+        <div class="header-form row m-0 p-1" style="height: 6vh;">
+            <!-- #NUMERO DE MESA -->
+            <div class="col-2 px-1">
+              <!-- <label class="form-label">Mesa</label> -->
+              <input type="number" #mesa="ngModel" [(ngModel)]="ventaForm.mesa" name="mesa" class="form-control" placeholder="Mesa"> 
+            </div>
+            <!-- DESCRIPCIÓN -->
+            <div class="col-8 px-1">
+              <!-- <label class="form-label">Detalle:</label> -->
+              <input type="text" #descripcion="ngModel" [(ngModel)]="ventaForm.descripcion" name="descripcion" class="form-control" placeholder="descripción"> 
+            </div>
+            <!-- TODO PARA LLEVAR -->
+            <div class="col-2 d-flex align-items-center px-1">
+              <label class="form-label mb-0" style="color: #f3f3f3;">P/LL</label>
+              <input class="form-check-input checkbox-grande" type="checkbox" #vender_negativo="ngModel" [(ngModel)]="ventaForm.venta_llevar" name="vender_negativo">
+            </div>
+        </div>
+        <!--****************** BODY FORMULARIO ******************-->
+        <div class="body-form" style="color: #f3f3f3;">
+            <form #formListaProductos="ngForm">
+              <!-- LISTA PRODUCTOS SELECCIONADOS -->
+                <ng-container *ngFor="let producto of lista_Productos_Agregados; let i = index">
+                  <!-- Contenedor flex para organizar el producto y complementos en fila -->
+                  <div class="container-producto d-flex align-items-start" style="border-bottom: 1px solid #545252; padding: 10px;" (click)="showModalDetalle_Producto(i,1)">
+                    <!-- Contenedor flex para producto y complementos -->
+
+                      <!-- PRODUCTO NOMBRE -->
+                      <p class="producto m-0 me-2" style="font-weight: bold; letter-spacing: 1px;" [ngStyle]="{'width':producto.complementos.length>0 ? '30%' : '100%'}">
+                        ({{producto.cantidad_item}}) {{producto.nombre}} <br>
+                        <span class="m-0" *ngIf="producto.item_llevar" style="color: rgb(198, 129, 38);">P/LL</span>
+                      </p>
+                      <!-- COMPLEMENTOS -->
+                      <div class="d-flex flex-wrap" style="color: #c5c5c5;" [ngStyle]="{'width':producto.complementos.length>0 ? '70%' : '0%'}">
+                        <!-- *ngFor="let complemento of producto.complementos" -->
+                        <ng-container *ngFor="let complemento of producto.complementos">
+                          <!-- Iterar sobre cada complemento -->
+                          <div class="complemento-col me-4">
+                            <!-- *ngFor="let opcion of complemento.opciones" -->
+                            <ng-container *ngFor="let opcion of complemento.opciones">
+                              <p class="detalle-producto m-0" *ngIf="opcion.cantidad_op>0">
+                                ({{opcion.cantidad_op}}) {{opcion.nombre}} 
+                              </p>
+                            </ng-container>
+                          </div>
+                        </ng-container>
+                      </div>
+                      <!-- BOTONES -->
+                      <!-- <div class="opciones" *ngIf="this.ventaForm.estado_transaccion!=2"> -->
+                      <div class="opciones">
+                        <!-- <button class="btn p-0" title="Modificar Producto"> <span class="px-0" (click)="showModalDetalle_Producto(i,1)"><img src="../assets/images/icons/icon-options/editar.png" style="width: 27px;"></span></button> -->
+                        <button class="btn p-0" title="Eliminar Producto"> <span class="px-0" (click)="eliminar_Producto(i)"><img src="../assets/images/icons/icon-options/eliminar.png" style="width: 27px;"></span></button>
+                      </div>
+
+
+                  </div>
+                </ng-container>
+
+            </form>
+        </div>
+
+        <!--****************** FOOTER FORMULARIO ******************-->
+        <div class="footer-form" style="color: #f3f3f3;">
+          <!-- CUENTA TOTAL -->
+          <div class="botones-venta p-1" style="height: 18vh; display: flex; flex-direction: column; justify-content: flex-end;">
+            <div class="pagar mb-1">
+              <!-- <button class="btn btn-danger" style="width:50%; background: #873232;" [disabled]="this.ventaForm.estado_transaccion==0" (click)="showModal_Eliminar(ventaForm)">ELIMINAR</button> -->
+              <button class="btn btn-success d-flex justify-content-center" style="width: 100%;" (click)="showModal_Pagar()">PAGAR            
+                <span class="mx-2">Bs. {{ventaForm.bs_total | number}}</span>
+                <span class="mx-2">Ps. {{ventaForm.ps_total | number}}</span>
+              </button>
+            </div>
+            <div class="finalizar mb-1">
+              <button class="btn btn-danger" style="width:33.33%; background: #873232; border: none;" [disabled]="this.ventaForm.estado_transaccion==0" 
+                                              *ngIf="this.ventaForm.estado_transaccion!=2 && this.ventaForm.estado_documento==0" (click)="showModal_Eliminar(ventaForm)">ELIMINAR
+              </button>
+              <button class="btn btn-primary" style="width: 33.33%;" (click)="AGREGAR_VENTA('Finalizar venta')"   *ngIf="this.ventaForm.estado_transaccion == 0">FINALIZAR VENTA</button>
+              <button class="btn btn-primary" style="width: 33.33%;" (click)="AGREGAR_VENTA('Agregar sin pagar')" *ngIf="this.ventaForm.estado_transaccion == 0">AGREGAR SIN PAGAR</button>
+
+              <button class="btn btn-primary" style="width: 33.33%;" (click)="MODIFICAR_VENTA('Agregar sin pagar')" *ngIf="this.ventaForm.estado_transaccion == 1">M/AGREGAR SIN PAGAR</button>
+              <button class="btn btn-primary" style="width: 33.33%;" (click)="MODIFICAR_VENTA('Finalizar venta')" *ngIf="this.ventaForm.estado_transaccion == 1 || this.ventaForm.estado_transaccion == 2">M/FINALIZAR VENTA</button>
+              
+              <button class="btn btn-danger" style="width:50%; background: #873232; border: none;" *ngIf="this.ventaForm.estado_transaccion==2 && this.ventaForm.estado_documento==0" (click)="showModal_Eliminar(ventaForm)">ELIMINAR</button>
+              <button class="btn btn-danger" style="width:50%; background: #873232; border: none;" *ngIf="this.ventaForm.estado_transaccion==2 && this.ventaForm.estado_documento==1" (click)="showModal_Eliminar(ventaForm)">ANULAR VENTA</button>
+              <button class="btn btn-primary" style="width:50%;" *ngIf="this.ventaForm.estado_transaccion==2 && this.ventaForm.estado_documento==0" (click)="MODIFICAR_SOLO_DATOS_VENTA()">MODIFICAR DATOS VENTA</button>
+              <button class="btn btn-primary" style="width:50%;" *ngIf="this.ventaForm.estado_transaccion==2 && this.ventaForm.estado_documento==1" (click)="MODIFICAR_SOLO_DATOS_VENTA()">MODIFICAR DATOS VENTA</button>
+              <button class="btn btn-danger" style="width:100%; background: #873232; border: none;" *ngIf="this.ventaForm.estado_documento==2" (click)="showModal_Eliminar(ventaForm)">ELIMINAR DE RESERVA</button>
+            </div>
+
+            <div class="ticket">
+              <!-- <button class="btn btn-danger" style="width: 25%; background: #4a5979;">PRE/COMANDA</button> -->
+              <button class="btn btn-secondary" style="width: 33.33%; background: #ba8400;" (click)="EMITIR_COMANDA()">COMANDA</button>
+              <button class="btn btn-danger" style="width: 33.33%; background: #524e98;" (click)="EMITIR_RECIBO()">PRE-CUENTA</button>
+              <button class="btn btn-secondary" style="width: 33.33%; background: #5a237c;" (click)="showModal_EmitirFactura(ventaForm)">FACTURA</button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+</div>
+
+
+
+
+
+
+
+<!-- ***************************************************************************************************************************************************** -->
+<!-- *************************************************************************  MODALES  ***************************************************************** -->
+<!-- ***************************************************************************************************************************************************** -->
+ 
+<!-- ****************************** MENSAJE TOAST ***************************************** -->
+<div class="toast" id="toast" role="alert" aria-live="assertive" aria-atomic="true">
+
+  <div id="toast-body" class="toast-body">
+    <span class="px-2" *ngIf="toast_tipo == 1"><img src="../assets/images/icons/icon-options/correcto.png"></span> 
+    <span class="px-2" *ngIf="toast_tipo == 2"><img src="../assets/images/icons/icon-options/error.png"></span> 
+    <span>{{mensaje_toast}}</span>
+  </div>
+</div>
+
+
+<!-- ***************************************************************** MODAL ESCOGER FECHA ****************************************************************  -->
+ <!-- ***************************************************************************************************************************************************** -->
+ <div #modalSelectFecha id="modalSelectFecha" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom">
+    <div class="modal-content content-modal">
+      <div class="modal-header">
+        <h1 class="modal-title fs-4" id="exampleModalLabel">Filtrar Fecha</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+    
+        <form #formFecha="ngForm" class="row g-3">
+          <div class="col-8 row m-0 mt-4">
+              <!-- FECHA -->
+              <div class="col-6 mb-1 mt-0">
+                <label class="form-label">Fecha</label>
+                <input type="date" #fecha="ngModel" [(ngModel)]="select_Fecha" name="fecha" [min]="min_totay" [max]="today"  required style="width: 100%;" class="form-control">
+              </div>
+          </div>
+
+          <!-- <div class="col-4 m-0 atajos mt-4">
+            <button type="button" class="btn btn-secondary">Últimos 15</button>
+            <button type="button" class="btn btn-secondary">Últimos 30</button>
+            <button type="button" class="btn btn-secondary">Últimos 50</button>
+          </div> -->
+
+          <!-- BOTONES -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="submit" class="btn btn-secondary" style="border: none;background: #2b5480;">Filtrar</button>
+          </div>
+        </form>
+      </div>
+    
+    </div>
+  </div>
+</div>
+
+<!-- ************************************************************** MODAL DETALLE PRODUCTO ****************************************************** -->
+<!-- ******************************************************************************************************************************************** -->
+<div #modalDetalleProducto id="modalDetalleProducto" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" (hidden.bs.modal)="verificar_cantidades()">
+  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom">
+    <div class="modal-content content-modal">
+      <div class="modal-header">
+        <h1 class="modal-title fs-4" id="exampleModalLabel">Detalle Producto</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+
+        <!-- CANTIDAD PRODUCTO -->
+        <div class="producto d-flex justify-content-between">
+          <div class="producto d-flex align-items-center">
+            <!-- BOTONES -->
+            <button class="btn btn-primary" (click)="disminuir_cantidad()"  [disabled]="lista_Productos_Agregados[index_producto]?.cantidad_item === 1" [ngStyle]="{'background-color': lista_Productos_Agregados[index_producto]?.cantidad_item === 1 ? '#244e4e' : ''}">-</button>
+            <div class="producto_nombre mx-3">{{lista_Productos_Agregados[index_producto]?.cantidad_item}}</div>
+            <button class="btn btn-primary" (click)="aumentar_cantidad()">+</button>
+            <!-- PRODUCTO NOMBRE -->
+            <div class="producto_nombre mx-3">{{lista_Productos_Agregados[index_producto]?.nombre}}</div>
+          </div>
+
+          <!-- CHEBOX PARA LLEVAR -->
+          <!-- <div class="d-flex align-items-center" *ngIf="lista_Productos_Agregados[index_producto]">
+            <label class="form-label mb-0" style="color: #f3f3f3;">Para Llevar</label>
+            <input class="form-check-input checkbox-grande" type="checkbox" #item_llevar="ngModel" [(ngModel)]="lista_Productos_Agregados[index_producto].item_llevar" name="vender_negativo">
+          </div> -->
+          <div class="d-flex align-items-center" *ngIf="lista_Productos_Agregados[index_producto]">      
+            <!-- Custom styled checkbox acting as a button -->
+            <label class="btn-checkbox" style="margin-left: 10px;" [ngStyle]="{'background-color': lista_Productos_Agregados[index_producto]?.item_llevar ? '#a16e31' : ''}">
+              <input class="form-check-input checkbox-grande" type="checkbox" 
+                     #item_llevar="ngModel" 
+                     [(ngModel)]="lista_Productos_Agregados[index_producto].item_llevar" 
+                     name="vender_negativo">
+              <span>Para Llevar</span>
+            </label>
+          </div>
+          
+        </div>
+
+        <hr *ngIf="lista_Productos_Agregados[index_producto]?.complementos.length>0">
+
+        <!-- LISTA COMPLEMENTOS -->
+        <h5 class="text-center" *ngIf="lista_Productos_Agregados[index_producto]?.complementos.length>0">Complementos</h5>
+
+        <div class="complemento">
+          <ng-container *ngFor="let complemento of lista_Productos_Agregados[index_producto]?.complementos ; let i = index">
+            <h5 style="font-weight: 300;margin-top: 10px;">{{complemento.nombre}}</h5>
+            <ul class="list-group p-0">
+              <!-- Titulos -->
+              <li class="list-group-item py-0">
+                <div class="row mx-0 d-flex align-items-center">
+                  <div class="col-3 px-1">Operaciones</div>
+                  <div class="col-6 px-1">Complemento</div>
+                  <div class="col-3 px-1">Cantidad</div>
+                </div>
+              </li>
+              <!-- Lista Cajas -->
+              <li class="list-group-item"*ngFor="let opcion of complemento.opciones; let j = index">
+                <div class="row mx-0 d-flex align-items-center">
+                    <!-- OPERACIONES -->
+                    <div class="col-3 d-flex align-items-center"> 
+                      <button class="btn btn-secondary btn-complemento-menos me-2" (click)="disminuir_cantidad_opcion(i,j)"  [ngStyle]="{'background-color': opcion?.cantidad_op === 0 ? '#5e2929' : ''}">-</button>
+                      <button class="btn btn-primary btn-complemento-mas" (click)="aumentar_cantidad_opcion(i,j)">+</button>
+                    </div>
+                    <!-- PRODUCTO -->
+                    <div class="col-6" style="color: #d4da8f"> {{opcion.nombre}} </div>
+                    <!-- BS. PRECIO C/U-->
+                    <div class="col-3">{{opcion.cantidad_op}}</div>
+  
+                </div>
+              </li>
+            </ul>
+    
+          </ng-container>
+        </div>
+
+      </div>
+
+      <!-- BOTONES AGREGAR Y MODIFICAR -->
+      <div class="modal-footer btn-principal">
+        <button *ngIf="tipo_detalleproducto==0" type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="eliminar_Producto(index_producto)">Cancelar</button>
+        <button  class="btn btn-secondary" style="background: #006bb0;" (click)="verificar_cantidades()">
+         <span>Listo</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ****************************************************************** MODAL PAGAR  ************************************************************ -->
+<!-- ******************************************************************************************************************************************** -->
+<div #modalPagar id="modalPagar" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom">
+    <div class="modal-content content-modal">
+      <div class="modal-header">
+        <h1 class="modal-title fs-4" id="exampleModalLabel">Pagar</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body" style="font-weight: 300; letter-spacing: 0px;">
+        <!-- DETALLES PRODUCTOS -->
+        <div class="detalle_productos mb-2">
+          <ul class="list-group p-0">
+            <!-- Titulo Principal -->
+            <!-- <li class="list-group-item py-0">
+              <p class="mb-1">Detalle</p>
+            </li>         -->
+            <!-- Titulos -->
+            <li class="list-group-item py-0">
+              <div class="row mx-0 d-flex align-items-center">
+                <div class="col-1 px-1">Cant.</div>
+                <div class="col-3 px-1">Producto</div>
+                <div class="col-2 px-1">precio c/u</div>
+                <div class="col-2 px-1">Total</div>
+                <div class="col-2 px-1">precio c/u</div>
+                <div class="col-2 px-1">Total</div>
+              </div>
+            </li>
+            <!-- Lista pedido -->
+            <li class="list-group-item py-0" *ngFor="let pro of lista_Productos_Agregados; let i = index">
+              <div class="row mx-0 d-flex align-items-center">
+                  <!-- CANTIDAD -->
+                  <div class="col-1 px-1"> {{pro.cantidad_item}} </div>
+                  <!-- PRODUCTO -->
+                  <div class="col-3 px-1" style="color: #d4da8f"> {{pro.nombre}} </div>
+                  <!-- BS. PRECIO C/U-->
+                  <div class="col-2 px-1"> Bs. {{pro.precio | number}} </div>
+                  <!-- BS. TOTAL -->
+                  <div class="col-2 px-1"> Bs. {{(pro.precio * pro.cantidad_item) | number}} </div>
+                  <!-- PS. PRECIO C/U-->
+                  <div class="col-2 px-1"> Ps. {{pro.ps_precio | number}} </div>
+                  <!-- PS. TOTAL -->
+                  <div class="col-2 px-1"> Ps. {{math_Ceil(pro.precio, pro.cantidad_item) | number}} </div>
+              </div>
+            </li>
+          </ul>
+
+        </div>
+        <!-- <div *ngIf="ventaForm.estado_transaccion != 2"> -->
+          <div>
+            <!-- SUB TOTALES -->
+            <div class="subtotal d-flex mb-2">
+              <p class="m-0 me-4">Sub Total:</p>
+              <p class="m-0 me-4">Bs. {{ventaForm.bs_total  | number}}</p>
+              <p class="m-0">Ps. {{ventaForm.ps_total  | number}}</p>
+            </div>
+
+            <!-- DESCUENTO -->
+            <div class="descuento d-flex mb-2">
+              <div class="d-flex">
+                <label class="me-3">Bol. descuento</label>
+                <input type="number" #bs_descuento="ngModel" [(ngModel)]="ventaForm.bs_descuento" name="bs_descuento" class="form-control py-0" style="width: 30%;" (keyup)="calcular_descuento()">
+              </div>
+              <div class="d-flex">
+                <label class="me-3">Arg. descuento</label>
+                <input type="number" #ps_descuento="ngModel" [(ngModel)]="ventaForm.ps_descuento" name="ps_descuento" class="form-control py-0" style="width: 30%;" (keyup)="calcular_descuento()">
+              </div>
+            </div>
+
+            <!-- TOTALES -->
+            <div class="total d-flex mb-2" style="font-size: 25px; font-weight: 400; background: #253448;">
+              <p class="m-0 me-5">Total</p>
+              <p class="m-0 me-5">Bs. {{bs_total | number}}</p>
+              <p class="m-0">Ps. {{ps_total | number}}</p>        
+            </div>
+
+
+            <!-- DIVISA -->
+            <div class="btn-divisa d-flex mb-4">
+              <p class="m-0 p-0 me-3">Metodo de pago</p>
+                <button class="btn me-1" (click)="seleccionar_divisa(1)" [ngStyle]="{'background-color': divisa_seleccionada === 1 ? '#1f4574' : '','border': divisa_seleccionada === 1 ? 'none' : ''}">Bol.</button>
+                <button class="btn me-1" (click)="seleccionar_divisa(2)" [ngStyle]="{'background-color': divisa_seleccionada === 2 ? '#1f4574' : '','border': divisa_seleccionada === 2 ? 'none' : ''}">Arg.</button>
+                <button class="btn me-1" (click)="seleccionar_divisa(3)" [ngStyle]="{'background-color': divisa_seleccionada === 3 ? '#1f4574' : '','border': divisa_seleccionada === 3 ? 'none' : ''}">Banca</button>
+            </div>
+
+            <!-- INPUTS -->
+            <div class="pagos d-flex">
+              <!-- DIVISA INPUTS -->
+              <div class="divisa mb-4" style="width: 40%;">
+
+                <!-- BOLIVIANOS -->
+                <div class="boliviano row m-0 p-0" *ngIf="divisa_seleccionada == 1">
+                  <div class="d-flex col-12 p-0 mb-3">
+                    <label style="width: 25%;">Monto</label>
+                    <input type="number" #bs_pagado="ngModel" [(ngModel)]="ventaForm.bs_pagado" (input)="actualizarMontos('bs')" [disabled]="ventaForm.bs_falta === 0" name="bs_pagado" class="form-control py-0" style="width: 65%; letter-spacing: 1px;">
+                  </div>
+                  <div class="col-12 mb-0 p-0 d-flex"> 
+                    <p class="mb-0" style="width: 25%;"> Cambio: </p> 
+                    <p class="mb-0"> {{ventaForm.bs_cambio}} </p>  
+                  </div>
+                </div>
+
+                <!-- PESOS ARGENTINOS -->
+                <div class="pesos row m-0 p-0" *ngIf="divisa_seleccionada == 2">
+                  <div class="d-flex col-12 p-0 mb-3">
+                    <label style="width: 25%;">Monto</label>
+                    <input type="number" #ps_pagado="ngModel" [(ngModel)]="ventaForm.ps_pagado"  (input)="actualizarMontos('ps')" name="ps_pagado" class="form-control py-0" style="width: 65%; letter-spacing: 1px;">
+                  </div>
+                  <div class="col-12 mb-0 p-0 d-flex"> 
+                    <p class="mb-0" style="width: 25%;"> Cambio: </p> 
+                    <p class="mb-0"> {{ventaForm.ps_cambio | number}} </p>  
+                  </div>
+                </div>
+
+                <!-- BANCA (QR) -->
+                <div class="pesos d-flex" *ngIf="divisa_seleccionada == 3">
+                  <label style="width: 25%;">Monto</label>
+                  <input type="number" #bs_banca_pagado="ngModel" [(ngModel)]="ventaForm.bs_banca_pagado" (input)="actualizarMontos('banca')" name="bs_banca_pagado" class="form-control py-0" style="width: 65%;">
+                </div>
+
+              </div>
+              <!-- ATAJOS --> 
+              <div class="atajos mb-2" style="width: 60%;">
+                  <!-- BOLIVIANOS MONTO POSITIVO -->
+                  <div class="bs-atajo-monto-positivo mb-1" *ngIf="divisa_seleccionada == 1 || divisa_seleccionada == 3">
+                    <button class="btn" (click)="actualizarValor('monto', 0.5)">+0.5</button>
+                    <button class="btn" (click)="actualizarValor('monto', 1)">+1</button>
+                    <button class="btn" (click)="actualizarValor('monto', 2)">+2</button>
+                    <button class="btn" (click)="actualizarValor('monto', 5)">+5</button>
+                    <button class="btn" (click)="actualizarValor('monto', 10)">+10</button>
+                    <button class="btn" (click)="actualizarValor('monto', 20)">+20</button>
+                    <button class="btn" (click)="actualizarValor('monto', 50)">+50</button>
+                    <button class="btn" (click)="actualizarValor('monto', 100)">+100</button>
+                    <button class="btn" (click)="actualizarValor('monto', 200)">+200</button>
+                  </div>
+                  <!-- BOLIVIANOS MONTO NEGATIVO -->
+                  <div class="bs-atajo-monto-negativo" *ngIf="divisa_seleccionada == 1 || divisa_seleccionada == 3">
+                    <button class="btn" (click)="actualizarValor('monto', -0.5)">-0.5</button>
+                    <button class="btn" (click)="actualizarValor('monto', -1)">-1</button>
+                    <button class="btn" (click)="actualizarValor('monto', -2)">-2</button>
+                    <button class="btn" (click)="actualizarValor('monto', -5)">-5</button>
+                    <button class="btn" (click)="actualizarValor('monto', -10)">-10</button>
+                    <button class="btn" (click)="actualizarValor('monto', -20)">-20</button>
+                    <button class="btn" (click)="actualizarValor('monto', -50)">-50</button>
+                    <button class="btn" (click)="actualizarValor('monto', -100)">-100</button>
+                    <button class="btn" (click)="actualizarValor('monto', -200)">-200</button>
+                  </div>
+                  <!-- PESOS ARG MONTO POSITIVO -->
+                  <div class="ps-atajo-monto-positivo mb-1" *ngIf="divisa_seleccionada == 2">
+                    <button class="btn" (click)="actualizarValor('monto', 50)">+50</button>
+                    <button class="btn" (click)="actualizarValor('monto', 100)">+100</button>
+                    <button class="btn" (click)="actualizarValor('monto', 200)">+200</button>
+                    <button class="btn" (click)="actualizarValor('monto', 500)">+500</button>
+                    <button class="btn" (click)="actualizarValor('monto', 1000)">+1,000</button>
+                    <button class="btn" (click)="actualizarValor('monto', 2000)">+2,000</button>
+                    <button class="btn" (click)="actualizarValor('monto', 5000)">+5,000</button>
+                    <button class="btn" (click)="actualizarValor('monto', 10000)">+10,000</button>
+                    <button class="btn" (click)="actualizarValor('monto', 20000)">+20,000</button>
+                  </div>
+                  <!-- PESOS ARG MONTO NEGATIVO -->
+                  <div class="ps-atajo-monto-negativo" *ngIf="divisa_seleccionada == 2">
+                    <button class="btn" (click)="actualizarValor('monto', -50)">-50</button>
+                    <button class="btn" (click)="actualizarValor('monto', -100)">-100</button>
+                    <button class="btn" (click)="actualizarValor('monto', -200)">-200</button>
+                    <button class="btn" (click)="actualizarValor('monto', -500)">-500</button>
+                    <button class="btn" (click)="actualizarValor('monto', -1000)">-1,000</button>
+                    <button class="btn" (click)="actualizarValor('monto', -2000)">-2,000</button>
+                    <button class="btn" (click)="actualizarValor('monto', -5000)">-5,000</button>
+                    <button class="btn" (click)="actualizarValor('monto', -10000)">-10,000</button>
+                    <button class="btn" (click)="actualizarValor('monto', -20000)">-20,000</button>
+                  </div>
+              </div>
+            </div>
+
+            <!-- FALTA -->
+            <div class="falta d-flex mb-2" style="font-weight: 400; letter-spacing: 1px; width: 40%;">
+              <p class="m-0 mb-0" style="width: 25%;">Falta:</p>
+              <p class="m-0 mb-0" style="width: 25%;">Bs. {{ventaForm.bs_falta | number}}</p>
+              <p class="m-0 mb-0" style="width: 25%;">Ps. {{ventaForm.ps_falta | number}}</p>
+            </div>
+        </div>
+
+
+        <!-- PAGADOS -->
+        <div class="saldos d-flex" style="letter-spacing: 1px; width: 100%;" *ngIf="ventaForm.estado_transaccion == 2">
+            <div class="pagados" style="width: 20%;">
+              <p class="m-0 mb-0 me-1">Pagado:</p>
+              <p class="m-0 mb-0 me-1" *ngIf="ventaForm.bs_pagado ?? 0 >0">Bs. {{ventaForm.bs_pagado | number}}</p>
+              <p class="m-0 mb-0 me-1" *ngIf="ventaForm.ps_pagado ?? 0 >0">Ps. {{ventaForm.ps_pagado | number}}</p>
+              <p class="m-0 mb-0 me-1" *ngIf="ventaForm.bs_banca_pagado ?? 0 >0">Banca {{ventaForm.bs_banca_pagado | number}}</p>
+            </div>
+            <div class="cambios" style="width: 20%;">
+              <p class="m-0 mb-0 me-1">Cambio:</p>
+              <p class="m-0 mb-0 me-1" *ngIf="ventaForm.bs_cambio ?? 0 >0">Bs. {{ventaForm.bs_cambio | number}}</p>
+              <p class="m-0 mb-0 me-1" *ngIf="ventaForm.ps_cambio ?? 0 >0">Ps. {{ventaForm.ps_cambio | number}}</p>
+            </div>
+            <div class="descuento" style="width: 20%;">
+              <p class="m-0 mb-0 me-1">Descuento:</p>
+              <p class="m-0 mb-0 me-1" *ngIf="ventaForm.bs_descuento ?? 0 >0">Bs. {{ventaForm.bs_descuento | number}}</p>
+              <p class="m-0 mb-0 me-1" *ngIf="ventaForm.ps_descuento ?? 0 >0">Ps. {{ventaForm.ps_descuento | number}}</p>
+            </div>
+        </div>
+
+      </div>
+
+      <!-- BOTONES AGREGAR Y MODIFICAR -->
+      <div class="modal-footer btn-principal">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CERRAR</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" *ngIf="ventaForm.estado_transaccion == 0 || ventaForm.estado_transaccion == 1" (click)="limpiar_Datos_Pagar()">BORRAR DATOS</button>
+        <button class="btn btn-primary" *ngIf="ventaForm.estado_transaccion == 0" (click)="AGREGAR_VENTA('Finalizar venta')" >FINALIZAR VENTA</button>
+        <button class="btn btn-primary" *ngIf="ventaForm.estado_transaccion == 1" (click)="MODIFICAR_VENTA('Finalizar venta')">FINALIZAR VENTA</button>
+        <!-- <button class="btn btn-success" data-bs-dismiss="modal">PAGO RALIZADO</button> -->
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+<!-- ***************************************************************  MODAL ELIMINAR VENTA **************************************************************  -->
+<!-- ***************************************************************************************************************************************************** -->
+<div #modalEliminarVenta id="modalEliminarVenta" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom">
+    <div class="modal-content content-modal">
+      <div class="modal-header">
+        <h1 class="modal-title fs-4" id="exampleModalLabel">
+          <span *ngIf="ventaForm.estado_documento == 1">Anular Venta</span>
+          <span *ngIf="ventaForm.estado_documento != 1">Eliminar Venta</span>
+        </h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- FOOTER : BOTON CERRAR -->
+      <div class="modal-footer btn-principal">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button class="btn btn-secondary" style="border: none;background: #006bb0;" (click)="ELIMINAR_VENTA(ventaForm)">
+          <span *ngIf="ventaForm.estado_documento == 1">Anular</span>
+          <span *ngIf="ventaForm.estado_documento != 1">Eliminar</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ********************************************************************  MODAL FACTURA ***************************************************************  -->
+<!-- *************************************************************************************************************************************************** -->
+<div #modalFacturaVenta id="modalFacturaVenta" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" (hidden.bs.modal)="resetForm()">
+  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom">
+    <div class="modal-content content-modal">
+      <div class="modal-header">
+        <h1 class="modal-title fs-4" id="exampleModalLabel">Emitir Factura</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body d-flex">
+
+          <!-- DETALLES PRODUCTOS -->
+          <div class="detalle_productos" style="flex: 1; padding-right: 20px; border-right: 1px solid #828992;">
+            <ul class="list-group p-0">
+              <!-- Titulos -->
+              <li class="list-group-item py-0">
+                <div class="row mx-0 d-flex align-items-center">
+                  <div class="col-2 px-1">Cant.</div>
+                  <div class="col-4 px-1">Producto</div>
+                  <div class="col-3 px-1">precio U.</div>
+                  <div class="col-3 px-1">Sub Total</div>
+                </div>
+              </li>
+              <!-- Lista Cajas -->
+              <li class="list-group-item py-0" style="font-weight: 100;" *ngFor="let pro of lista_Productos_Agregados; let i = index">
+                <div class="row mx-0 d-flex align-items-center">
+                    <!-- CANTIDAD -->
+                    <div class="col-2 px-1"> {{pro.cantidad_item}} </div>
+                    <!-- PRODUCTO -->
+                    <div class="col-4 px-1" style="color: #d4da8f"> {{pro.nombre}} </div>
+                    <!-- BS. PRECIO C/U-->
+                    <div class="col-3 px-1"> Bs. {{pro.precio | number}} </div>
+                    <!-- BS. TOTAL -->
+                    <div class="col-3 px-1"> Bs. {{(pro.precio * pro.cantidad_item) | number}} </div>
+                </div>
+              </li>
+              <!-- IMPORTE BASE -->
+              <li class="list-group-item py-0" style="font-weight: 100; font-size: 17px; border-top: 1px solid #828992;">
+                  <div class="px-1">DESCUENTO: {{descuento}}</div>
+                  <div class="px-1">TOTAL: {{total}}</div>
+                  <!-- <div class="px-1">IMP. BASE CREDITO FISCAL: {{credido_fiscal}}</div> -->
+                  <!-- <div class="px-1">SubTotal:</div> -->
+              </li>
+            </ul>
+
+          </div>
+
+          <!-- FORMULARIO DATOS DEL CLIENTE -->
+          <form #formCliente="ngForm" class="row g-3" style="flex: 1; padding-left: 20px;">
+            <!-- SELECCIONAR CLIENTE -->
+            <div class="col-12 mb-1 mt-2">
+                <label class="form-label">Seleccionar Cliente</label>
+                <ng-select class="custom-ng-select" 
+                          [items]="lista_Clientes"
+                          [(ngModel)]="clienteSeleccionado"
+                          placeholder=""
+                          [searchable]="true"
+                          [bindLabel]="'identificacion'"
+                          [virtualScroll]="true"
+                          [clearable]="true"
+                          (change)="onClienteChange($event)"
+                          (clear)="onClienteClear()"  
+                          #insumo="ngModel"
+                          name="clienteSeleccionado"
+                          required
+                          style="height: 30px;">
+                          <!-- Plantilla personalizada para mostrar las etiquetas -->
+                          <ng-template ng-label-tmp let-item="item">
+                              <span [ngStyle]="{'font-weight': '400'}"> 
+                                <span [ngStyle]="{'color': '#d4da8f'}">{{ item.nombre  }} </span> {{  item.identificacion }}
+                              </span>
+                          </ng-template>
+                          <!-- Plantilla personalizada para mostrar las opciones -->
+                          <ng-template ng-option-tmp let-item="item">
+                              <span [ngStyle]="{'font-weight': '400'}">
+                                <span [ngStyle]="{'color': '#d4da8f'}">{{ item.nombre  }} </span> {{  item.identificacion }}
+                              </span>
+                          </ng-template>
+                </ng-select>
+            </div>
+
+            <!-- NOMBRE CLIENTE -->
+            <div class="col-12 mb-1 mt-2">
+              <label class="form-label">Nombre/Razon Social</label>
+              <input type="text" #nombre="ngModel" [(ngModel)]="clienteForm.nombre" name="nombre" placeholder="" [class.is-invalid]="mostrarAdvertencias && clienteForm.nombre.length==0" class="form-control" required>
+              <div class="advertencias" *ngIf="mostrarAdvertencias && clienteForm.nombre.length==0">
+                <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+                <p class="m-0">Agregar Nombre</p>
+              </div>
+            </div> 
+            <!-- SELECCIONAR DOCUMENTO -->
+            <div class="col-6 mb-1 mt-2">
+              <label class="form-label">Documento</label>
+              <select class="custom-select" #documento="ngModel" [(ngModel)]="clienteForm.documento" [class.is-invalid]="mostrarAdvertencias && !clienteForm.documento" name="documento" required>
+                <option value="">Seleccionar</option>
+                <option value=1>Cedula</option>
+                <option value=2>NIT</option>
+                <!-- <option value=3>DNI</option> -->
+                <option value=5>NIT Generico</option>
+              </select>
+              <div class="advertencias" *ngIf="mostrarAdvertencias && !clienteForm.documento" title="Seleccionar tipo de documento">
+                <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+                <p class="m-0">Seleccionar Documento</p>
+              </div>
+            </div>
+            <!-- INDENTIDAD -->
+            <div class="col-6 mb-1 mt-2">
+              <label class="form-label">Nro Identificación</label>
+              <input type="text" #identificacion="ngModel" [(ngModel)]="clienteForm.identificacion" name="identificacion" placeholder="" [class.is-invalid]="mostrarAdvertencias && clienteForm.identificacion==null" class="form-control" required>
+              <div class="advertencias" *ngIf="mostrarAdvertencias && clienteForm.identificacion==null">
+                <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+                <p class="m-0">Agregar Nro Identificación</p>
+              </div>
+            </div>
+            <!-- CORREO -->
+            <div class="col-6 mb-1 mt-2">
+              <label class="form-label">Correo</label>
+              <input type="text" #correo="ngModel" [(ngModel)]="clienteForm.correo" name="correo" class="form-control">
+            </div>
+            <!-- CELULAR -->
+            <div class="col-6 mb-1 mt-2">
+              <label class="form-label">Celular</label>
+              <input type="number" #celular="ngModel" [(ngModel)]="clienteForm.celular" name="celular" class="form-control">
+            </div>  
+            <div class="col-12 mb-1 mt-2">
+              <button type="button" class="btn btn-secondary" style="background: #006bb0;border: none;" (click)="AGREGAR_CLIENTE()">Agregar Cliente</button>
+            </div>  
+
+          </form>
+
+      </div>
+      <!-- BOTONES AGREGAR Y MODIFICAR -->
+      <div class="modal-footer btn-principal" style="font-size: 18px; font-weight: 400;">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-secondary" style="background: #006bb0;border: none;" (click)="EMITIR_FACURA()">Emitir Factura</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- ****************************** MODAL GENERAR PDF ***************************************** -->
+<div #modalgenerarpdf id="modalgenerarpdf" class="modal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-md">
+    <div class="modal-content content-modal">
+      <div class="modal-header">
+        <h5 class="modal-title fs-5">Emitir Ticket</h5>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-success" >Imprimir</button>
+        <button type="button" class="btn-close mx-0" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <ngx-extended-pdf-viewer [src]="pdfurl" [useBrowserLocale]="true" [showToolbar]="false" style="height: 610px;">
+          <div _ngcontent-ng-c1982957692 class="zoom" style="height: 510px;"> </div>
+        </ngx-extended-pdf-viewer>
+      </div>
+      <!-- <div class="modal-footer">
+      </div> -->
+    </div>
+  </div>
+</div>

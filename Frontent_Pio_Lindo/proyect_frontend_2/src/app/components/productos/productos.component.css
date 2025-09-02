@@ -1,0 +1,29 @@
+/* CARDS PRINCIPALES */
+.container-cards{
+  display: flex;
+  flex-wrap: wrap;
+}
+.container-cards .card{
+  display: flex;
+  width: 18%;
+  margin: 10px;
+  color: #f4f4f4;
+  background: #283042;
+}
+.card .card-text{
+  height: 85px;
+}
+.card button,.container-agregar button {
+  font-weight: 600;
+  background: #28526b;
+  border: none;
+}
+
+
+.card img{
+  width: 100px;
+}
+
+.card h5{
+  margin-top: 10px;
+}
