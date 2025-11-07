@@ -48,6 +48,9 @@
               </span>
             </button>
           </div>
+          <div>
+            <button (click)="IMPRIMIT_RECIBO()">Imprimir Recibo</button>
+          </div>
 
   </div>
 
@@ -140,9 +143,7 @@
       style="text-align: center;">
    </pagination-controls>
   </div>
-  
 </div>
-
 
 <!-- ******************************************************************* AGREGAR - VENTA ***************************************************************** -->
 <!-- ***************************************************************************************************************************************************** -->
@@ -155,7 +156,7 @@
         <h5>Categorías</h5>
         <div class="categorias-container">
             <button *ngFor="let categoria of lista_categorias" type="button" (click)="seleccionar_Categoria(categoria.cod_categoria)" [ngClass]="{'selected': categoria.cod_categoria === cod_categoria}"
-            [ngStyle]="{'background-color': categoria.cod_categoria === cod_categoria ? '#a68017' : ''}">
+            [ngStyle]="{'background-color': categoria.cod_categoria === cod_categoria ? '#258cd1' : ''}">
                 {{ categoria.nombre }}
             </button>
         </div>
@@ -169,7 +170,7 @@
             <h5>Subcategorías</h5>
             <div class="subcategorias">
                 <button *ngFor="let subcategoria of subcategoriasFiltradas" type="button" (click)="seleccionar_SubCategoria(subcategoria.cod_subcategoria)"
-                    [ngStyle]="{'background-color': subcategoria.cod_subcategoria === cod_subcategoria ? '#a96525' : ''}">
+                    [ngStyle]="{'background-color': subcategoria.cod_subcategoria === cod_subcategoria ? '#258cd1' : ''}">
                     {{ subcategoria.nombre }}
                 </button>
             </div>
@@ -300,9 +301,9 @@
 
             <div class="ticket">
               <!-- <button class="btn btn-danger" style="width: 25%; background: #4a5979;">PRE/COMANDA</button> -->
-              <button class="btn btn-secondary" style="width: 33.33%; background: #ba8400;" (click)="EMITIR_COMANDA()">COMANDA</button>
-              <button class="btn btn-danger" style="width: 33.33%; background: #524e98;" (click)="EMITIR_RECIBO()">PRE-CUENTA</button>
-              <button class="btn btn-secondary" style="width: 33.33%; background: #5a237c;" (click)="showModal_EmitirFactura(ventaForm)">FACTURA</button>
+              <button class="btn btn-secondary" style="width: 33.33%; background: #3d657d;" (click)="EMITIR_COMANDA()">COMANDA</button>
+              <button class="btn btn-danger" style="width: 33.33%; background: #3d657d;" (click)="EMITIR_RECIBO()">PRE-CUENTA</button>
+              <button class="btn btn-secondary" style="width: 33.33%; background: #3d657d;" (click)="showModal_EmitirFactura(ventaForm)">FACTURA</button>
 
             </div>
 
@@ -478,9 +479,9 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 
-      <div class="modal-body" style="font-weight: 300; letter-spacing: 0px;">
+      <div class="modal-body" style="font-weight: 300; letter-spacing: 1px;">
         <!-- DETALLES PRODUCTOS -->
-        <div class="detalle_productos mb-2">
+        <div class="detalle_productos mb-1">
           <ul class="list-group p-0">
             <!-- Titulo Principal -->
             <!-- <li class="list-group-item py-0">
@@ -503,7 +504,7 @@
                   <!-- CANTIDAD -->
                   <div class="col-1 px-1"> {{pro.cantidad_item}} </div>
                   <!-- PRODUCTO -->
-                  <div class="col-3 px-1" style="color: #d4da8f"> {{pro.nombre}} </div>
+                  <div class="col-3 px-1"> {{pro.nombre}} </div>
                   <!-- BS. PRECIO C/U-->
                   <div class="col-2 px-1"> Bs. {{pro.precio | number}} </div>
                   <!-- BS. TOTAL -->
@@ -517,139 +518,128 @@
           </ul>
 
         </div>
-        <!-- <div *ngIf="ventaForm.estado_transaccion != 2"> -->
-          <div>
-            <!-- SUB TOTALES -->
-            <div class="subtotal d-flex mb-2">
-              <p class="m-0 me-4">Sub Total:</p>
-              <p class="m-0 me-4">Bs. {{ventaForm.bs_total  | number}}</p>
-              <p class="m-0">Ps. {{ventaForm.ps_total  | number}}</p>
-            </div>
-
-            <!-- DESCUENTO -->
-            <div class="descuento d-flex mb-2">
-              <div class="d-flex">
-                <label class="me-3">Bol. descuento</label>
-                <input type="number" #bs_descuento="ngModel" [(ngModel)]="ventaForm.bs_descuento" name="bs_descuento" class="form-control py-0" style="width: 30%;" (keyup)="calcular_descuento()">
+            <div class="container-pago p-3">
+               <!-- DESCUENTO -->
+               <div class="descuento d-flex">
+               <div class="d-flex" style="width: 25%;">
+                    <label class="me-3">Bs. descuento:</label>
+                    <input type="number" #bs_descuento="ngModel" [(ngModel)]="ventaForm.bs_descuento" name="bs_descuento" class="form-control py-0" style="width: 35%;" (keyup)="calcular_descuento()">
+               </div>
+                <div class="d-flex" style="width: 25%;">
+                    <label class="me-3">Ps. descuento:</label>
+                    <input type="number" #ps_descuento="ngModel" [(ngModel)]="ventaForm.ps_descuento" name="ps_descuento" class="form-control py-0" style="width: 35%;" (keyup)="calcular_descuento()">
+                 </div>
+             </div>
+              <hr>
+                <!-- DIVISA -->
+              <div class="btn-divisa d-flex mb-3">
+                  <p class="m-0 p-0 me-3">Metodo de pago</p>
+                    <button class="btn me-1" (click)="seleccionar_divisa(1)" [ngStyle]="{'background-color': divisa_seleccionada === 1 ? '#1f4574' : '','border': divisa_seleccionada === 1 ? 'none' : ''}">Bol.</button>
+                    <button class="btn me-1" (click)="seleccionar_divisa(2)" [ngStyle]="{'background-color': divisa_seleccionada === 2 ? '#1f4574' : '','border': divisa_seleccionada === 2 ? 'none' : ''}">Arg.</button>
+                    <button class="btn me-1" (click)="seleccionar_divisa(3)" [ngStyle]="{'background-color': divisa_seleccionada === 3 ? '#1f4574' : '','border': divisa_seleccionada === 3 ? 'none' : ''}">Banca</button>
               </div>
-              <div class="d-flex">
-                <label class="me-3">Arg. descuento</label>
-                <input type="number" #ps_descuento="ngModel" [(ngModel)]="ventaForm.ps_descuento" name="ps_descuento" class="form-control py-0" style="width: 30%;" (keyup)="calcular_descuento()">
+              <!-- SUB TOTALES -->
+              <div class="subtotal d-flex mb-2">
+                  <p class="m-0" style="width: 10%;">Sub Total:</p>
+                  <p class="m-0 me-5">Bs. {{ventaForm.bs_total  | number}}</p>
+                  <p class="m-0">Ps. {{ventaForm.ps_total  | number}}</p>
               </div>
-            </div>
+                <!-- FALTA -->
+                <div class="falta d-flex mb-3" style="font-weight: 500; width: 40%; color: #cdba70;">
+                    <p class="m-0 mb-0" style="width: 25%;">Falta:</p>
+                    <p class="m-0 mb-0" style="width: 25%;">Bs. {{ventaForm.bs_falta | number}}</p>
+                    <p class="m-0 mb-0" style="width: 25%;">Ps. {{ventaForm.ps_falta | number}}</p>
+                </div>
+                <!-- INPUTS -->
+                <div class="pagos d-flex">
+                  <!-- DIVISA INPUTS -->
+                  <div class="divisa mb-3" style="width: 40%;">
 
-            <!-- TOTALES -->
-            <div class="total d-flex mb-2" style="font-size: 25px; font-weight: 400; background: #253448;">
-              <p class="m-0 me-5">Total</p>
-              <p class="m-0 me-5">Bs. {{bs_total | number}}</p>
-              <p class="m-0">Ps. {{ps_total | number}}</p>        
-            </div>
+                    <!-- BOLIVIANOS -->
+                    <div class="boliviano row m-0 p-0" *ngIf="divisa_seleccionada == 1">
+                      <div class="d-flex col-12 p-0 mb-3">
+                        <label style="width: 25%;">Monto</label>
+                        <input type="number" #bs_pagado="ngModel" [(ngModel)]="ventaForm.bs_pagado" (input)="actualizarMontos('bs')" [disabled]="ventaForm.bs_falta === 0" name="bs_pagado" class="form-control py-0" style="width: 65%; letter-spacing: 1px;">
+                      </div>
+                      <div class="col-12 mb-0 p-0 d-flex"> 
+                        <p class="mb-0" style="width: 25%;"> Cambio: </p> 
+                        <p class="mb-0"> {{ventaForm.bs_cambio}} </p>  
+                      </div>
+                    </div>
 
+                    <!-- PESOS ARGENTINOS -->
+                    <div class="pesos row m-0 p-0" *ngIf="divisa_seleccionada == 2">
+                      <div class="d-flex col-12 p-0 mb-3">
+                        <label style="width: 25%;">Monto</label>
+                        <input type="number" #ps_pagado="ngModel" [(ngModel)]="ventaForm.ps_pagado"  (input)="actualizarMontos('ps')" name="ps_pagado" class="form-control py-0" style="width: 65%; letter-spacing: 1px;">
+                      </div>
+                      <div class="col-12 mb-0 p-0 d-flex"> 
+                        <p class="mb-0" style="width: 25%;"> Cambio: </p> 
+                        <p class="mb-0"> {{ventaForm.ps_cambio | number}} </p>  
+                      </div>
+                    </div>
 
-            <!-- DIVISA -->
-            <div class="btn-divisa d-flex mb-4">
-              <p class="m-0 p-0 me-3">Metodo de pago</p>
-                <button class="btn me-1" (click)="seleccionar_divisa(1)" [ngStyle]="{'background-color': divisa_seleccionada === 1 ? '#1f4574' : '','border': divisa_seleccionada === 1 ? 'none' : ''}">Bol.</button>
-                <button class="btn me-1" (click)="seleccionar_divisa(2)" [ngStyle]="{'background-color': divisa_seleccionada === 2 ? '#1f4574' : '','border': divisa_seleccionada === 2 ? 'none' : ''}">Arg.</button>
-                <button class="btn me-1" (click)="seleccionar_divisa(3)" [ngStyle]="{'background-color': divisa_seleccionada === 3 ? '#1f4574' : '','border': divisa_seleccionada === 3 ? 'none' : ''}">Banca</button>
-            </div>
+                    <!-- BANCA (QR) -->
+                    <div class="pesos d-flex" *ngIf="divisa_seleccionada == 3">
+                      <label style="width: 25%;">Monto</label>
+                      <input type="number" #bs_banca_pagado="ngModel" [(ngModel)]="ventaForm.bs_banca_pagado" (input)="actualizarMontos('banca')" name="bs_banca_pagado" class="form-control py-0" style="width: 65%;">
+                    </div>
 
-            <!-- INPUTS -->
-            <div class="pagos d-flex">
-              <!-- DIVISA INPUTS -->
-              <div class="divisa mb-4" style="width: 40%;">
-
-                <!-- BOLIVIANOS -->
-                <div class="boliviano row m-0 p-0" *ngIf="divisa_seleccionada == 1">
-                  <div class="d-flex col-12 p-0 mb-3">
-                    <label style="width: 25%;">Monto</label>
-                    <input type="number" #bs_pagado="ngModel" [(ngModel)]="ventaForm.bs_pagado" (input)="actualizarMontos('bs')" [disabled]="ventaForm.bs_falta === 0" name="bs_pagado" class="form-control py-0" style="width: 65%; letter-spacing: 1px;">
                   </div>
-                  <div class="col-12 mb-0 p-0 d-flex"> 
-                    <p class="mb-0" style="width: 25%;"> Cambio: </p> 
-                    <p class="mb-0"> {{ventaForm.bs_cambio}} </p>  
+                  <!-- ATAJOS --> 
+                  <div class="atajos mb-2" style="width: 60%;">
+                      <!-- BOLIVIANOS MONTO POSITIVO -->
+                      <div class="bs-atajo-monto-positivo mb-1" *ngIf="divisa_seleccionada == 1 || divisa_seleccionada == 3">
+                        <button class="btn" (click)="actualizarValor('monto', 0.5)">+0.5</button>
+                        <button class="btn" (click)="actualizarValor('monto', 1)">+1</button>
+                        <button class="btn" (click)="actualizarValor('monto', 2)">+2</button>
+                        <button class="btn" (click)="actualizarValor('monto', 5)">+5</button>
+                        <button class="btn" (click)="actualizarValor('monto', 10)">+10</button>
+                        <button class="btn" (click)="actualizarValor('monto', 20)">+20</button>
+                        <button class="btn" (click)="actualizarValor('monto', 50)">+50</button>
+                        <button class="btn" (click)="actualizarValor('monto', 100)">+100</button>
+                        <button class="btn" (click)="actualizarValor('monto', 200)">+200</button>
+                      </div>
+                      <!-- BOLIVIANOS MONTO NEGATIVO -->
+                      <div class="bs-atajo-monto-negativo" *ngIf="divisa_seleccionada == 1 || divisa_seleccionada == 3">
+                        <button class="btn" (click)="actualizarValor('monto', -0.5)">-0.5</button>
+                        <button class="btn" (click)="actualizarValor('monto', -1)">-1</button>
+                        <button class="btn" (click)="actualizarValor('monto', -2)">-2</button>
+                        <button class="btn" (click)="actualizarValor('monto', -5)">-5</button>
+                        <button class="btn" (click)="actualizarValor('monto', -10)">-10</button>
+                        <button class="btn" (click)="actualizarValor('monto', -20)">-20</button>
+                        <button class="btn" (click)="actualizarValor('monto', -50)">-50</button>
+                        <button class="btn" (click)="actualizarValor('monto', -100)">-100</button>
+                        <button class="btn" (click)="actualizarValor('monto', -200)">-200</button>
+                      </div>
+                      <!-- PESOS ARG MONTO POSITIVO -->
+                      <div class="ps-atajo-monto-positivo mb-1" *ngIf="divisa_seleccionada == 2">
+                        <button class="btn" (click)="actualizarValor('monto', 50)">+50</button>
+                        <button class="btn" (click)="actualizarValor('monto', 100)">+100</button>
+                        <button class="btn" (click)="actualizarValor('monto', 200)">+200</button>
+                        <button class="btn" (click)="actualizarValor('monto', 500)">+500</button>
+                        <button class="btn" (click)="actualizarValor('monto', 1000)">+1,000</button>
+                        <button class="btn" (click)="actualizarValor('monto', 2000)">+2,000</button>
+                        <button class="btn" (click)="actualizarValor('monto', 5000)">+5,000</button>
+                        <button class="btn" (click)="actualizarValor('monto', 10000)">+10,000</button>
+                        <button class="btn" (click)="actualizarValor('monto', 20000)">+20,000</button>
+                      </div>
+                      <!-- PESOS ARG MONTO NEGATIVO -->
+                      <div class="ps-atajo-monto-negativo" *ngIf="divisa_seleccionada == 2">
+                        <button class="btn" (click)="actualizarValor('monto', -50)">-50</button>
+                        <button class="btn" (click)="actualizarValor('monto', -100)">-100</button>
+                        <button class="btn" (click)="actualizarValor('monto', -200)">-200</button>
+                        <button class="btn" (click)="actualizarValor('monto', -500)">-500</button>
+                        <button class="btn" (click)="actualizarValor('monto', -1000)">-1,000</button>
+                        <button class="btn" (click)="actualizarValor('monto', -2000)">-2,000</button>
+                        <button class="btn" (click)="actualizarValor('monto', -5000)">-5,000</button>
+                        <button class="btn" (click)="actualizarValor('monto', -10000)">-10,000</button>
+                        <button class="btn" (click)="actualizarValor('monto', -20000)">-20,000</button>
+                      </div>
                   </div>
                 </div>
-
-                <!-- PESOS ARGENTINOS -->
-                <div class="pesos row m-0 p-0" *ngIf="divisa_seleccionada == 2">
-                  <div class="d-flex col-12 p-0 mb-3">
-                    <label style="width: 25%;">Monto</label>
-                    <input type="number" #ps_pagado="ngModel" [(ngModel)]="ventaForm.ps_pagado"  (input)="actualizarMontos('ps')" name="ps_pagado" class="form-control py-0" style="width: 65%; letter-spacing: 1px;">
-                  </div>
-                  <div class="col-12 mb-0 p-0 d-flex"> 
-                    <p class="mb-0" style="width: 25%;"> Cambio: </p> 
-                    <p class="mb-0"> {{ventaForm.ps_cambio | number}} </p>  
-                  </div>
-                </div>
-
-                <!-- BANCA (QR) -->
-                <div class="pesos d-flex" *ngIf="divisa_seleccionada == 3">
-                  <label style="width: 25%;">Monto</label>
-                  <input type="number" #bs_banca_pagado="ngModel" [(ngModel)]="ventaForm.bs_banca_pagado" (input)="actualizarMontos('banca')" name="bs_banca_pagado" class="form-control py-0" style="width: 65%;">
-                </div>
-
-              </div>
-              <!-- ATAJOS --> 
-              <div class="atajos mb-2" style="width: 60%;">
-                  <!-- BOLIVIANOS MONTO POSITIVO -->
-                  <div class="bs-atajo-monto-positivo mb-1" *ngIf="divisa_seleccionada == 1 || divisa_seleccionada == 3">
-                    <button class="btn" (click)="actualizarValor('monto', 0.5)">+0.5</button>
-                    <button class="btn" (click)="actualizarValor('monto', 1)">+1</button>
-                    <button class="btn" (click)="actualizarValor('monto', 2)">+2</button>
-                    <button class="btn" (click)="actualizarValor('monto', 5)">+5</button>
-                    <button class="btn" (click)="actualizarValor('monto', 10)">+10</button>
-                    <button class="btn" (click)="actualizarValor('monto', 20)">+20</button>
-                    <button class="btn" (click)="actualizarValor('monto', 50)">+50</button>
-                    <button class="btn" (click)="actualizarValor('monto', 100)">+100</button>
-                    <button class="btn" (click)="actualizarValor('monto', 200)">+200</button>
-                  </div>
-                  <!-- BOLIVIANOS MONTO NEGATIVO -->
-                  <div class="bs-atajo-monto-negativo" *ngIf="divisa_seleccionada == 1 || divisa_seleccionada == 3">
-                    <button class="btn" (click)="actualizarValor('monto', -0.5)">-0.5</button>
-                    <button class="btn" (click)="actualizarValor('monto', -1)">-1</button>
-                    <button class="btn" (click)="actualizarValor('monto', -2)">-2</button>
-                    <button class="btn" (click)="actualizarValor('monto', -5)">-5</button>
-                    <button class="btn" (click)="actualizarValor('monto', -10)">-10</button>
-                    <button class="btn" (click)="actualizarValor('monto', -20)">-20</button>
-                    <button class="btn" (click)="actualizarValor('monto', -50)">-50</button>
-                    <button class="btn" (click)="actualizarValor('monto', -100)">-100</button>
-                    <button class="btn" (click)="actualizarValor('monto', -200)">-200</button>
-                  </div>
-                  <!-- PESOS ARG MONTO POSITIVO -->
-                  <div class="ps-atajo-monto-positivo mb-1" *ngIf="divisa_seleccionada == 2">
-                    <button class="btn" (click)="actualizarValor('monto', 50)">+50</button>
-                    <button class="btn" (click)="actualizarValor('monto', 100)">+100</button>
-                    <button class="btn" (click)="actualizarValor('monto', 200)">+200</button>
-                    <button class="btn" (click)="actualizarValor('monto', 500)">+500</button>
-                    <button class="btn" (click)="actualizarValor('monto', 1000)">+1,000</button>
-                    <button class="btn" (click)="actualizarValor('monto', 2000)">+2,000</button>
-                    <button class="btn" (click)="actualizarValor('monto', 5000)">+5,000</button>
-                    <button class="btn" (click)="actualizarValor('monto', 10000)">+10,000</button>
-                    <button class="btn" (click)="actualizarValor('monto', 20000)">+20,000</button>
-                  </div>
-                  <!-- PESOS ARG MONTO NEGATIVO -->
-                  <div class="ps-atajo-monto-negativo" *ngIf="divisa_seleccionada == 2">
-                    <button class="btn" (click)="actualizarValor('monto', -50)">-50</button>
-                    <button class="btn" (click)="actualizarValor('monto', -100)">-100</button>
-                    <button class="btn" (click)="actualizarValor('monto', -200)">-200</button>
-                    <button class="btn" (click)="actualizarValor('monto', -500)">-500</button>
-                    <button class="btn" (click)="actualizarValor('monto', -1000)">-1,000</button>
-                    <button class="btn" (click)="actualizarValor('monto', -2000)">-2,000</button>
-                    <button class="btn" (click)="actualizarValor('monto', -5000)">-5,000</button>
-                    <button class="btn" (click)="actualizarValor('monto', -10000)">-10,000</button>
-                    <button class="btn" (click)="actualizarValor('monto', -20000)">-20,000</button>
-                  </div>
-              </div>
             </div>
 
-            <!-- FALTA -->
-            <div class="falta d-flex mb-2" style="font-weight: 400; letter-spacing: 1px; width: 40%;">
-              <p class="m-0 mb-0" style="width: 25%;">Falta:</p>
-              <p class="m-0 mb-0" style="width: 25%;">Bs. {{ventaForm.bs_falta | number}}</p>
-              <p class="m-0 mb-0" style="width: 25%;">Ps. {{ventaForm.ps_falta | number}}</p>
-            </div>
-        </div>
 
 
         <!-- PAGADOS -->
@@ -671,7 +661,6 @@
               <p class="m-0 mb-0 me-1" *ngIf="ventaForm.ps_descuento ?? 0 >0">Ps. {{ventaForm.ps_descuento | number}}</p>
             </div>
         </div>
-
       </div>
 
       <!-- BOTONES AGREGAR Y MODIFICAR -->
@@ -876,5 +865,20 @@
       <!-- <div class="modal-footer">
       </div> -->
     </div>
+  </div>
+</div>
+
+
+
+
+
+<div style="display: none;">
+  <div id="ticket">
+    <h2>Mi Restaurante</h2>
+    <p>Pedido #123</p>
+    <p>Producto 1 - 10 Bs</p>
+    <p>Producto 2 - 15 Bs</p>
+    <hr>
+    <p><strong>Total: 25 Bs</strong></p>
   </div>
 </div>

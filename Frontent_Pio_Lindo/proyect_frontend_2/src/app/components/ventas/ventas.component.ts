@@ -10,8 +10,7 @@ import { SocketService } from '../../services/socket.service';
 import { SharedservicesService } from 'src/app/services/sharedservices.service';
 
 import { jsPDF } from 'jspdf';
-
-
+import html2pdf from 'html2pdf.js';
 import * as bootstrap from 'bootstrap';
 
 // import { Memoize } from 'ngx-memoize';
@@ -106,13 +105,26 @@ showModal_Pagar():void{
 }
 
 convertirDivisa(cantidad:any,divisa:any ):number{
+  // Normalizar cantidad a número
+  const cant = Number(cantidad ?? 0);
+  if (isNaN(cant)) return 0;
 
-  if (divisa == 'bs-arg') {
-    return this.ventaForm.ps_total * ((cantidad ?? 0) / this.ventaForm.bs_total);
-  }else{
-    return this.ventaForm.bs_total * ((cantidad ?? 0) / this.ventaForm.ps_total);
+  // Normalizar valores del formulario
+  const bsTotal = Number(this.ventaForm.bs_total ?? 0);
+  const psTotal = Number(this.ventaForm.ps_total ?? 0);
+
+  // Convertir de bolivianos a pesos argentinos
+  if (divisa == 'bs-arg' || divisa == 'a-ps') {
+    if (bsTotal === 0) return 0;
+    return psTotal * (cant / bsTotal);
   }
-
+  // Convertir de pesos argentinos a bolivianos
+  else if (divisa == 'arg-bs' || divisa == 'a-bs') {
+    if (psTotal === 0) return 0;
+    return bsTotal * (cant / psTotal);
+  }
+  
+  return 0;
 }
 
 showModal_SelectFecha(){
@@ -928,51 +940,6 @@ VISUALIZAR_VENTA(venta:any){
   // Reinicia la lista de productos agregados antes de agregar la nueva venta
   this.lista_Productos_Agregados = [];
 
- // Agrega los productos y complementos a la lista
-//  for (const detalle of venta.detalle_venta) {
-//   // Buscar el producto correspondiente para obtener su precio
-//   const producto = this.lista_Productos.find((p: any) => p.cod_producto === detalle.cod_producto);
-
-//   // Crear objeto producto
-//   const productoAgregado = {
-//     cod_producto: producto.cod_producto,
-//     cantidad_item: detalle.cantidad_item,
-//     nombre: producto ? producto.nombre : 'Desconocido', // nombre del producto
-//     precio: producto ? producto.precio : 0, // precio del producto
-//     item_llevar: detalle.item_llevar,
-//     complementos: detalle.detalle_opcion.map((opcion: any[]) => {
-//       // Obtener el complemento correspondiente
-//       const complemento = this.lista_Complementos.find((c: any) => c.cod_complemento === opcion[0].cod_complemento);
-
-//       // Obtener todas las opciones disponibles para este complemento
-//       const opcionesDisponibles = this.lista_Complementos_Opciones
-//         .filter((co: any) => co.cod_complemento === complemento.cod_complemento) // Obtener opciones del complemento
-//         .map((co: any) => {
-//           const opcionCorrespondiente = this.lista_Opciones.find((o: any) => o.cod_opcion === co.cod_opcion);
-
-//           // Buscar si la opción ya está en los detalles de venta
-//           const opcionSeleccionada = opcion.find(o => o.cod_opcion === co.cod_opcion);
-
-//           return {
-//             cod_opcion: opcionCorrespondiente ? opcionCorrespondiente.cod_opcion : 0,
-//             cantidad_op: opcionSeleccionada ? opcionSeleccionada.cantidad_op : 0, // Mantener cantidad de la venta o poner en 0
-//             nombre: opcionCorrespondiente ? opcionCorrespondiente.nombre : 'Desconocido'
-//           };
-//         });
-
-//       return {
-//         nombre: complemento ? complemento.nombre : 'Desconocido', // nombre del complemento
-//         opciones: opcionesDisponibles, // Todas las opciones disponibles con cantidades
-//       };
-//     }),
-//   };
-
-//   // Agregar el producto a la lista
-//   this.lista_Productos_Agregados.push(productoAgregado);
-//   console.log('Producto Agregado:', productoAgregado);
-// }
-
-
 
 for (const detalle of venta.detalle_venta) {
   // Buscar el producto correspondiente para obtener su precio
@@ -984,6 +951,7 @@ for (const detalle of venta.detalle_venta) {
     cantidad_item: detalle.cantidad_item,
     nombre: producto ? producto.nombre : 'Desconocido',
     precio: producto ? producto.precio : 0,
+    ps_precio: producto ? producto.ps_precio : 0,
     item_llevar: detalle.item_llevar,
     complementos: []
   };
@@ -1675,7 +1643,26 @@ EMITIR_FACURA() {
 }
 
 
+ticket=false
+IMPRIMIT_RECIBO(){
+  const elemento = document.getElementById('ticket'); // tu div del ticket
+  const opciones = {
+    margin: 0,
+    filename: 'ticket.pdf',
+    image: { type: 'jpeg' as const, quality: 0.98 },
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: 'mm', format: [80, 200] as [number, number], orientation: 'portrait' as const }
+  };
 
+
+  if (elemento) {
+    //tml2pdf().set(opciones).from(elemento).save();
+    html2pdf().set(opciones).from(elemento).output('bloburl').then(pdfUrl => {
+      window.open(pdfUrl, '_blank');
+    });
+  }
+  
+}
 
 //*************************************************** LISTAR CLIENTES ****************************************************
 //************************************************************************************************************************
@@ -1714,6 +1701,8 @@ AGREGAR_CLIENTE(){
   ) 
 
 }
+
+
 
 
 // FUNCION QUE SE EJECUTA CUANDO SE SELECCIONA UN CLIENTE

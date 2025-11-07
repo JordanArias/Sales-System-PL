@@ -1,4 +1,13 @@
 
+#ticket {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: red;
+  width: 100%;
+  padding: 5px;
+}
+
 
 .container-principal-agregar {
   display: flex;
@@ -116,13 +125,13 @@
   min-height: 54px;
   margin-bottom: 2px;
   border: none;
-  background-color:#6d571c; /* Color de fondo */
+  background-color:#0d5e95; /* Color de fondo */
   color: white; /* Color del texto */
   cursor: pointer;
   border-radius: 5px; /* Bordes redondeados opcionales */
 }
 .categorias-container button:hover {
-  background-color:#8a6e23; /* Color de fondo */
+  background-color:#258cd1; /* Color de fondo */
 }
 /************ CATEGORIAS STYLES *************/
 .container-subcategorias {
@@ -145,13 +154,13 @@
   padding: 15px 10px;
   margin: 0 3px;
   border: none;
-  background-color:#854e1b; /* Color de fondo */
+  background-color:#0d5e95; /* Color de fondo */
   color: white; /* Color del texto */
   cursor: pointer;
   border-radius: 5px; /* Bordes redondeados opcionales */
 }
 .subcategorias button:hover {
-  background-color:#a76424; 
+  background-color:#258cd1; 
 }
 /************ PRODUCTOS STYLES *************/
 
@@ -312,7 +321,7 @@
   color: #f3f3f3;
   border: none;
   /* border-bottom: 1px solid #404c5d;   */
-  letter-spacing: 1px;
+  /* letter-spacing: 1px; */
 }
 #modalPagar .btn-divisa button{
   color: #f3f3f3;
@@ -322,7 +331,7 @@
   background: #293b52;
 }
 #modalPagar .bs-atajo-monto-positivo button, #modalPagar .ps-atajo-monto-positivo button{
-  background: #347952;
+  background: #2a61a5;
   margin-right: 7px;
   padding: 3px 0px;
   color: #f3f3f3;

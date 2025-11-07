@@ -25,11 +25,9 @@
       "ES2022",
       "dom"
     ],
-    "types": [
-      "cookie",
-      "wrap-ansi"
-    ]
-    
+    "skipLibCheck": true,
+    "types": []
+
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
