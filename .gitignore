@@ -1,29 +1,32 @@
+# Electron
+dist-electron/
+build-resources/
 
-# Node.js
+# Dependencies
 node_modules/
-npm-debug.log
+Backend_Pio_Lindo/node_modules/
+Frontent_Pio_Lindo/proyect_frontend_2/node_modules/
 
-# Angular
-dist/
-.angular/
-.cache/
+# Build outputs
+Backend_Pio_Lindo/build/
+Frontent_Pio_Lindo/proyect_frontend_2/dist/
 
 # Logs
-logs
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# OS generated files
+# OS
 .DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
 Thumbs.db
-*.sublime-project
-*.sublime-workspace
-*.vscode/
+
+# IDE
+.vscode/
 .idea/
+*.swp
+*.swo
+
+# Environment
+.env
+.env.local

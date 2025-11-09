@@ -1,0 +1,62 @@
+{
+  "name": "pio-lindo-desktop",
+  "version": "1.0.0",
+  "description": "Sistema Pio Lindo - Aplicación de Escritorio",
+  "main": "electron/main.js",
+  "author": "Fabrizio Arias Marca",
+  "license": "MIT",
+  "scripts": {
+    "electron": "electron .",
+    "electron:dev": "electron . --dev",
+    "build:backend": "cd Backend_Pio_Lindo && npm run build",
+    "build:frontend": "cd Frontent_Pio_Lindo/proyect_frontend_2 && npm run build",
+    "build:all": "npm run build:backend && npm run build:frontend",
+    "postinstall": "cd Backend_Pio_Lindo && npm install && cd ../Frontent_Pio_Lindo/proyect_frontend_2 && npm install",
+    "dist": "npm run build:all && electron-builder",
+    "dist:win": "npm run build:all && electron-builder --win",
+    "pack": "npm run build:all && electron-builder --dir"
+  },
+  "devDependencies": {
+    "electron": "^39.1.1",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.piolindo.desktop",
+    "productName": "Pio Lindo",
+    "directories": {
+      "output": "dist-electron",
+      "buildResources": "build-resources"
+    },
+    "files": [
+      "electron/**/*",
+      "Backend_Pio_Lindo/build/**/*",
+      "Backend_Pio_Lindo/node_modules/**/*",
+      "Backend_Pio_Lindo/package.json",
+      "Frontent_Pio_Lindo/proyect_frontend_2/dist/**/*",
+      "!Backend_Pio_Lindo/src/**/*",
+      "!Frontent_Pio_Lindo/proyect_frontend_2/src/**/*",
+      "!Frontent_Pio_Lindo/proyect_frontend_2/node_modules/**/*",
+      "!**/*.map"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build-resources/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}

@@ -30,7 +30,7 @@ app.use(cors({
 const io = socketIo(server, {
   cors: {
     //origin: "http://localhost:4200", // Cambia esta URL al origen de tu aplicación Angular
-    origin: ["http://localhost:4200", "http://192.168.0.125:4200"],
+    origin: ["http://localhost:4200", "http://192.168.0.125:4200", "file://"],
     methods: ["GET", "POST","PUT", "DELETE"],
     allowedHeaders: ["my-custom-header"],
     credentials: true

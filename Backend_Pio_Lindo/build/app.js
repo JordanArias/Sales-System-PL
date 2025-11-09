@@ -1,60 +1,85 @@
 'use strict';
 
-var express = require('express'); //cargaremos el modulo de Express
-var bodyParser = require('body-parser'); //Cargamos el modulo body-parser
+const express = require('express');
+const morgan = require('morgan');
+const pkg = require('../package.json');
+const cors = require('cors'); // Importa el módulo cors
+const usuariosRoutes = require('./routes/usuarios.routes');
+const authRoutes = require('./routes/auth.routes');
+const usu_rolRoutes = require('./routes/usu_rol.routes');
+const productosRoutes = require('./routes/productos/productos.routes');
+const categoriasRoutes = require('./routes/productos/categorias.routes');
+const opcionesRoutes = require('./routes/productos/opciones.routes');
+const complementosRoutes = require('./routes/productos/complementos.routes');
+const ventasRoutes = require('./routes/ventas.routes');
+const reportesRoutes = require('./routes/reporte.routes');
+const clientesRoutes = require('./routes/clientes.routes');
+const cajaRoutes = require('./routes/caja.routes');
+const insumoRoutes = require('./routes/insumos.routes');
+const movimiento_insumoRoutes = require('./routes/movimiento_insumo.routes');
+const socketIo = require('socket.io');
+const http = require('http'); // Importa el módulo http para crear el servidor
+const app = express();
 
-var app = express(); //creamos la variable para ejecutar Express
-
-//cargar archivos de rutas
-//var project_router =require('./routes/project'); //cargamos el archivo de rutas(project.js)
-
-//middlewares: es un metodo que se ejecuta antes de ejecutar la accion de un controlador o del resultado de la peticion
-app.use(bodyParser.urlencoded({
-  extended: false
+// Crear un servidor HTTP
+const server = http.createServer(app);
+// Configura el servidor de Socket.IO con CORS
+app.use(cors({
+  methods: ['GET', 'POST', 'PUT', 'DELETE']
 }));
-app.use(bodyParser.json()); //cualquier tipo de peticion que llegue lo convertira a Json
+const io = socketIo(server, {
+  cors: {
+    //origin: "http://localhost:4200", // Cambia esta URL al origen de tu aplicación Angular
+    origin: ["http://localhost:4200", "http://192.168.0.125:4200", "file://"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["my-custom-header"],
+    credentials: true
+  }
+});
+io.on('connection', socket => {
+  console.log('-----------------------------------------Un cliente se ha conectado.');
 
-//CORS
-// Configurar cabeceras y cors
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*'); //Cuando hagamos deploy en vez de * tendriamos que poner la url o origenes permitidos.
-  res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
-  res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
-  next();
+  // Maneja eventos personalizados aquí
+  socket.on('evento_personalizado', data => {
+    console.log('Evento personalizado recibido:', data);
+    // Puedes emitir eventos a otros clientes aquí
+    io.emit('evento_personalizado', data);
+  });
+  socket.on('disconnect', () => {
+    console.log('Un cliente se ha desconectado.');
+  });
+});
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+  console.log(`Servidor escuchando en el puerto ${PORT}`);
+});
+app.set('pkg', pkg);
+app.use(morgan('dev'));
+app.use(express.json());
+app.get('/', (req, res) => {
+  res.json({
+    name: app.get('pkg').name,
+    author: app.get('pkg').author,
+    description: app.get('pkg').description,
+    version: app.get('pkg').version
+  });
 });
 
-//RUTAS
-// RUTA DE PRUEBA
-// creamos la ruta(/test) | req: son los datos que enviamos desde el cliente o peticion que hagamos 
-//                       | res: es la response que estaremos enviando
-// app.get('/test', (req, res) =>{
-//     res.status(200).send({ //Es una respuesta exitosa por parte del servidor y con(send) enviaremos los datos
-//         message: "Hola mundo desde mi API de NodeJs" //En este caso enviaremos un mensaje
-//     })
-// })
+//Rutas Principales para las API Rest
+app.use('/api/usuarios', usuariosRoutes);
+app.use('/api/usu_rol', usu_rolRoutes);
+app.use('/api/auth', authRoutes);
+//PRODUCTOS
+app.use('/api/productos', productosRoutes);
+app.use('/api/categorias', categoriasRoutes);
+app.use('/api/opciones', opcionesRoutes);
+app.use('/api/complementos', complementosRoutes);
+app.use('/api/ventas', ventasRoutes);
+app.use('/api/reportes', reportesRoutes);
+app.use('/api/clientes', clientesRoutes);
+app.use('/api/caja', cajaRoutes);
+app.use('/api/insumos', insumoRoutes);
+app.use('/api/movimiento_insumo', movimiento_insumoRoutes);
 
-// //OTRA RUTA
-// app.get('/', (req, res) =>{
-//     res.status(200).send( // Devolvemos algo no sea un Json queitanto las llaves {}
-//         "<h1>Pagina de inicio</h1>" //Enviamso solo texto
-//     )
-// })
-
-// //CAMBIAMOS GET POR POST
-// app.post('/test/:id', (req, res) =>{
-//    //console.log(req.param('nombre')); //devuelve Fabrizio
-//     console.log(req.body.nombre); //forma mas optima, devuelve Fabrizio
-//     console.log(req.query.web); // Devuelve la variable web de la peticion : http://localhost:3700/test?web=google.com 
-//     console.log(req.params.id); //devuelve el id:88 que colocamos al hacer la peticion : http://localhost:3700/test/88?web=google.com  
-//     res.status(200).send({ //Es una respuesta exitosa por parte del servidor y con(send) enviaremos los datos
-//         message: "Hola mundo desde mi API de NodeJs" //En este caso enviaremos un mensaje
-//     })
-// })
-
-// **************************************4.-CONTROLADOR DEL BACKEND DE NODE********************************  
-//Cargamos las rutas de project_router
-//app.use('/api',project_router); //Si queremos lo ponemos sin /api
-
-//EXPORTAR
+//export default app;//Exportamos este modulo
 module.exports = app; //Exportamos este modulo

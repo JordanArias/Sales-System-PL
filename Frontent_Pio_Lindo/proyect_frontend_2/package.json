@@ -20,7 +20,7 @@
     "@angular/platform-browser": "^17.0.0",
     "@angular/platform-browser-dynamic": "^17.0.0",
     "@angular/router": "^17.0.0",
-    "@ng-bootstrap/ng-bootstrap": "^15.0.0",
+    "@ng-bootstrap/ng-bootstrap": "^17.0.0",
     "@ng-select/ng-select": "^10.0.0",
     "@types/bootstrap": "^5.2.7",
     "bootstrap": "^5.3.2",
@@ -36,7 +36,7 @@
     "rxjs": "~7.8.1",
     "socket.io-client": "^4.7.2",
     "tslib": "^2.5.3",
-    "zone.js": "~0.13.0"
+    "zone.js": "~0.14.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^17.0.0",
@@ -53,6 +53,7 @@
     "@types/raf": "^3.4.3",
     "@types/sizzle": "^2.3.9",
     "@types/wrap-ansi": "^8.1.0",
+    "electron": "^39.1.1",
     "jasmine-core": "~5.0.0",
     "karma": "~6.4.2",
     "karma-chrome-launcher": "~3.2.0",
