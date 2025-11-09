@@ -201,7 +201,8 @@
   <div class="container-venta">
     <div class="formulario-venta" style="border-left: 2px solid #575757;">
       <div class="p-2 d-flex justify-content-between" style="height: 6vh;">
-        <h5 class="m-0 d-flex align-items-center" style="color: #f3f3f3;">Venta</h5>
+        <h5 class="m-0 d-flex align-items-center" style="color: #f3f3f3;">VENTA</h5>
+        <button class="btn btn-danger p-0" style="width: 20%; background: #198754; border: none;" (click)="Limpiar_Datos_Venta()">NUEVO</button>
         <button class="btn btn-danger p-0" style="width: 8%; background: #9d3030; border: none;" (click)="cambiar_Pantalla()">X</button>
       </div>
 
@@ -282,24 +283,25 @@
               <button class="btn btn-danger" style="width:33.33%; background: #873232; border: none;" [disabled]="this.ventaForm.estado_transaccion==0" 
                                               *ngIf="this.ventaForm.estado_transaccion!=2 && this.ventaForm.estado_documento==0" (click)="showModal_Eliminar(ventaForm)">ELIMINAR
               </button>
+              <button class="btn btn-danger" style="width:50%; background: #873232; border: none;" *ngIf="this.ventaForm.estado_transaccion==2 && this.ventaForm.estado_documento==0" (click)="showModal_Eliminar(ventaForm)">ELIMINAR</button>
+
               <button class="btn btn-primary" style="width: 33.33%;" (click)="AGREGAR_VENTA('Finalizar venta')"   *ngIf="this.ventaForm.estado_transaccion == 0">FINALIZAR VENTA</button>
               <button class="btn btn-primary" style="width: 33.33%;" (click)="AGREGAR_VENTA('Agregar sin pagar')" *ngIf="this.ventaForm.estado_transaccion == 0">AGREGAR SIN PAGAR</button>
 
-              <button class="btn btn-primary" style="width: 33.33%;" (click)="MODIFICAR_VENTA('Agregar sin pagar')" *ngIf="this.ventaForm.estado_transaccion == 1">M/AGREGAR SIN PAGAR</button>
-              <button class="btn btn-primary" style="width: 33.33%;" (click)="MODIFICAR_VENTA('Finalizar venta')" *ngIf="this.ventaForm.estado_transaccion == 1 || this.ventaForm.estado_transaccion == 2">M/FINALIZAR VENTA</button>
+              <button class="btn btn-primary" style="width: 33.33%;" (click)="MODIFICAR_VENTA('Agregar sin pagar')" *ngIf="this.ventaForm.estado_transaccion == 1">AGREGAR SIN PAGAR</button> <!-- M/ -->
+              <button class="btn btn-primary" style="width: 50%;" (click)="MODIFICAR_VENTA('Finalizar venta')" *ngIf="this.ventaForm.estado_transaccion == 1 || this.ventaForm.estado_transaccion == 2">FINALIZAR VENTA</button> <!-- M/ -->
               
-              <button class="btn btn-danger" style="width:50%; background: #873232; border: none;" *ngIf="this.ventaForm.estado_transaccion==2 && this.ventaForm.estado_documento==0" (click)="showModal_Eliminar(ventaForm)">ELIMINAR</button>
-              <button class="btn btn-danger" style="width:50%; background: #873232; border: none;" *ngIf="this.ventaForm.estado_transaccion==2 && this.ventaForm.estado_documento==1" (click)="showModal_Eliminar(ventaForm)">ANULAR VENTA</button>
-              <button class="btn btn-primary" style="width:50%;" *ngIf="this.ventaForm.estado_transaccion==2 && this.ventaForm.estado_documento==0" (click)="MODIFICAR_SOLO_DATOS_VENTA()">MODIFICAR DATOS VENTA</button>
-              <button class="btn btn-primary" style="width:50%;" *ngIf="this.ventaForm.estado_transaccion==2 && this.ventaForm.estado_documento==1" (click)="MODIFICAR_SOLO_DATOS_VENTA()">MODIFICAR DATOS VENTA</button>
-              <button class="btn btn-danger" style="width:100%; background: #873232; border: none;" *ngIf="this.ventaForm.estado_documento==2" (click)="showModal_Eliminar(ventaForm)">ELIMINAR DE RESERVA</button>
+              <!-- <button class="btn btn-danger" style="width:50%; background: #873232; border: none;" *ngIf="this.ventaForm.estado_transaccion==2 && this.ventaForm.estado_documento==1" (click)="showModal_Eliminar(ventaForm)">ANULAR VENTA</button> -->
+              <!-- <button class="btn btn-primary" style="width:50%;" *ngIf="this.ventaForm.estado_transaccion==2 && this.ventaForm.estado_documento==0" (click)="MODIFICAR_SOLO_DATOS_VENTA()">MODIFICAR DATOS VENTA</button>
+              <button class="btn btn-primary" style="width:50%;" *ngIf="this.ventaForm.estado_transaccion==2 && this.ventaForm.estado_documento==1" (click)="MODIFICAR_SOLO_DATOS_VENTA()">MODIFICAR DATOS VENTA</button> -->
+              <!-- <button class="btn btn-danger" style="width:100%; background: #873232; border: none;" *ngIf="this.ventaForm.estado_documento==2" (click)="showModal_Eliminar(ventaForm)">ELIMINAR DE RESERVA</button> -->
             </div>
 
             <div class="ticket">
               <!-- <button class="btn btn-danger" style="width: 25%; background: #4a5979;">PRE/COMANDA</button> -->
-              <button class="btn btn-secondary" style="width: 33.33%; background: #3d657d;" (click)="EMITIR_COMANDA()">COMANDA</button>
-              <button class="btn btn-danger" style="width: 33.33%; background: #3d657d;" (click)="EMITIR_RECIBO()">PRE-CUENTA</button>
-              <button class="btn btn-secondary" style="width: 33.33%; background: #3d657d;" (click)="showModal_EmitirFactura(ventaForm)">FACTURA</button>
+              <button class="btn btn-secondary" style="width: 50%; background: #3d657d;" (click)="EMITIR_COMANDA()">COMANDA</button>
+              <button class="btn btn-danger" style="width: 50%; background: #3d657d;" (click)="EMITIR_RECIBO()">PRE-CUENTA</button>
+              <!-- <button class="btn btn-secondary" style="width: 33.33%; background: #3d657d;" (click)="showModal_EmitirFactura(ventaForm)">FACTURA</button> -->
 
             </div>
 

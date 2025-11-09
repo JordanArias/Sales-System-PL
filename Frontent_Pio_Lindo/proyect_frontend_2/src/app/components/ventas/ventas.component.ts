@@ -61,6 +61,10 @@ cambiar_Pantalla(){
   }
 }
 
+Limpiar_Datos_Venta(){
+  this.limpiarDatosCargados_AgregarVenta();
+}
+
 
 //******************************************************************************************************************************************************* 
 //**********************************************************************  MODALES  **********************************************************************
@@ -1123,177 +1127,168 @@ MODIFICAR_SOLO_DATOS_VENTA(){
 //***************************************************************************************************************************************************************************************
  //PDF
 pdfurl: string = ''; // Establece la ruta correcta a tu archivo PDF aquí
-EMITIR_COMANDA2() {
-  //SI LA VENTA NO TIENE PRODUCTOS SELECCIONADOS RETURN
-  if (this.lista_Productos_Agregados.length==0) {
-    this.mostrarToast('No existen productos agregados','rojo');
-    return;
-  }
+// EMITIR_COMANDA2() {
+//   //SI LA VENTA NO TIENE PRODUCTOS SELECCIONADOS RETURN
+//   if (this.lista_Productos_Agregados.length==0) {
+//     this.mostrarToast('No existen productos agregados','rojo');
+//     return;
+//   }
  
-  //VERIFICAR SI LA VENTA SE AGREGO
-  if (this.ventaForm.estado_transaccion == 0) {
-    this.mostrarToast('Aun no se guardó la venta','rojo');
-    return;
-  }
+//   //VERIFICAR SI LA VENTA SE AGREGO
+//   if (this.ventaForm.estado_transaccion == 0) {
+//     this.mostrarToast('Aun no se guardó la venta','rojo');
+//     return;
+//   }
 
-  // Crear un nuevo documento PDF
-  const doc = new jsPDF({
-    orientation: 'portrait', // Orientación del documento (vertical)
-    unit: 'mm',              // Unidad de medida en milímetros
-    format: [80, 120]       // Tamaño del papel (ancho, alto)
-  });
+//   // Crear un nuevo documento PDF
+//   const doc = new jsPDF({
+//     orientation: 'portrait', // Orientación del documento (vertical)
+//     unit: 'mm',              // Unidad de medida en milímetros
+//     format: [80, 120]       // Tamaño del papel (ancho, alto)
+//   });
 
-  // Configuración de la fuente
-  doc.setFontSize(8); // Tamaño de fuente
-  // Calcular la posición x para centrar el texto "PIO LINDO"
-  const pageWidth = 72; // Ancho del documento
+//   // Configuración de la fuente
+//   doc.setFontSize(8); // Tamaño de fuente
+//   // Calcular la posición x para centrar el texto "PIO LINDO"
+//   const pageWidth = 72; // Ancho del documento
 
-  //**************************************************************************************************************
-  // Espacios en 'x' y 'y' para el encabezado
-  const nombre = 'PIO LINDO'; let textWidth = doc.getTextWidth(nombre); let x = (pageWidth - textWidth) / 2;
-  doc.setFont('Helvetica', 'bold'); // Establece la fuente en negrita
-  doc.text(nombre, x, 5); // Texto centrado horizontalmente en x
-  doc.setFont('Helvetica', 'normal'); // Restablece la fuente a normal
+//   //**************************************************************************************************************
+//   // Espacios en 'x' y 'y' para el encabezado
+//   const nombre = 'PIO LINDO'; let textWidth = doc.getTextWidth(nombre); let x = (pageWidth - textWidth) / 2;
+//   doc.setFont('Helvetica', 'bold'); // Establece la fuente en negrita
+//   doc.text(nombre, x, 5); // Texto centrado horizontalmente en x
+//   doc.setFont('Helvetica', 'normal'); // Restablece la fuente a normal
 
-  const fecha = `${this.ventaForm.fecha}  -  ${this.ventaForm.hora}`;  textWidth = doc.getTextWidth(fecha); x = (pageWidth - textWidth) / 2;
-  doc.text(fecha, x, 8); // x=2, y=8
+//   const fecha = `${this.ventaForm.fecha}  -  ${this.ventaForm.hora}`;  textWidth = doc.getTextWidth(fecha); x = (pageWidth - textWidth) / 2;
+//   doc.text(fecha, x, 8); // x=2, y=8
 
-  const ticket = `N° TICKET :  ${this.ventaForm.ticket}`;  textWidth = doc.getTextWidth(ticket); x = (pageWidth - textWidth) / 2;
-  doc.setFont('Helvetica', 'bold'); // Establece la fuente en negrita
-  doc.text(ticket, x, 11); // x=2, y=14
+//   const ticket = `N° TICKET :  ${this.ventaForm.ticket}`;  textWidth = doc.getTextWidth(ticket); x = (pageWidth - textWidth) / 2;
+//   doc.setFont('Helvetica', 'bold'); // Establece la fuente en negrita
+//   doc.text(ticket, x, 11); // x=2, y=14
 
-  let posicionY = 13; // Inicializa la posición vertical para el contenido de productos
+//   let posicionY = 13; // Inicializa la posición vertical para el contenido de productos
 
-  if (this.ventaForm.venta_llevar == true) {
-    const llevar = '(PARA LLEVAR)';  textWidth = doc.getTextWidth(llevar); x = (pageWidth - textWidth) / 2;
-    doc.text(llevar, x, 14); // x=2, y=14
-    posicionY = 16
-  }
-  doc.setFont('Helvetica', 'normal'); // Restablece la fuente a normal
-  //***************************************************************************************************************
+//   if (this.ventaForm.venta_llevar == true) {
+//     const llevar = '(PARA LLEVAR)';  textWidth = doc.getTextWidth(llevar); x = (pageWidth - textWidth) / 2;
+//     doc.text(llevar, x, 14); // x=2, y=14
+//     posicionY = 16
+//   }
+//   doc.setFont('Helvetica', 'normal'); // Restablece la fuente a normal
+//   //***************************************************************************************************************
 
-// Define el patrón de línea discontinua
-doc.setLineDashPattern([1, 1], 0); // 1mm línea, 1mm espacio, fase de inicio 0
-doc.line(2, posicionY, 70, posicionY); // Dibuja la línea discontinua en y=posicionY
-posicionY +=3 
-//---------------------------------------------------------------------------------------------------------------------
-const mesaText = `Mesa: ${this.ventaForm.mesa ?? ''}`;
-const codigoText = `Codigo: ${this.ventaForm.cod_venta}`;
-// Ancho del texto "Codigo"
-const codigoTextWidth = doc.getTextWidth(codigoText);
-// Posición x para "Codigo" al final de la línea
-const codigoX = pageWidth - codigoTextWidth - 2; // Restar 2mm de margen
-// Imprimir "Mesa" al principio y "Codigo" al final
-doc.text(mesaText, 2, posicionY); // "Mesa" en x=2
-doc.text(codigoText, codigoX, posicionY); // "Codigo" al final de la línea
-doc.line(2, posicionY+1, 70, posicionY+1); // Dibuja la línea discontinua en y=posicionY
-//---------------------------------------------------------------------------------------------------------------------
+// // Define el patrón de línea discontinua
+// doc.setLineDashPattern([1, 1], 0); // 1mm línea, 1mm espacio, fase de inicio 0
+// doc.line(2, posicionY, 70, posicionY); // Dibuja la línea discontinua en y=posicionY
+// posicionY +=3 
+// //---------------------------------------------------------------------------------------------------------------------
+// const mesaText = `Mesa: ${this.ventaForm.mesa ?? ''}`;
+// const codigoText = `Codigo: ${this.ventaForm.cod_venta}`;
+// // Ancho del texto "Codigo"
+// const codigoTextWidth = doc.getTextWidth(codigoText);
+// // Posición x para "Codigo" al final de la línea
+// const codigoX = pageWidth - codigoTextWidth - 2; // Restar 2mm de margen
+// // Imprimir "Mesa" al principio y "Codigo" al final
+// doc.text(mesaText, 2, posicionY); // "Mesa" en x=2
+// doc.text(codigoText, codigoX, posicionY); // "Codigo" al final de la línea
+// doc.line(2, posicionY+1, 70, posicionY+1); // Dibuja la línea discontinua en y=posicionY
+// //---------------------------------------------------------------------------------------------------------------------
 
-  //doc.line(2, posicionY, 70, posicionY); // Dibuja una línea horizontal en y=16
-  posicionY += 5; // Incrementa la posición vertical para el siguiente elemento
-  // const detalle = 'DETALLE';  textWidth = doc.getTextWidth(detalle); x = (pageWidth - textWidth) / 2;
-  // doc.text(detalle, x, posicionY); // "Mesa" en x=2
-  // posicionY += 3;
+//   //doc.line(2, posicionY, 70, posicionY); // Dibuja una línea horizontal en y=16
+//   posicionY += 5; // Incrementa la posición vertical para el siguiente elemento
+//   // const detalle = 'DETALLE';  textWidth = doc.getTextWidth(detalle); x = (pageWidth - textWidth) / 2;
+//   // doc.text(detalle, x, posicionY); // "Mesa" en x=2
+//   // posicionY += 3;
 
-  // Itera sobre la lista de productos agregados
-  this.lista_Productos_Agregados.forEach((producto) => {
-    // *********** NOMBRE PRODUCTO *********** 
-    let llevar = '';
-    if (producto.item_llevar) {
-      llevar = '(Para Llevar)';
-    }
+//   // Itera sobre la lista de productos agregados
+//   this.lista_Productos_Agregados.forEach((producto) => {
+//     // *********** NOMBRE PRODUCTO *********** 
+//     let llevar = '';
+//     if (producto.item_llevar) {
+//       llevar = '(Para Llevar)';
+//     }
   
-    // Texto del producto con cantidad y "Para Llevar"
-    const productoTexto = `${producto.cantidad_item} x ${producto.nombre} ${llevar}`;
-    const maxWidthProducto = 65; // Ancho máximo permitido para el texto en mm
+//     // Texto del producto con cantidad y "Para Llevar"
+//     const productoTexto = `${producto.cantidad_item} x ${producto.nombre} ${llevar}`;
+//     const maxWidthProducto = 65; // Ancho máximo permitido para el texto en mm
     
-    // Divide el texto en varias líneas si es necesario
-    const lineasProducto = doc.splitTextToSize(productoTexto, maxWidthProducto);
+//     // Divide el texto en varias líneas si es necesario
+//     const lineasProducto = doc.splitTextToSize(productoTexto, maxWidthProducto);
   
-    // Imprimir cantidad y nombre del producto en negrita
-    doc.setFont('Helvetica', 'bold'); // Establece la fuente en negrita
-    lineasProducto.forEach((linea: string | string[]) => {
-      doc.text(linea, 2, posicionY); // Imprimir cada línea de texto
-      posicionY += 3; // Incrementa la posición vertical para la siguiente línea
-    });
-    doc.setFont('Helvetica', 'normal'); // Restablece la fuente a normal
+//     // Imprimir cantidad y nombre del producto en negrita
+//     doc.setFont('Helvetica', 'bold'); // Establece la fuente en negrita
+//     lineasProducto.forEach((linea: string | string[]) => {
+//       doc.text(linea, 2, posicionY); // Imprimir cada línea de texto
+//       posicionY += 3; // Incrementa la posición vertical para la siguiente línea
+//     });
+//     doc.setFont('Helvetica', 'normal'); // Restablece la fuente a normal
 
-    // *********************************************** LISTA COMPLEMENTOS **********************************************
-    doc.setFontSize(7); // Tamaño de fuente 
-    // Si el producto tiene complementos, se iteran los complementos
-    if (producto.complementos && Array.isArray(producto.complementos)) {
-      producto.complementos.forEach((complemento: { opciones: any[]; }) => {
-        const maxWidth = 70; // Ancho máximo permitido para el texto en mm
+//     // *********************************************** LISTA COMPLEMENTOS **********************************************
+//     doc.setFontSize(7); // Tamaño de fuente 
+//     // Si el producto tiene complementos, se iteran los complementos
+//     if (producto.complementos && Array.isArray(producto.complementos)) {
+//       producto.complementos.forEach((complemento: { opciones: any[]; }) => {
+//         const maxWidth = 70; // Ancho máximo permitido para el texto en mm
         
-        // Solo se generan las opciones de los complementos, sin el nombre del complemento
-        let textoOpciones = complemento.opciones
-          .filter(opcion => opcion.cantidad_op > 0) // Filtra las opciones con cantidad mayor a 0
-          .map(opcion => `${opcion.cantidad_op} ${opcion.nombre}`) // Mapea a formato de texto
-          .join(', '); // Une las opciones con una coma
+//         // Solo se generan las opciones de los complementos, sin el nombre del complemento
+//         let textoOpciones = complemento.opciones
+//           .filter(opcion => opcion.cantidad_op > 0) // Filtra las opciones con cantidad mayor a 0
+//           .map(opcion => `${opcion.cantidad_op} ${opcion.nombre}`) // Mapea a formato de texto
+//           .join(', '); // Une las opciones con una coma
 
-        // Verifica si hay opciones para imprimir
-        if (textoOpciones) {
-          // Imprimir opciones solo si existen
-          const lineasTextoOpciones = doc.splitTextToSize(textoOpciones, maxWidth);
+//         // Verifica si hay opciones para imprimir
+//         if (textoOpciones) {
+//           // Imprimir opciones solo si existen
+//           const lineasTextoOpciones = doc.splitTextToSize(textoOpciones, maxWidth);
 
-          // Imprimir cada línea de las opciones
-          lineasTextoOpciones.forEach((linea: string | string[]) => {
-            doc.text(linea, 2, posicionY); // Imprimir cada línea en x=2, y=posicionY
-            posicionY += 3; // Mover hacia abajo para la siguiente línea
-          });
-        }
-      });
-    }
-    doc.setFontSize(8); // Tamaño de fuente
-    //doc.line(2, posicionY, 70, posicionY); // Dibuja una línea horizontal para separar productos
-    posicionY += 1; // Incrementa la posición vertical para el siguiente producto
-  });
+//           // Imprimir cada línea de las opciones
+//           lineasTextoOpciones.forEach((linea: string | string[]) => {
+//             doc.text(linea, 2, posicionY); // Imprimir cada línea en x=2, y=posicionY
+//             posicionY += 3; // Mover hacia abajo para la siguiente línea
+//           });
+//         }
+//       });
+//     }
+//     doc.setFontSize(8); // Tamaño de fuente
+//     //doc.line(2, posicionY, 70, posicionY); // Dibuja una línea horizontal para separar productos
+//     posicionY += 1; // Incrementa la posición vertical para el siguiente producto
+//   });
 
-  //----------------------------------------------------------------------------------------------------------------------
-  posicionY -= 2;
-  doc.line(2, posicionY, 70, posicionY); // Dibuja una línea horizontal para separar productos
-  posicionY += 3;
-  //----------------------------------------------------------------------------------------------------------------------
+//   //----------------------------------------------------------------------------------------------------------------------
+//   posicionY -= 2;
+//   doc.line(2, posicionY, 70, posicionY); // Dibuja una línea horizontal para separar productos
+//   posicionY += 3;
+//   //----------------------------------------------------------------------------------------------------------------------
 
-  //*************************** DETALLE *****************************************
-  // Ajustar la descripción para que no se salga del ancho de 70 mm
-  if(this.ventaForm.descripcion.length>0){
-    const maxWidth = 70; // Ancho máximo permitido en milímetros
-    const descripcion = `Obs : ${this.ventaForm.descripcion}`;
+//   //*************************** DETALLE *****************************************
+//   // Ajustar la descripción para que no se salga del ancho de 70 mm
+//   if(this.ventaForm.descripcion.length>0){
+//     const maxWidth = 70; // Ancho máximo permitido en milímetros
+//     const descripcion = `Obs : ${this.ventaForm.descripcion}`;
     
-    // Divide el texto en varias líneas si excede el ancho máximo
-    const lineasDescripcion = doc.splitTextToSize(descripcion, maxWidth);
+//     // Divide el texto en varias líneas si excede el ancho máximo
+//     const lineasDescripcion = doc.splitTextToSize(descripcion, maxWidth);
     
-    // Imprime cada línea de la descripción
-    lineasDescripcion.forEach((linea: string | string[]) => {
-      doc.text(linea, 2, posicionY); // Imprimir cada línea en x=2, y=posicionY
-      posicionY += 4; // Incrementar la posición vertical para la siguiente línea
-    });
-  }
+//     // Imprime cada línea de la descripción
+//     lineasDescripcion.forEach((linea: string | string[]) => {
+//       doc.text(linea, 2, posicionY); // Imprimir cada línea en x=2, y=posicionY
+//       posicionY += 4; // Incrementar la posición vertical para la siguiente línea
+//     });
+//   }
 
   
-  //*************************** SIN CANCELAR *****************************************
-  if (this.ventaForm.estado_transaccion == 1) {
-    const sin_pagar = `(PENDIENTE DE PAGO)`;  textWidth = doc.getTextWidth(sin_pagar); x = (pageWidth - textWidth) / 2;
-    //doc.setFont('Helvetica', 'bold'); // Establece la fuente en negrita
-    doc.text(sin_pagar, x, posicionY); // x=2, y=14
-  }
+//   //*************************** SIN CANCELAR *****************************************
+//   if (this.ventaForm.estado_transaccion == 1) {
+//     const sin_pagar = `(PENDIENTE DE PAGO)`;  textWidth = doc.getTextWidth(sin_pagar); x = (pageWidth - textWidth) / 2;
+//     //doc.setFont('Helvetica', 'bold'); // Establece la fuente en negrita
+//     doc.text(sin_pagar, x, posicionY); // x=2, y=14
+//   }
 
 
-  doc.autoPrint(); // Configura el documento para impresión automática
-  window.open(doc.output('bloburl'), '_blank'); // Abre el ticket en una nueva pestaña
-}
+//   doc.autoPrint(); // Configura el documento para impresión automática
+//   window.open(doc.output('bloburl'), '_blank'); // Abre el ticket en una nueva pestaña
+// }
 
 
-/**
- * ===================================================================================
- * FUNCIÓN: EMITIR_COMANDA()
- * ===================================================================================
- * Esta función genera un ticket/comanda en formato HTML para imprimir.
- * Utiliza .map() para transformar los datos de productos, complementos y opciones
- * en código HTML.
- * ===================================================================================
- */
 EMITIR_COMANDA() {
   if (this.lista_Productos_Agregados.length == 0) {
     this.mostrarToast('No existen productos agregados', 'rojo');
@@ -1330,7 +1325,7 @@ EMITIR_COMANDA() {
 
   <div>
     <div class="center bold">🍽 COMANDA</div>
-    <div class="center bold">PIO LINDO</div>
+    <div class="center bold">RestCode</div>
     <div class="center">${this.ventaForm.fecha} - ${this.ventaForm.hora}</div>
     <div class="center bold">N° TICKET: ${this.ventaForm.ticket}</div>
 
@@ -1601,7 +1596,7 @@ EMITIR_RECIBO(){
   </style>
 
   <div>
-    <div class="center bold">PIO LINDO</div>
+    <div class="center bold">RestCode</div>
     <div class="center">${this.ventaForm.fecha} - ${this.ventaForm.hora}</div>
     <div class="center bold">N° TICKET: ${this.ventaForm.ticket}</div>
 
