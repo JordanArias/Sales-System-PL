@@ -1,13 +1,4 @@
 
-#ticket {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: red;
-  width: 100%;
-  padding: 5px;
-}
-
 
 .container-principal-agregar {
   display: flex;

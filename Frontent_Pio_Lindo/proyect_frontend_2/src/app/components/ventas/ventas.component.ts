@@ -901,7 +901,7 @@ LISTAR_VENTAS_EN_PROCESO(){
   .subscribe(
     res => {
       this.lista_Ventas = res;
-      console.log('VENTAS NUEVAS: ', this.lista_Ventas);
+      console.log('VENTAS EN PROCESO: ', this.lista_Ventas);
       console.log('Ultima Caja',res);
     },
     err =>{
@@ -918,7 +918,7 @@ LISTAR_VENTAS_FINALIZADAS(){
   .subscribe(
     res => {
       this.lista_Ventas = res;
-      console.log('VENTAS NUEVAS: ', this.lista_Ventas);
+      console.log('VENTAS FINALIZADAS: ', this.lista_Ventas);
       console.log('Ultima Caja',res);
     },
     err =>{
@@ -1123,7 +1123,7 @@ MODIFICAR_SOLO_DATOS_VENTA(){
 //***************************************************************************************************************************************************************************************
  //PDF
 pdfurl: string = ''; // Establece la ruta correcta a tu archivo PDF aquí
-EMITIR_COMANDA() {
+EMITIR_COMANDA2() {
   //SI LA VENTA NO TIENE PRODUCTOS SELECCIONADOS RETURN
   if (this.lista_Productos_Agregados.length==0) {
     this.mostrarToast('No existen productos agregados','rojo');
@@ -1284,152 +1284,371 @@ doc.line(2, posicionY+1, 70, posicionY+1); // Dibuja la línea discontinua en y=
   window.open(doc.output('bloburl'), '_blank'); // Abre el ticket en una nueva pestaña
 }
 
-//***************************************************************************************************************************************************************************************
-//*********************************************************************************  EMITIR PRECUENTA   ************************************************************************************
-//***************************************************************************************************************************************************************************************
-EMITIR_RECIBO() {
-  //SI LA VENTA NO TIENE PRODUCTOS SELECCIONADOS RETURN
-  if (this.lista_Productos_Agregados.length==0) {
-    this.mostrarToast('No existen productos agregados','rojo');
+
+/**
+ * ===================================================================================
+ * FUNCIÓN: EMITIR_COMANDA()
+ * ===================================================================================
+ * Esta función genera un ticket/comanda en formato HTML para imprimir.
+ * Utiliza .map() para transformar los datos de productos, complementos y opciones
+ * en código HTML.
+ * ===================================================================================
+ */
+EMITIR_COMANDA() {
+  if (this.lista_Productos_Agregados.length == 0) {
+    this.mostrarToast('No existen productos agregados', 'rojo');
     return;
   }
- 
-  //VERIFICAR SI LA VENTA SE AGREGO
+
   if (this.ventaForm.estado_transaccion == 0) {
     this.mostrarToast('Aun no se guardó la venta','rojo');
     return;
   }
 
-  // Crear un nuevo documento PDF
-  const doc = new jsPDF({
-    orientation: 'portrait', // Orientación del documento (vertical)
-    unit: 'mm',              // Unidad de medida en milímetros
-    format: [80, 120]       // Tamaño del papel (ancho, alto)
-  });
-
-  // Configuración de la fuente
-  doc.setFontSize(8); // Tamaño de fuente
-  const pageWidth = 72; // Ancho del documento
-
-  //**************************************************************************************************************
-  // Encabezado original
-  const nombre = 'PIO LINDO'; let textWidth = doc.getTextWidth(nombre); let x = (pageWidth - textWidth) / 2;
-  doc.setFont('Helvetica', 'bold'); // Establece la fuente en negrita
-  doc.text(nombre, x, 5); // Texto centrado horizontalmente en x
-  doc.setFont('Helvetica', 'normal'); // Restablece la fuente a normal
-
-  const fecha = `${this.ventaForm.fecha}  -  ${this.ventaForm.hora}`; textWidth = doc.getTextWidth(fecha); x = (pageWidth - textWidth) / 2;
-  doc.text(fecha, x, 8); // x=2, y=8
-
-  const ticket = `N° TICKET :  ${this.ventaForm.ticket}`; textWidth = doc.getTextWidth(ticket); x = (pageWidth - textWidth) / 2;
-  doc.setFont('Helvetica', 'bold'); // Establece la fuente en negrita
-  doc.text(ticket, x, 11); // x=2, y=14
-
-  let posicionY = 13; // Inicializa la posición vertical para el contenido de productos
-
-  if (this.ventaForm.venta_llevar == true) {
-    const llevar = '(PARA LLEVAR)'; textWidth = doc.getTextWidth(llevar); x = (pageWidth - textWidth) / 2;
-    doc.text(llevar, x, 14); // x=2, y=14
-    posicionY = 16;
-  }
-  doc.setFont('Helvetica', 'normal'); // Restablece la fuente a normal
-  //***************************************************************************************************************
-
-// Define el patrón de línea discontinua
-doc.setLineDashPattern([1, 1], 0); // 1mm línea, 1mm espacio, fase de inicio 0
-//doc.line(2, posicionY, 70, posicionY); // Dibuja la línea discontinua en y=posicionY
-posicionY += 2; // Aumentar el espaciado después de la línea
-
-//---------------------------------------------------------------------------------------------------------------------
-doc.setFontSize(7); // Tamaño de fuente
-// Aumentar el tamaño de la fuente para "Mesa" y "Codigo"
-const mesaFontSize = 8; // Aumentar el tamaño de la fuente
-doc.setFontSize(mesaFontSize);
-
-const mesaText = `Mesa: ${this.ventaForm.mesa ?? ''}`;
-const codigoText = `Codigo: ${this.ventaForm.cod_venta}`;
-
-// Ancho del texto "Codigo"
-const codigoTextWidth = doc.getTextWidth(codigoText);
-
-// Posición x para "Codigo" al final de la línea
-const codigoX = pageWidth - codigoTextWidth - 2; // Restar 2mm de margen
-
-// Imprimir "Mesa" al principio y "Codigo" al final
-doc.text(mesaText, 2, posicionY); // "Mesa" en x=2
-doc.text(codigoText, codigoX, posicionY); // "Codigo" al final de la línea
-doc.line(2, posicionY+1, 70, posicionY+1); // Dibuja la línea discontinua en y=posicionY
-// Dibuja la línea discontinua debajo de "Mesa" y "Codigo"
-posicionY += 5; // Aumentar el espaciado vertical para la línea
-
-//---------------------------------------------------------------------------------------------------------------------
-
-
-  //**************************************************************************************************************
-  doc.setFont('Helvetica', 'bold'); // Establece la fuente en negrita
-  // Agregar los títulos de las columnas
-  doc.text('Cant', 2, posicionY); // Título Cantidad
-  doc.text('Producto', 10, posicionY); // Título Producto
-  doc.text('Precio', 45, posicionY); // Título Precio
-  doc.text('Total', 58, posicionY); // Título Total
-  doc.setFont('Helvetica', 'normal'); // Restablece la fuente a normal
-  posicionY += 2; // Ajustar la posición Y después de los títulos
-
-  // Dibuja una línea horizontal discontinua debajo de los títulos
-  doc.line(2, posicionY, 70, posicionY);
-  posicionY += 3;
-
-  //**************************************************************************************************************
-  // DETALLE DE PRODUCTOS
-
-  this.lista_Productos_Agregados.forEach((producto) => {
-    const cantidad = producto.cantidad_item;
-    let nombreProducto = producto.nombre;
-    if (producto.item_llevar) {
-      nombreProducto = nombreProducto + ' (Para LLevar)'
+  const ticket = `
+  <style>
+    body {
+      font-family: monospace;
+      width: 80mm;
+      margin: 0;
+      padding: 0px;
+      font-size: 12px;
     }
-    const precioUnidad = producto.precio;
-    const total = cantidad * precioUnidad;
+    .center { text-align: center; }
+    .bold { font-weight: bold;}
+    .row {
+      padding: 0px;
+      margin: 0px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .line {
+      border-top: 1px dashed black;
+      margin: 2px 0;
+    }
+  </style>
 
-    // Nombre del producto con ajuste de ancho
-    const maxNombreWidth = 34; // Limitar el nombre del producto a 42 mm
-    const nombreProductoLineas = doc.splitTextToSize(nombreProducto, maxNombreWidth);
+  <div>
+    <div class="center bold">🍽 COMANDA</div>
+    <div class="center bold">PIO LINDO</div>
+    <div class="center">${this.ventaForm.fecha} - ${this.ventaForm.hora}</div>
+    <div class="center bold">N° TICKET: ${this.ventaForm.ticket}</div>
 
-    // Imprimir cantidad, nombre del producto y total
-    nombreProductoLineas.forEach((linea: string | string[], index: number) => {
-      if (index === 0) {
-        doc.text(`${cantidad}`, 3, posicionY); // Cantidad
-        doc.text(linea, 10, posicionY); // Primera línea del nombre del producto
-        doc.text(`${precioUnidad.toFixed(2)}`, 45, posicionY); // Precio por unidad
-        doc.text(`${total.toFixed(2)}`, 58, posicionY); // Total
-      } else {
-        doc.text(linea, 10, posicionY); // Continuación del nombre en nuevas líneas
-      }
-      posicionY += 4; // Incrementar la posición vertical
-    });
-  });
+    ${this.ventaForm.venta_llevar ? `<div class="center bold">(PARA LLEVAR)</div>` : ''}
 
-  //**************************************************************************************************************
-  // LÍNEA FINAL
-  posicionY -= 2;
-  doc.line(2, posicionY, 70, posicionY);
-  posicionY += 4;
+    <div class="line"></div>
 
-  // DETALLES FINALES DE PAGO
-  const total = `TOTAL : ${(this.ventaForm.bs_total??0).toFixed(2)}`;  textWidth = doc.getTextWidth(total); x = (pageWidth - textWidth) / 2;
-  doc.text(total, x, posicionY);
-  posicionY += 4;
-  //*************************** SIN CANCELAR *****************************************
-  if (this.ventaForm.estado_transaccion == 1) {
-    const sin_pagar = `(PENDIENTE DE PAGO)`;  textWidth = doc.getTextWidth(sin_pagar); x = (pageWidth - textWidth) / 2;
-    //doc.setFont('Helvetica', 'bold'); // Establece la fuente en negrita
-    doc.text(sin_pagar, x, posicionY); // x=2, y=14
-  }
-  // Preparar para imprimir
-  doc.autoPrint();
-  window.open(doc.output('bloburl'), '_blank');
+    <div class="row">
+      <span>Mesa: ${this.ventaForm.mesa ?? ''}</span>
+      <span>Codigo: ${this.ventaForm.cod_venta}</span>
+    </div>
+
+    <div class="line"></div>
+
+    <!-- 
+      ===================================================================================
+      PRIMER .map() - Itera sobre cada producto en la lista de productos agregados
+      ===================================================================================
+      .map() es un método de arrays que transforma cada elemento del array en algo nuevo.
+      En este caso, toma cada producto 'p' y lo convierte en una cadena HTML.
+      
+      Ejemplo: Si tienes [producto1, producto2], .map() crea [html1, html2]
+      Luego .join('') une todas las cadenas HTML en una sola cadena.
+      
+      Para cada producto 'p', creamos un div con:
+      - La cantidad del producto (p.cantidad_item)
+      - El nombre del producto (p.nombre)
+      - Si es para llevar, agregamos "(LLEVAR)"
+    -->
+    ${this.lista_Productos_Agregados.map(p => `
+        <div class="bold">${p.cantidad_item} x ${p.nombre} ${p.item_llevar ? '(LLEVAR)' : ''}</div>
+
+        <!-- 
+        ===================================================================================
+        SEGUNDO .map() - Itera sobre los complementos de cada producto
+        ===================================================================================
+        (p.complementos ?? []) significa: 
+        - Si p.complementos existe, úsalo
+        - Si es null o undefined, usa un array vacío []
+        
+        Este .map() toma cada complemento 'c' y genera HTML para sus opciones.
+        Al final, .join('') une todos los HTML de complementos en una sola cadena.
+        -->
+      ${(p.complementos ?? []).map((c: { opciones: any; }) => {
+        // ===================================================================================
+        // TERCER .map() - Itera sobre las opciones de cada complemento
+        // ===================================================================================
+        // Aquí hay una cadena de métodos que procesan las opciones:
+        //
+        // 1. (c.opciones ?? []) - Obtiene las opciones del complemento, o array vacío si no hay
+        //
+        // 2. .filter() - Filtra solo las opciones con cantidad > 0
+        //    Ejemplo: Si hay 5 opciones pero solo 2 tienen cantidad > 0, 
+        //    filter devuelve solo esas 2 opciones
+        //
+        // 3. .map() - Transforma cada opción 'o' en un texto formateado:
+        //    - Si cantidad > 1: "2 Queso" (muestra cantidad + nombre)
+        //    - Si cantidad = 1: "Queso" (solo nombre)
+        //    Ejemplo: [opcion1, opcion2] se convierte en ["2 Queso", "Tomate"]
+        //
+        // 4. .join(' | ') - Une todas las opciones con " | " entre ellas
+        //    Ejemplo: ["2 Queso", "Tomate"] se convierte en "2 Queso | Tomate"
+        const opciones = (c.opciones ?? [])
+          .filter((o: { cantidad_op: number }) => o.cantidad_op > 0)
+          .map((o: { cantidad_op: number, nombre: string }) =>
+            o.cantidad_op > 1 ? `${o.cantidad_op} ${o.nombre}` : o.nombre
+          )
+          .join(' | ');  
+
+        // Si hay opciones (texto no vacío), retornamos un div con las opciones.
+        // Si no hay opciones, retornamos una cadena vacía ''.
+        return opciones ? `<div style="font-size:11px;">${opciones}</div>` : '';
+      }).join('')}
+
+
+        <div style="margin-bottom:5px"> </div>
+    `).join('')}
+
+    <div class="line"></div>
+
+    ${this.ventaForm.descripcion ? `
+      <div class="bold">Obs:</div>
+      <div>${this.ventaForm.descripcion}</div>
+      <div class="line"></div>
+    ` : ''}
+
+    ${this.ventaForm.estado_transaccion == 1 ? `<div class="center bold">(PENDIENTE DE PAGO)</div>` : ''}
+
+  </div>
+  `;
+
+  const w = window.open('', '', 'width=2000,height=1000');
+  w?.document.write(ticket);
+  w?.document.close();
+  w?.focus();
+  w?.print();
+  w?.close();
 }
 
+//***************************************************************************************************************************************************************************************
+//*********************************************************************************  EMITIR PRECUENTA   ************************************************************************************
+//***************************************************************************************************************************************************************************************
+// EMITIR_RECIBO() {
+//   //SI LA VENTA NO TIENE PRODUCTOS SELECCIONADOS RETURN
+//   if (this.lista_Productos_Agregados.length==0) {
+//     this.mostrarToast('No existen productos agregados','rojo');
+//     return;
+//   }
+ 
+//   //VERIFICAR SI LA VENTA SE AGREGO
+//   if (this.ventaForm.estado_transaccion == 0) {
+//     this.mostrarToast('Aun no se guardó la venta','rojo');
+//     return;
+//   }
+
+//   // Crear un nuevo documento PDF
+//   const doc = new jsPDF({
+//     orientation: 'portrait', // Orientación del documento (vertical)
+//     unit: 'mm',              // Unidad de medida en milímetros
+//     format: [80, 120]       // Tamaño del papel (ancho, alto)
+//   });
+
+//   // Configuración de la fuente
+//   doc.setFontSize(8); // Tamaño de fuente
+//   const pageWidth = 72; // Ancho del documento
+
+//   //**************************************************************************************************************
+//   // Encabezado original
+//   const nombre = 'PIO LINDO'; let textWidth = doc.getTextWidth(nombre); let x = (pageWidth - textWidth) / 2;
+//   doc.setFont('Helvetica', 'bold'); // Establece la fuente en negrita
+//   doc.text(nombre, x, 5); // Texto centrado horizontalmente en x
+//   doc.setFont('Helvetica', 'normal'); // Restablece la fuente a normal
+
+//   const fecha = `${this.ventaForm.fecha}  -  ${this.ventaForm.hora}`; textWidth = doc.getTextWidth(fecha); x = (pageWidth - textWidth) / 2;
+//   doc.text(fecha, x, 8); // x=2, y=8
+
+//   const ticket = `N° TICKET :  ${this.ventaForm.ticket}`; textWidth = doc.getTextWidth(ticket); x = (pageWidth - textWidth) / 2;
+//   doc.setFont('Helvetica', 'bold'); // Establece la fuente en negrita
+//   doc.text(ticket, x, 11); // x=2, y=14
+
+//   let posicionY = 13; // Inicializa la posición vertical para el contenido de productos
+
+//   if (this.ventaForm.venta_llevar == true) {
+//     const llevar = '(PARA LLEVAR)'; textWidth = doc.getTextWidth(llevar); x = (pageWidth - textWidth) / 2;
+//     doc.text(llevar, x, 14); // x=2, y=14
+//     posicionY = 16;
+//   }
+//   doc.setFont('Helvetica', 'normal'); // Restablece la fuente a normal
+//   //***************************************************************************************************************
+
+// // Define el patrón de línea discontinua
+// doc.setLineDashPattern([1, 1], 0); // 1mm línea, 1mm espacio, fase de inicio 0
+// //doc.line(2, posicionY, 70, posicionY); // Dibuja la línea discontinua en y=posicionY
+// posicionY += 2; // Aumentar el espaciado después de la línea
+
+// //---------------------------------------------------------------------------------------------------------------------
+// doc.setFontSize(7); // Tamaño de fuente
+// // Aumentar el tamaño de la fuente para "Mesa" y "Codigo"
+// const mesaFontSize = 8; // Aumentar el tamaño de la fuente
+// doc.setFontSize(mesaFontSize);
+
+// const mesaText = `Mesa: ${this.ventaForm.mesa ?? ''}`;
+// const codigoText = `Codigo: ${this.ventaForm.cod_venta}`;
+
+// // Ancho del texto "Codigo"
+// const codigoTextWidth = doc.getTextWidth(codigoText);
+
+// // Posición x para "Codigo" al final de la línea
+// const codigoX = pageWidth - codigoTextWidth - 2; // Restar 2mm de margen
+
+// // Imprimir "Mesa" al principio y "Codigo" al final
+// doc.text(mesaText, 2, posicionY); // "Mesa" en x=2
+// doc.text(codigoText, codigoX, posicionY); // "Codigo" al final de la línea
+// doc.line(2, posicionY+1, 70, posicionY+1); // Dibuja la línea discontinua en y=posicionY
+// // Dibuja la línea discontinua debajo de "Mesa" y "Codigo"
+// posicionY += 5; // Aumentar el espaciado vertical para la línea
+
+// //---------------------------------------------------------------------------------------------------------------------
+
+
+//   //**************************************************************************************************************
+//   doc.setFont('Helvetica', 'bold'); // Establece la fuente en negrita
+//   // Agregar los títulos de las columnas
+//   doc.text('Cant', 2, posicionY); // Título Cantidad
+//   doc.text('Producto', 10, posicionY); // Título Producto
+//   doc.text('Precio', 45, posicionY); // Título Precio
+//   doc.text('Total', 58, posicionY); // Título Total
+//   doc.setFont('Helvetica', 'normal'); // Restablece la fuente a normal
+//   posicionY += 2; // Ajustar la posición Y después de los títulos
+
+//   // Dibuja una línea horizontal discontinua debajo de los títulos
+//   doc.line(2, posicionY, 70, posicionY);
+//   posicionY += 3;
+
+//   //**************************************************************************************************************
+//   // DETALLE DE PRODUCTOS
+
+//   this.lista_Productos_Agregados.forEach((producto) => {
+//     const cantidad = producto.cantidad_item;
+//     let nombreProducto = producto.nombre;
+//     if (producto.item_llevar) {
+//       nombreProducto = nombreProducto + ' (Para LLevar)'
+//     }
+//     const precioUnidad = producto.precio;
+//     const total = cantidad * precioUnidad;
+
+//     // Nombre del producto con ajuste de ancho
+//     const maxNombreWidth = 34; // Limitar el nombre del producto a 42 mm
+//     const nombreProductoLineas = doc.splitTextToSize(nombreProducto, maxNombreWidth);
+
+//     // Imprimir cantidad, nombre del producto y total
+//     nombreProductoLineas.forEach((linea: string | string[], index: number) => {
+//       if (index === 0) {
+//         doc.text(`${cantidad}`, 3, posicionY); // Cantidad
+//         doc.text(linea, 10, posicionY); // Primera línea del nombre del producto
+//         doc.text(`${precioUnidad.toFixed(2)}`, 45, posicionY); // Precio por unidad
+//         doc.text(`${total.toFixed(2)}`, 58, posicionY); // Total
+//       } else {
+//         doc.text(linea, 10, posicionY); // Continuación del nombre en nuevas líneas
+//       }
+//       posicionY += 4; // Incrementar la posición vertical
+//     });
+//   });
+
+//   //**************************************************************************************************************
+//   // LÍNEA FINAL
+//   posicionY -= 2;
+//   doc.line(2, posicionY, 70, posicionY);
+//   posicionY += 4;
+
+//   // DETALLES FINALES DE PAGO
+//   const total = `TOTAL : ${(this.ventaForm.bs_total??0).toFixed(2)}`;  textWidth = doc.getTextWidth(total); x = (pageWidth - textWidth) / 2;
+//   doc.text(total, x, posicionY);
+//   posicionY += 4;
+//   //*************************** SIN CANCELAR *****************************************
+//   if (this.ventaForm.estado_transaccion == 1) {
+//     const sin_pagar = `(PENDIENTE DE PAGO)`;  textWidth = doc.getTextWidth(sin_pagar); x = (pageWidth - textWidth) / 2;
+//     //doc.setFont('Helvetica', 'bold'); // Establece la fuente en negrita
+//     doc.text(sin_pagar, x, posicionY); // x=2, y=14
+//   }
+//   // Preparar para imprimir
+//   doc.autoPrint();
+//   window.open(doc.output('bloburl'), '_blank');
+// }
+
+EMITIR_RECIBO(){
+  const ticket = `
+  <style>
+    body {
+      font-family: monospace;
+      width: 80mm;
+      margin: 0;
+      padding: 0px;
+      font-size: 12px;
+    }
+    .center { text-align: center; }
+    .bold { font-weight: bold; }
+    .row {
+      padding: 0px;
+      margin: 0px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .line {
+      border-top: 1px dashed black;
+      margin: 2px 0;
+    }
+  </style>
+
+  <div>
+    <div class="center bold">PIO LINDO</div>
+    <div class="center">${this.ventaForm.fecha} - ${this.ventaForm.hora}</div>
+    <div class="center bold">N° TICKET: ${this.ventaForm.ticket}</div>
+
+    ${this.ventaForm.venta_llevar ? `<div class="center bold">(PARA LLEVAR)</div>` : ''}
+
+    <div class="line"></div>
+
+    <div class="row">
+      <span>Mesa: ${this.ventaForm.mesa ?? ''}</span>
+      <span>Codigo: ${this.ventaForm.cod_venta}</span>
+    </div>
+
+    <div class="line"></div>
+
+    <div class="row bold">
+      <span style="width: 15%">Cant</span>
+      <span style="width: 45%">Producto</span>
+      <span style="width: 20%">Precio</span>
+      <span style="width: 20%">Total</span>
+    </div>
+
+    <div class="line"></div>
+
+    ${this.lista_Productos_Agregados.map(p => `
+      <div class="row">
+        <span style="width: 15%">${p.cantidad_item}</span>
+        <span style="width: 45%">${p.nombre}${p.item_llevar ? ' (LLEVAR)' : ''}</span>
+        <span style="width: 20%">${p.precio.toFixed(2)}</span>
+        <span style="width: 20%">${(p.cantidad_item * p.precio).toFixed(2)}</span>
+      </div>
+    `).join('')}
+
+    <div class="line"></div>
+
+    <div class="center bold">TOTAL : ${this.ventaForm.bs_total.toFixed(2)}</div>
+
+    ${this.ventaForm.estado_transaccion == 1 ? `<div class="center bold">(PENDIENTE DE PAGO)</div>` : ''}
+  </div>
+  `;
+
+  const w = window.open('', '', 'width=2000,height=1000');
+  w?.document.write(ticket);
+  w?.document.close();
+  w?.focus();
+  w?.print();
+  w?.close();
+}
 
 //***************************************************************************************************************************************************************************************
 //*********************************************************************************  EMITIR FACTURA   ***********************************************************************************
@@ -1642,27 +1861,6 @@ EMITIR_FACURA() {
   window.open(doc.output('bloburl'), '_blank');
 }
 
-
-ticket=false
-IMPRIMIT_RECIBO(){
-  const elemento = document.getElementById('ticket'); // tu div del ticket
-  const opciones = {
-    margin: 0,
-    filename: 'ticket.pdf',
-    image: { type: 'jpeg' as const, quality: 0.98 },
-    html2canvas: { scale: 2 },
-    jsPDF: { unit: 'mm', format: [80, 200] as [number, number], orientation: 'portrait' as const }
-  };
-
-
-  if (elemento) {
-    //tml2pdf().set(opciones).from(elemento).save();
-    html2pdf().set(opciones).from(elemento).output('bloburl').then(pdfUrl => {
-      window.open(pdfUrl, '_blank');
-    });
-  }
-  
-}
 
 //*************************************************** LISTAR CLIENTES ****************************************************
 //************************************************************************************************************************
