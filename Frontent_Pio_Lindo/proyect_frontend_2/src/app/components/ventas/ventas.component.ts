@@ -4,7 +4,7 @@ import { NumToWordsPipe } from '../../pipes/num-to-words.pipe';
 import { VentaService } from "../../services/ventas.service";
 import { CajaService } from "../../services/caja.service";
 import { ProductosService } from "../../services/productos.service";
-import {ClientesService} from "../../services/clientes.service";
+import { ClientesService } from "../../services/clientes.service";
 
 import { SocketService } from '../../services/socket.service';
 import { SharedservicesService } from 'src/app/services/sharedservices.service';
@@ -42,7 +42,6 @@ export class VentasComponent {
 // filterPost:any;
 page_v:any
 // page_p:any
-
 
 pantalla_principal=1;
 cambiar_Pantalla(){
@@ -1283,147 +1282,63 @@ pdfurl: string = ''; // Establece la ruta correcta a tu archivo PDF aquí
 //     doc.text(sin_pagar, x, posicionY); // x=2, y=14
 //   }
 
-
-//   doc.autoPrint(); // Configura el documento para impresión automática
-//   window.open(doc.output('bloburl'), '_blank'); // Abre el ticket en una nueva pestaña
+//   const pdfDataUri = doc.output('datauristring'); // genera el PDF como string base64 embebido en HTML
+//   (window as any).electronAPI.imprimirTicket(pdfDataUri);
+  
+  
+//   //doc.autoPrint(); // Configura el documento para impresión automática
+//   //window.open(doc.output('bloburl'), '_blank'); // Abre el ticket en una nueva pestaña
 // }
 
 
 EMITIR_COMANDA() {
-  if (this.lista_Productos_Agregados.length == 0) {
+  // 🔹 1. Validaciones básicas
+  if (this.lista_Productos_Agregados.length === 0) {
     this.mostrarToast('No existen productos agregados', 'rojo');
     return;
   }
 
-  if (this.ventaForm.estado_transaccion == 0) {
-    this.mostrarToast('Aun no se guardó la venta','rojo');
+  if (this.ventaForm.estado_transaccion === 0) {
+    this.mostrarToast('Aún no se guardó la venta', 'rojo');
     return;
   }
 
-  const ticket = `
-  <style>
-    body {
-      font-family: monospace;
-      width: 80mm;
-      margin: 0;
-      padding: 0px;
-      font-size: 12px;
-    }
-    .center { text-align: center; }
-    .bold { font-weight: bold;}
-    .row {
-      padding: 0px;
-      margin: 0px;
-      display: flex;
-      justify-content: space-between;
-    }
-    .line {
-      border-top: 1px dashed black;
-      margin: 2px 0;
-    }
-  </style>
+  // 🔹 2. Construir objeto de ticket con los datos reales
+  const ticket = {
+    fecha: this.ventaForm.fecha,
+    hora: this.ventaForm.hora,
+    ticket: this.ventaForm.ticket,
+    mesa: this.ventaForm.mesa ?? '',
+    cod_venta: this.ventaForm.cod_venta,
+    descripcion: this.ventaForm.descripcion ?? '',
+    estado_transaccion: this.ventaForm.estado_transaccion,
+    venta_llevar: this.ventaForm.venta_llevar ?? false,
 
-  <div>
-    <div class="center bold">🍽 COMANDA</div>
-    <div class="center bold">RestCode</div>
-    <div class="center">${this.ventaForm.fecha} - ${this.ventaForm.hora}</div>
-    <div class="center bold">N° TICKET: ${this.ventaForm.ticket}</div>
+    // 🧾 Lista de productos con complementos
+    productos: this.lista_Productos_Agregados.map(prod => ({
+      cantidad_item: prod.cantidad_item,
+      nombre: prod.nombre,
+      item_llevar: prod.item_llevar ?? false,
 
-    ${this.ventaForm.venta_llevar ? `<div class="center bold">(PARA LLEVAR)</div>` : ''}
+      // Complementos y sus opciones seleccionadas
+      complementos: (prod.complementos || []).map((comp: any) => ({
+        opciones: (comp.opciones || [])
+          .filter((op: any) => op.cantidad_op > 0)
+          .map((op: any) => ({
+            cantidad_op: op.cantidad_op,
+            nombre: op.nombre
+          }))
+      }))
+    }))
+  };
 
-    <div class="line"></div>
-
-    <div class="row">
-      <span>Mesa: ${this.ventaForm.mesa ?? ''}</span>
-      <span>Codigo: ${this.ventaForm.cod_venta}</span>
-    </div>
-
-    <div class="line"></div>
-
-    <!-- 
-      ===================================================================================
-      PRIMER .map() - Itera sobre cada producto en la lista de productos agregados
-      ===================================================================================
-      .map() es un método de arrays que transforma cada elemento del array en algo nuevo.
-      En este caso, toma cada producto 'p' y lo convierte en una cadena HTML.
-      
-      Ejemplo: Si tienes [producto1, producto2], .map() crea [html1, html2]
-      Luego .join('') une todas las cadenas HTML en una sola cadena.
-      
-      Para cada producto 'p', creamos un div con:
-      - La cantidad del producto (p.cantidad_item)
-      - El nombre del producto (p.nombre)
-      - Si es para llevar, agregamos "(LLEVAR)"
-    -->
-    ${this.lista_Productos_Agregados.map(p => `
-        <div class="bold">${p.cantidad_item} x ${p.nombre} ${p.item_llevar ? '(LLEVAR)' : ''}</div>
-
-        <!-- 
-        ===================================================================================
-        SEGUNDO .map() - Itera sobre los complementos de cada producto
-        ===================================================================================
-        (p.complementos ?? []) significa: 
-        - Si p.complementos existe, úsalo
-        - Si es null o undefined, usa un array vacío []
-        
-        Este .map() toma cada complemento 'c' y genera HTML para sus opciones.
-        Al final, .join('') une todos los HTML de complementos en una sola cadena.
-        -->
-      ${(p.complementos ?? []).map((c: { opciones: any; }) => {
-        // ===================================================================================
-        // TERCER .map() - Itera sobre las opciones de cada complemento
-        // ===================================================================================
-        // Aquí hay una cadena de métodos que procesan las opciones:
-        //
-        // 1. (c.opciones ?? []) - Obtiene las opciones del complemento, o array vacío si no hay
-        //
-        // 2. .filter() - Filtra solo las opciones con cantidad > 0
-        //    Ejemplo: Si hay 5 opciones pero solo 2 tienen cantidad > 0, 
-        //    filter devuelve solo esas 2 opciones
-        //
-        // 3. .map() - Transforma cada opción 'o' en un texto formateado:
-        //    - Si cantidad > 1: "2 Queso" (muestra cantidad + nombre)
-        //    - Si cantidad = 1: "Queso" (solo nombre)
-        //    Ejemplo: [opcion1, opcion2] se convierte en ["2 Queso", "Tomate"]
-        //
-        // 4. .join(' | ') - Une todas las opciones con " | " entre ellas
-        //    Ejemplo: ["2 Queso", "Tomate"] se convierte en "2 Queso | Tomate"
-        const opciones = (c.opciones ?? [])
-          .filter((o: { cantidad_op: number }) => o.cantidad_op > 0)
-          .map((o: { cantidad_op: number, nombre: string }) =>
-            o.cantidad_op > 1 ? `${o.cantidad_op} ${o.nombre}` : o.nombre
-          )
-          .join(' | ');  
-
-        // Si hay opciones (texto no vacío), retornamos un div con las opciones.
-        // Si no hay opciones, retornamos una cadena vacía ''.
-        return opciones ? `<div style="font-size:11px;">${opciones}</div>` : '';
-      }).join('')}
-
-
-        <div style="margin-bottom:5px"> </div>
-    `).join('')}
-
-    <div class="line"></div>
-
-    ${this.ventaForm.descripcion ? `
-      <div class="bold">Obs:</div>
-      <div>${this.ventaForm.descripcion}</div>
-      <div class="line"></div>
-    ` : ''}
-
-    ${this.ventaForm.estado_transaccion == 1 ? `<div class="center bold">(PENDIENTE DE PAGO)</div>` : ''}
-
-  </div>
-  `;
-
-  const w = window.open('', '', 'width=2000,height=1000');
-  w?.document.write(ticket);
-  w?.document.close();
-  w?.focus();
-  w?.print();
-  w?.close();
+  console.log('🧾 Ticket enviado a impresión:', ticket); // 👀 Ver en consola
+  window.electron.ipcRenderer.send('imprimir-ticket', ticket);
 }
+
+
+
+
 
 //***************************************************************************************************************************************************************************************
 //*********************************************************************************  EMITIR PRECUENTA   ************************************************************************************
@@ -1572,14 +1487,26 @@ EMITIR_COMANDA() {
 // }
 
 EMITIR_RECIBO(){
-  const ticket = `
+  const ticketHTML = `
+  <html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Ticket</title>
   <style>
+    @page {
+      size: 80mm auto;
+      margin: 0;
+    }
     body {
       font-family: monospace;
       width: 80mm;
       margin: 0;
       padding: 0px;
       font-size: 12px;
+      /* 🔹 Añadido para corregir tamaño y nitidez */
+      transform: none;
+      -webkit-print-color-adjust: exact;
+      image-rendering: crisp-edges;
     }
     .center { text-align: center; }
     .bold { font-weight: bold; }
@@ -1595,10 +1522,13 @@ EMITIR_RECIBO(){
     }
   </style>
 
+  </head>
+  <body>
+  
   <div>
     <div class="center bold">RestCode</div>
     <div class="center">${this.ventaForm.fecha} - ${this.ventaForm.hora}</div>
-    <div class="center bold">N° TICKET: ${this.ventaForm.ticket}</div>
+    <div class="center bold">TICKET: ${this.ventaForm.ticket}</div>
 
     ${this.ventaForm.venta_llevar ? `<div class="center bold">(PARA LLEVAR)</div>` : ''}
 
@@ -1635,14 +1565,25 @@ EMITIR_RECIBO(){
 
     ${this.ventaForm.estado_transaccion == 1 ? `<div class="center bold">(PENDIENTE DE PAGO)</div>` : ''}
   </div>
+    </body>
+</html>
   `;
 
-  const w = window.open('', '', 'width=2000,height=1000');
-  w?.document.write(ticket);
-  w?.document.close();
-  w?.focus();
-  w?.print();
-  w?.close();
+  //IMPRESION DIRECTA A ELECTRON
+  // window.electron.ipcRenderer.send('imprimir-ticket', ticketHTML);
+
+  //VENTANA DE IMPRESIÓN
+  // const w = window.open('', '', 'width=2000,height=1000');
+  // w?.document.write(ticketHTML);
+  // w?.document.close();
+  // w?.focus();
+  // w?.print();
+  // w?.close();
+  
+  //VENTANA DE NAVEGADOR
+  const blob = new Blob([ticketHTML], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  window.open(url, '_blank'); // abre en navegador por defecto
 }
 
 //***************************************************************************************************************************************************************************************
