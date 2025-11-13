@@ -12,7 +12,6 @@ import { SharedservicesService } from 'src/app/services/sharedservices.service';
 import { jsPDF } from 'jspdf';
 import html2pdf from 'html2pdf.js';
 import * as bootstrap from 'bootstrap';
-
 // import { Memoize } from 'ngx-memoize';
 
 // This lets me use jquery
@@ -39,9 +38,53 @@ export class VentasComponent {
     this.listar_Last_Caja();
   }
 
+  ngOnInit() {
+    this.setItemsPerPage();
+  
+    window.addEventListener('resize', () => this.setItemsPerPage());
+  }
+
+//*************************************************** PANTALLA PARA MOVIL ******************************************
+//******************************************************************************************************************
+
+//SELECT PARA LISTAR NUEVAS, ENPROCESO Y FINALIZADAS
+onChangeVista(event: any) {
+  const valor = Number(event.target.value);
+
+  switch (valor) {
+    case 1:
+      this.LISTAR_VENTAS_NUEVAS();
+      break;
+    case 2:
+      this.LISTAR_VENTAS_EN_PROCESO();
+      break;
+    case 3:
+      this.LISTAR_VENTAS_FINALIZADAS();
+      break;
+  }
+}
+
 // filterPost:any;
 page_v:any
 // page_p:any
+itemsPerPage = 6; // valor por defecto (desktop)
+
+setItemsPerPage() {
+    const width = window.innerWidth;
+  
+    if (width < 400) {
+      // móvil
+      this.itemsPerPage = 2;
+    } else if (width < 800) {
+      // tablet
+      this.itemsPerPage = 4;
+    } else {
+      // desktop
+      this.itemsPerPage = 6;
+    }
+}
+
+
 
 pantalla_principal=1;
 cambiar_Pantalla(){
@@ -1292,7 +1335,7 @@ pdfurl: string = ''; // Establece la ruta correcta a tu archivo PDF aquí
 
 
 EMITIR_COMANDA() {
-  // 🔹 1. Validaciones básicas
+  // 🔹 Validaciones básicas
   if (this.lista_Productos_Agregados.length === 0) {
     this.mostrarToast('No existen productos agregados', 'rojo');
     return;
@@ -1303,38 +1346,105 @@ EMITIR_COMANDA() {
     return;
   }
 
-  // 🔹 2. Construir objeto de ticket con los datos reales
-  const ticket = {
-    fecha: this.ventaForm.fecha,
-    hora: this.ventaForm.hora,
-    ticket: this.ventaForm.ticket,
-    mesa: this.ventaForm.mesa ?? '',
-    cod_venta: this.ventaForm.cod_venta,
-    descripcion: this.ventaForm.descripcion ?? '',
-    estado_transaccion: this.ventaForm.estado_transaccion,
-    venta_llevar: this.ventaForm.venta_llevar ?? false,
+  // 🔹 Construcción del HTML
+  const ticketHTML = `
+  <html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Comanda</title>
+    <style>
+      @page {
+        size: 80mm auto;
+        margin: 0;
+      }
+      body {
+        font-family: monospace;
+        width: 80mm;
+        margin: 0;
+        padding: 0px;
+        font-size: 12px;
+        -webkit-print-color-adjust: exact;
+        image-rendering: crisp-edges;
+      }
+      .center { text-align: center; }
+      .bold { font-weight: bold; }
+      .row {
+        padding: 0px;
+        margin: 0px;
+        display: flex;
+        justify-content: space-between;
+      }
+      .line {
+        border-top: 1px dashed black;
+        margin: 2px 0;
+      }
+      .indent {
+        margin-left: 2px;
+        font-size: 11px;
+      }
+    </style>
+  </head>
 
-    // 🧾 Lista de productos con complementos
-    productos: this.lista_Productos_Agregados.map(prod => ({
-      cantidad_item: prod.cantidad_item,
-      nombre: prod.nombre,
-      item_llevar: prod.item_llevar ?? false,
+  <body>
+    <div class="center bold">COMANDA</div>
+    <div class="center">${this.ventaForm.fecha} - ${this.ventaForm.hora}</div>
+    <div class="center bold">N° TICKET: ${this.ventaForm.ticket}</div>
 
-      // Complementos y sus opciones seleccionadas
-      complementos: (prod.complementos || []).map((comp: any) => ({
-        opciones: (comp.opciones || [])
-          .filter((op: any) => op.cantidad_op > 0)
-          .map((op: any) => ({
-            cantidad_op: op.cantidad_op,
-            nombre: op.nombre
-          }))
-      }))
-    }))
-  };
+    ${this.ventaForm.venta_llevar ? `<div class="center bold">(PARA LLEVAR)</div>` : ''}
 
-  console.log('🧾 Ticket enviado a impresión:', ticket); // 👀 Ver en consola
-  window.electron.ipcRenderer.send('imprimir-ticket', ticket);
+    <div class="line"></div>
+
+    <div class="row">
+      <span>Mesa: ${this.ventaForm.mesa ?? ''}</span>
+      <span>Código: ${this.ventaForm.cod_venta}</span>
+    </div>
+
+    <div class="line"></div>
+
+    ${this.lista_Productos_Agregados.map(p => `
+      <div>
+        <div class="bold">${p.cantidad_item} x ${p.nombre}${p.item_llevar ? ' (LLEVAR)' : ''}</div>
+        ${p.complementos && Array.isArray(p.complementos) && p.complementos.length > 0
+          ? p.complementos.map((c: any) => `
+              <div class="indent">
+                ${(c.opciones || [])
+                  .filter((o: any) => o.cantidad_op > 0)
+                  .map((o: any) => `${o.cantidad_op} ${o.nombre}`)
+                  .join(' | ')}
+              </div>
+            `).join('')
+          : ''}
+      </div>
+    `).join('')}
+
+    ${this.ventaForm.descripcion
+      ? `<div class="line"></div><div><b>Obs:</b> ${this.ventaForm.descripcion}</div>`
+      : ''
+    }
+
+    <div class="line"></div>
+    <div class="center bold">¡Gracias!</div>
+  </body>
+  </html>
+  `;
+
+  // 🔹 OPCIÓN 1 — Enviar directo a Electron para imprimir
+  // window.electron.ipcRenderer.send('imprimir-ticket', ticketHTML);
+
+  // 🔹 OPCIÓN 2 — Abrir vista previa de impresión en ventana del sistema
+  // const w = window.open('', '', 'width=2000,height=1000');
+  // w?.document.write(ticketHTML);
+  // w?.document.close();
+  // w?.focus();
+  // w?.print();
+  // w?.close();
+
+  // 🔹 OPCIÓN 3 — Abrir en navegador externo (útil para pruebas)
+  const blob = new Blob([ticketHTML], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  window.open(url, '_blank');
 }
+
 
 
 
@@ -1524,7 +1634,7 @@ EMITIR_RECIBO(){
 
   </head>
   <body>
-  
+
   <div>
     <div class="center bold">RestCode</div>
     <div class="center">${this.ventaForm.fecha} - ${this.ventaForm.hora}</div>
@@ -1562,6 +1672,7 @@ EMITIR_RECIBO(){
     <div class="line"></div>
 
     <div class="center bold">TOTAL : ${this.ventaForm.bs_total.toFixed(2)}</div>
+    <div class="center" style="font-size: 9px;">Software RestCode www.restcode.com</div>
 
     ${this.ventaForm.estado_transaccion == 1 ? `<div class="center bold">(PENDIENTE DE PAGO)</div>` : ''}
   </div>

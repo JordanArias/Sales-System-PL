@@ -4,7 +4,7 @@
 <!-- ********************************************************************************************* -->
 <div class="container-principal-listas" *ngIf="pantalla_principal==1">
   <!-- ********************************************* OPCIONES:BUSCAR - AGREGAR **********************************************************-->
-  <div class="d-flex align-items-center justify-content-between px-3 container-opciones">
+  <div class="d-flex align-items-center justify-content-between container-opciones">
         <!-- Buscador -->
         <!-- <div class="container-buscador px-2">
           <input type="text" class="form-control" placeholder="Buscar Ticket" name="filterPost" [(ngModel)]="filterPost" style="background: #39404a;color: #f4f4f4; border: none;">
@@ -15,7 +15,7 @@
             <input type="date" #fecha="ngModel" [(ngModel)]="select_Fecha" name="fecha"  [min]="min_totay" [max]="today"  required style="width: 100%;" class="form-control">
          </div>
         <!-- FILTRAR -->
-        <div class="container-filtrar d-flex">
+        <div class="container-filtrar d-none d-md-flex">
           <div class="btn-ventas_finalizadas">
             <button class="btn" type="button" style="color: #f3f3f3;" [ngStyle]="{'background-color': vista_ventas === 3 ? '#191e2a' : ''}" (click)="LISTAR_VENTAS_FINALIZADAS()">
               <span class="px-0 d-flex align-items-center">
@@ -38,12 +38,25 @@
             </button>
           </div>
         </div>
+        <!-- FILTRAR MOVIL -->
+        <div class="container-filtrar-movil d-block d-md-none">
+          <select
+            class="form-select text-light"
+            style="background-color:#252d3c; border:none; padding: 0px 15px; height: 30px;"
+            [(ngModel)]="vista_ventas"
+            (change)="onChangeVista($event)"
+          >
+            <option [value]="1">Nuevas</option>
+            <option [value]="2">En proceso</option>
+            <option [value]="3">Finalizadas</option>
+          </select>
+        </div>
 
-         <!-- BOTON NUEVO MOVIMIENTO -->
+         <!-- BOTON AGREGAR VENTA -->
           <div class="container-agregar px-2">
             <button class="btn btn-secondary" (click)="cambiar_Pantalla()">
               <span class="px-0 d-flex align-items-center">
-                <img src="../assets/images/icons/icon-options/agregar.png" class="me-1">
+                <!-- <img src="../assets/images/icons/icon-options/agregar.png" class="me-1"> -->
                 Agregar Venta
               </span>
             </button>
@@ -53,7 +66,7 @@
   <!-- **************************************************** LISTA VENTAS ****************************************************************  -->
   <div class="container-lista">
 
-    <ng-container *ngFor="let v of lista_Ventas | paginate: { itemsPerPage: 6, currentPage: page_v } ; let i = index">
+    <ng-container *ngFor="let v of lista_Ventas | paginate: { itemsPerPage: itemsPerPage, currentPage: page_v } ; let i = index">
       <!--******************************** CARD VENTA PRINCIPAL **************************-->
       <div class="card">
         <!-- *********** TITULO CARD VENTA **************-->
@@ -187,8 +200,8 @@
 
             <div class="productos">
                 <button *ngFor="let producto of productosFiltrados" type="button" (click)="agregar_Producto(producto)">
-                    <span style="font-size: 17px; font-weight: 700;">{{ producto.nombre }}</span> <br>
-                    <span>Bs.{{ producto.precio }}</span>
+                    <span class="producto-nombre" style="font-weight: 700;">{{ producto.nombre }}</span> <br>
+                    <span class="producto-precio">Bs.{{ producto.precio }}</span>
                 </button>
             </div>
         </div>
@@ -200,28 +213,26 @@
 <!--************************************ CONTAINER PRINCIPAL REGISTRAR VENTA ************************************-->
   <div class="container-venta">
     <div class="formulario-venta" style="border-left: 2px solid #575757;">
-      <div class="p-2 d-flex justify-content-between" style="height: 6vh;">
-        <h5 class="m-0 d-flex align-items-center" style="color: #f3f3f3;">VENTA</h5>
-        <button class="btn btn-danger p-0" style="width: 20%; background: #198754; border: none;" (click)="Limpiar_Datos_Venta()">NUEVO</button>
+      <div class="container-titulos d-flex justify-content-between" style="height: 6vh;">
+        <h5 class="m-0 d-flex align-items-center" style="color: #f3f3f3;">Venta</h5>
+        <button class="btn btn-danger p-0" style="width: 20%; background: #198754; border: none;" (click)="Limpiar_Datos_Venta()">Nuevo</button>
         <button class="btn btn-danger p-0" style="width: 8%; background: #9d3030; border: none;" (click)="cambiar_Pantalla()">X</button>
       </div>
 
       <form #formVenta="ngForm" class="form-detalle-venta">
         <!--****************** HEADER FORMULARIO ******************-->
-        <div class="header-form row m-0 p-1" style="height: 6vh;">
+        <div class="header-form m-0 d-flex align-items-center justify-content-center" style="height: 6vh;">
             <!-- #NUMERO DE MESA -->
-            <div class="col-2 px-1">
-              <!-- <label class="form-label">Mesa</label> -->
-              <input type="number" #mesa="ngModel" [(ngModel)]="ventaForm.mesa" name="mesa" class="form-control" placeholder="Mesa"> 
+            <div class="mesa px-1 flex-item">
+              <input type="number" #mesa="ngModel" [(ngModel)]="ventaForm.mesa" name="mesa" class="form-control" placeholder="Mesa">
             </div>
             <!-- DESCRIPCIÓN -->
-            <div class="col-8 px-1">
-              <!-- <label class="form-label">Detalle:</label> -->
-              <input type="text" #descripcion="ngModel" [(ngModel)]="ventaForm.descripcion" name="descripcion" class="form-control" placeholder="descripción"> 
+            <div class="descripcion px-1 flex-item">
+              <input type="text" #descripcion="ngModel" [(ngModel)]="ventaForm.descripcion" name="descripcion" class="form-control" placeholder="descripción">
             </div>
             <!-- TODO PARA LLEVAR -->
-            <div class="col-2 d-flex align-items-center px-1">
-              <label class="form-label mb-0" style="color: #f3f3f3;">P/LL</label>
+            <div class="llevar d-flex align-items-center px-1 no-shrink">
+              <label class="form-label mb-0 ms-1 me-2 text-nowrap" style="color: #f3f3f3;">P/LL</label>
               <input class="form-check-input checkbox-grande" type="checkbox" #vender_negativo="ngModel" [(ngModel)]="ventaForm.venta_llevar" name="vender_negativo">
             </div>
         </div>

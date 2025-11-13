@@ -29,7 +29,7 @@ export class AppComponent {
     private renderer: Renderer2,
     @Inject(DOCUMENT) private document: Document
     ){ 
-      if (window.innerWidth >= 768) {
+      if (window.innerWidth >= 1200) {
         this.sidebarActiva=true;
       }
 

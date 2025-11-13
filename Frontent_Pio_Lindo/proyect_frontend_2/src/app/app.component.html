@@ -5,7 +5,7 @@
 
     <div class="header-box px-3 pt-3 pb-4 d-flex justify-content-between">
       <h1 class="fs-4"> <span class="bg-white text-dark rounded shadow px-2">PL</span> <span class="text-white">Pio Lindo</span></h1>
-      <button class="btn d-md-none d-block close-btn px-1 py-0 text-white" (click)="closeMenu()">  <span class=""><img src="../assets/images/icons/icon-menus/menu.png" alt="" style="width: 25%;"></span> </button>
+      <button class="btn d-xl-none d-block close-btn px-1 py-0 text-white" (click)="closeMenu()">  <span class=""><img src="../assets/images/icons/icon-menus/menu.png" alt="" style="width: 25%;"></span> </button>
     </div>
 
     <!-- LISTA DE COMPONENTES -->
@@ -204,7 +204,7 @@
     <!-- NAV HORIZONTAL -->
     <div class="d-flex justify-content-between align-items-center ps-1 pe-3 navbar-horizontal" *ngIf="authService.loggedIn()">
       <!-- Boton Abrir Menu Movil -->
-      <div class="d-md-none d-flex align-items-center">
+      <div class="d-xl-none d-flex align-items-center">
         <h4 class="m-0" style="font-size: 17px;">Coding</h4>
         <a class="text-decoration-none" (click)="openMenu()">
           <span class="px-3">

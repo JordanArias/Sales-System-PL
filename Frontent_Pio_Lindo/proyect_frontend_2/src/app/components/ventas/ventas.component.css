@@ -49,6 +49,7 @@
   background: #212837;
   width: 100%;
   height: 6vh;
+  padding: 0 10px;
 }
 
 /* LISTAS GENERAL*/
@@ -144,6 +145,7 @@
   flex-shrink: 0; /* Evita que los botones se encojan */
   padding: 15px 10px;
   margin: 0 3px;
+  min-height: 54px;
   border: none;
   background-color:#0d5e95; /* Color de fondo */
   color: white; /* Color del texto */
@@ -496,10 +498,6 @@ input[type="number"] {
 
 
 
-
-
-
-
 ::-webkit-scrollbar {
   width: 0.4em;
   height: 0.5em;
@@ -508,4 +506,192 @@ input[type="number"] {
 
 ::-webkit-scrollbar-thumb {
   background-color: #8888888c; /* Cambia el color del thumb del scroll */
+}
+
+
+
+
+/* versión escritorio/tablet */
+.container-filtrar {
+  display: flex;
+}
+
+.container-filtrar-movil {
+  display: none;
+}
+
+.productos button{
+  font-size: 16px;
+}
+/******** CONTAINER-VENTA *********/
+/**** Venta Titulos ****/
+.formulario-venta .container-titulos{
+  padding: 8px;
+}
+/**** Venta Mesa, Descripcion, P/LL ****/
+.header-form {
+  display: flex;
+  gap: 0.4rem;              /* espacio entre items */
+  align-items: center;
+  padding: 0px 3px;
+}
+
+/* Los dos campos principales toman el espacio disponible */
+.header-form .flex-item {
+  flex: 1 1 0;              /* crecen y se encogen */
+  min-width: 0;             /* <--- MUY importante para permitir que el input se encoja */
+}
+
+/* Asegura que el input use todo el ancho del contenedor flex-item */
+.header-form .flex-item .form-control {
+  width: 100%;
+  box-sizing: border-box;
+  min-width: 0;             /* otra vez importante para inputs dentro de flex */
+}
+
+/* El contenedor del checkbox no se encoge ni crece: siempre visible */
+.header-form .no-shrink {
+  flex: 0 0 auto;
+  white-space: nowrap;      /* evita que la etiqueta salte de línea y ocupe más ancho */
+  display: flex;
+  align-items: center;
+}
+
+/* Opcional: ajustar tamaño del checkbox si lo quieres más grande/pequeño */
+.checkbox-grande {
+  transform: scale(2);     /* cambia a 0.9 / 1.1 según prefieras */
+  transform-origin: center;
+  margin-left: 0.1rem;
+}
+
+/* .header-form .mesa{width: 20%;} 
+.header-form .descripcion{width: 75%;}
+.header-form .llevar{width: 15%;} */
+
+
+/* ------------------------- @MEDIAS PARA DESKTOP-TABLET ---------------------*/
+/* -------------------------------------------------------------------------- */
+@media (max-width: 1000px) {
+  /***** Container Productos y Venta ****/
+  .container-seleccionar-productos, .container-venta{
+    width: 50%;
+  }
+  .container-principal-agregar h5{
+    font-size: 16px;
+  }
+  /***** Productos ****/
+  .container-subcategorias{
+    width: 30%; 
+  }
+  .container-productos{
+    width: 70%;
+  }
+  .productos button{
+    min-width: 45%;
+    /* max-width: 45%; */
+    padding: 5px 10px;
+    min-height: 45px;
+  }
+  .productos button, .categorias-container, .subcategorias{
+    font-size: 14px;
+  }
+  .categorias-container button,.subcategorias button{
+    padding: 0px 5px;
+    min-height: 45px;
+  }
+  /***** FORM VENTA ****/
+  .form-detalle-venta{
+    font-size: 14px;
+  }
+  .form-detalle-venta .opciones img{
+    width: 23px;
+  }
+  /***** BOTONES VENTA ****/
+  .botones-venta button{
+    font-size: 14px;
+  }
+
+  /**** Venta Titulos ****/
+  .formulario-venta .container-titulos{
+    padding: 3px;
+  }
+  /**** Venta Mesa, Descripcion ****/
+  form input[type="text"],
+  form input[type="number"]{
+    padding: 0px 5px;
+  }
+  .checkbox-grande{
+    margin: 0px;
+  }
+}
+
+/* ------------------------- @MEDIAS PARA TABLET ---------------------*/
+/* ----------------------------------------------------------------- */
+/* === Tablet === */
+@media (max-width: 800px) {
+  .container-lista .card {
+    /**** CARDS ****/
+    flex: 1 1 calc(50% - 10px);
+    max-width: calc(50% - 0px);
+  }
+  /***** Container Productos y Venta ****/
+  .container-seleccionar-productos{
+    width: 45%;
+  }
+  .container-venta{
+    width: 55%;
+  }
+  /***** Productos ****/
+  .container-subcategorias{
+    width: 40%; 
+  }
+  .container-productos{
+    width: 60%;
+  }
+  .productos-titulo h5{
+    display: none;
+  }
+  .productos button{
+    min-width: 90%;
+  }
+}
+
+
+/* ------------------------- @MEDIAS PARA MOVIL ---------------------*/
+/* ----------------------------------------------------------------- */
+
+/* === Móvil === */
+@media (max-width: 600px) {
+  /************* CARDS *************/
+  .container-lista .card {
+    flex: 1 1 calc(100% - 10px);
+    max-width: calc(100% - 0px);
+  }
+
+  /************* OPCIONES *************/
+  .container-opciones{
+    padding: 0px 5px;
+  }
+  input[type="date"]{
+    padding: 0px 5px;
+    height: 30px;
+    font-size: 14px;
+}
+  /** SELECT **/
+  .container-filtrar {
+    display: none;
+  }
+  .container-filtrar-movil {
+    display: block;
+  }
+  .form-select {
+    background-color: #252d3c;
+    color: #f4f4f4;
+  }
+  .container-agregar button{
+    font-size: 14px;
+    padding: 0px 5px;
+    height: 30px;
+  }
+
 }

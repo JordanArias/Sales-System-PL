@@ -30,7 +30,7 @@ app.use(cors({
 const io = socketIo(server, {
   cors: {
     //origin: "http://localhost:4200", // Cambia esta URL al origen de tu aplicación Angular
-    origin: ["http://localhost:4200", "http://192.168.0.125:4200", "file://"],
+    origin: ["http://localhost:4200", "http://192.168.1.100:4200", "file://"],
     methods: ["GET", "POST","PUT", "DELETE"],
     allowedHeaders: ["my-custom-header"],
     credentials: true
@@ -53,10 +53,9 @@ const io = socketIo(server, {
   });
   
   const PORT = process.env.PORT || 3000;
-  server.listen(PORT, () => {
-    console.log(`Servidor escuchando en el puerto ${PORT}`);
+  server.listen(PORT, '0.0.0.0', () => {
+    console.log(`Servidor escuchando en http://192.168.1.100:${PORT}`);
   });
-
  
   
 app.set('pkg', pkg);

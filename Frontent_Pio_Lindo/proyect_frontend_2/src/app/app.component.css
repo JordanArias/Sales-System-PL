@@ -76,7 +76,7 @@
 }
 
 
-@media(min-width:768px){
+@media(min-width:1200px){
     #side_nav{
         margin-left: 0;
     }
@@ -88,7 +88,7 @@
     }
 }
 
-@media(max-width:767px){
+@media(max-width:1199px){
     .laptop-bar{
         display: none;
     }
@@ -108,7 +108,7 @@
         display: none;
     }
     .titulo-gestion{
-        font-size: 17px;
+        font-size: 15px;
     }
     .navbar-horizontal{
         height: 40px;

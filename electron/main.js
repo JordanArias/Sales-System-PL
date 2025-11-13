@@ -190,7 +190,7 @@ function createWindow() {
   }
 
   // Abrir herramientas de desarrollo para ver errores
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 
   // Mostrar la ventana cuando esté lista
   mainWindow.once('ready-to-show', () => {
