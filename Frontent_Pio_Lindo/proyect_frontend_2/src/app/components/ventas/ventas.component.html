@@ -156,174 +156,362 @@
 
 <!-- ******************************************************************* AGREGAR - VENTA ***************************************************************** -->
 <!-- ***************************************************************************************************************************************************** -->
-
 <div class="container-principal-agregar d-flex" *ngIf="pantalla_principal==2">
-  <!--************************************ CONTAINER PRINCIPAL SELECCIONAR PRODUCTO ************************************-->
-  <div class="container-seleccionar-productos">
-    <!-- CONTAINER: SELECCIONAR CATEGORIA -->
-    <div class="seleccionar-categorias">
-        <h5>Categorías</h5>
-        <div class="categorias-container">
-            <button *ngFor="let categoria of lista_categorias" type="button" (click)="seleccionar_Categoria(categoria.cod_categoria)" [ngClass]="{'selected': categoria.cod_categoria === cod_categoria}"
-            [ngStyle]="{'background-color': categoria.cod_categoria === cod_categoria ? '#258cd1' : ''}">
-                {{ categoria.nombre }}
-            </button>
-        </div>
-    </div>
-
-    <!-- CONTAINER: SUBCATEGORIA - PRODUCTOS -->
-    <div class="container-subcategoria-productos d-flex">
-
-        <!-- CONTAINER - SUBCATEGORIAS -->
-        <div class="container-subcategorias">
-            <h5>Subcategorías</h5>
-            <div class="subcategorias">
-                <button *ngFor="let subcategoria of subcategoriasFiltradas" type="button" (click)="seleccionar_SubCategoria(subcategoria.cod_subcategoria)"
-                    [ngStyle]="{'background-color': subcategoria.cod_subcategoria === cod_subcategoria ? '#258cd1' : ''}">
-                    {{ subcategoria.nombre }}
-                </button>
-            </div>
-        </div>
-
-        <!-- CONTAINER - PRODUCTOS -->
-        <div class="container-productos">
-            <div class="productos-titulo d-flex justify-content-between mb-2">
-                <h5 class="m-0">Productos</h5>
-                <!-- Buscador -->
-                <div class="container-buscador px-1">
-                    <input type="text" class="form-control" placeholder="Buscar..." 
-                           [(ngModel)]="filterPost" 
-                           (ngModelChange)="filtrarProductos()"
-                           style="background: #39404a;color: #f4f4f4; border: none; padding: 3px 5px;">
-                </div>
-            </div>
-
-            <div class="productos">
-                <button *ngFor="let producto of productosFiltrados" type="button" (click)="agregar_Producto(producto)">
-                    <span class="producto-nombre" style="font-weight: 700;">{{ producto.nombre }}</span> <br>
-                    <span class="producto-precio">Bs.{{ producto.precio }}</span>
-                </button>
-            </div>
-        </div>
-    </div>
-
-  </div>
-
-
-<!--************************************ CONTAINER PRINCIPAL REGISTRAR VENTA ************************************-->
-  <div class="container-venta">
-    <div class="formulario-venta" style="border-left: 2px solid #575757;">
-      <div class="container-titulos d-flex justify-content-between" style="height: 6vh;">
-        <h5 class="m-0 d-flex align-items-center" style="color: #f3f3f3;">Venta</h5>
-        <button class="btn btn-danger p-0" style="width: 20%; background: #198754; border: none;" (click)="Limpiar_Datos_Venta()">Nuevo</button>
-        <button class="btn btn-danger p-0" style="width: 8%; background: #9d3030; border: none;" (click)="cambiar_Pantalla()">X</button>
+<!-- ///////////////////////////// DESKTOP //////////////////////////// -->
+<!-- ////////////////////////////////////////////////////////////////// -->
+  <ng-container *ngIf="!mostrar_movil">
+  <!--*********************** CONTAINER PRINCIPAL SELECCIONAR PRODUCTO **************************-->
+    <div class="container-seleccionar-productos">
+      <!-- CONTAINER: SELECCIONAR CATEGORIA -->
+      <div class="seleccionar-categorias">
+          <h5>Categorías</h5>
+          <div class="categorias-container">
+              <button *ngFor="let categoria of lista_categorias" type="button" (click)="seleccionar_Categoria(categoria.cod_categoria)" [ngClass]="{'selected': categoria.cod_categoria === cod_categoria}"
+              [ngStyle]="{'background-color': categoria.cod_categoria === cod_categoria ? '#258cd1' : ''}">
+                  {{ categoria.nombre }}
+              </button>
+          </div>
       </div>
 
-      <form #formVenta="ngForm" class="form-detalle-venta">
-        <!--****************** HEADER FORMULARIO ******************-->
-        <div class="header-form m-0 d-flex align-items-center justify-content-center" style="height: 6vh;">
-            <!-- #NUMERO DE MESA -->
-            <div class="mesa px-1 flex-item">
-              <input type="number" #mesa="ngModel" [(ngModel)]="ventaForm.mesa" name="mesa" class="form-control" placeholder="Mesa">
-            </div>
-            <!-- DESCRIPCIÓN -->
-            <div class="descripcion px-1 flex-item">
-              <input type="text" #descripcion="ngModel" [(ngModel)]="ventaForm.descripcion" name="descripcion" class="form-control" placeholder="descripción">
-            </div>
-            <!-- TODO PARA LLEVAR -->
-            <div class="llevar d-flex align-items-center px-1 no-shrink">
-              <label class="form-label mb-0 ms-1 me-2 text-nowrap" style="color: #f3f3f3;">P/LL</label>
-              <input class="form-check-input checkbox-grande" type="checkbox" #vender_negativo="ngModel" [(ngModel)]="ventaForm.venta_llevar" name="vender_negativo">
-            </div>
-        </div>
-        <!--****************** BODY FORMULARIO ******************-->
-        <div class="body-form" style="color: #f3f3f3;">
-            <form #formListaProductos="ngForm">
-              <!-- LISTA PRODUCTOS SELECCIONADOS -->
-                <ng-container *ngFor="let producto of lista_Productos_Agregados; let i = index">
-                  <!-- Contenedor flex para organizar el producto y complementos en fila -->
-                  <div class="container-producto d-flex align-items-start" style="border-bottom: 1px solid #545252; padding: 10px;" (click)="showModalDetalle_Producto(i,1)">
-                    <!-- Contenedor flex para producto y complementos -->
+      <!-- CONTAINER: SUBCATEGORIA - PRODUCTOS -->
+      <div class="container-subcategoria-productos d-flex">
 
-                      <!-- PRODUCTO NOMBRE -->
-                      <p class="producto m-0 me-2" style="font-weight: bold; letter-spacing: 1px;" [ngStyle]="{'width':producto.complementos.length>0 ? '30%' : '100%'}">
-                        ({{producto.cantidad_item}}) {{producto.nombre}} <br>
-                        <span class="m-0" *ngIf="producto.item_llevar" style="color: rgb(198, 129, 38);">P/LL</span>
-                      </p>
-                      <!-- COMPLEMENTOS -->
-                      <div class="d-flex flex-wrap" style="color: #c5c5c5;" [ngStyle]="{'width':producto.complementos.length>0 ? '70%' : '0%'}">
-                        <!-- *ngFor="let complemento of producto.complementos" -->
-                        <ng-container *ngFor="let complemento of producto.complementos">
-                          <!-- Iterar sobre cada complemento -->
-                          <div class="complemento-col me-4">
-                            <!-- *ngFor="let opcion of complemento.opciones" -->
-                            <ng-container *ngFor="let opcion of complemento.opciones">
-                              <p class="detalle-producto m-0" *ngIf="opcion.cantidad_op>0">
-                                ({{opcion.cantidad_op}}) {{opcion.nombre}} 
-                              </p>
-                            </ng-container>
-                          </div>
-                        </ng-container>
-                      </div>
-                      <!-- BOTONES -->
-                      <!-- <div class="opciones" *ngIf="this.ventaForm.estado_transaccion!=2"> -->
-                      <div class="opciones">
-                        <!-- <button class="btn p-0" title="Modificar Producto"> <span class="px-0" (click)="showModalDetalle_Producto(i,1)"><img src="../assets/images/icons/icon-options/editar.png" style="width: 27px;"></span></button> -->
-                        <button class="btn p-0" title="Eliminar Producto"> <span class="px-0" (click)="eliminar_Producto(i)"><img src="../assets/images/icons/icon-options/eliminar.png" style="width: 27px;"></span></button>
-                      </div>
+          <!-- CONTAINER - SUBCATEGORIAS -->
+          <div class="container-subcategorias">
+              <h5>Subcategorías</h5>
+              <div class="subcategorias">
+                  <button *ngFor="let subcategoria of subcategoriasFiltradas" type="button" (click)="seleccionar_SubCategoria(subcategoria.cod_subcategoria)"
+                      [ngStyle]="{'background-color': subcategoria.cod_subcategoria === cod_subcategoria ? '#258cd1' : ''}">
+                      {{ subcategoria.nombre }}
+                  </button>
+              </div>
+          </div>
 
-
+          <!-- CONTAINER - PRODUCTOS -->
+          <div class="container-productos">
+              <div class="productos-titulo d-flex justify-content-between mb-2">
+                  <h5 class="m-0">Productos</h5>
+                  <!-- Buscador -->
+                  <div class="container-buscador px-1">
+                      <input type="text" class="form-control" placeholder="Buscar..." 
+                            [(ngModel)]="filterPost" 
+                            (ngModelChange)="filtrarProductos()"
+                            style="background: #39404a;color: #f4f4f4; border: none; padding: 3px 5px;">
                   </div>
-                </ng-container>
+              </div>
 
-            </form>
+              <div class="productos">
+                  <button *ngFor="let producto of productosFiltrados" type="button" (click)="agregar_Producto(producto)">
+                      <span class="producto-nombre" style="font-weight: 700;">{{ producto.nombre }}</span> <br>
+                      <span class="producto-precio">Bs.{{ producto.precio }}</span>
+                  </button>
+              </div>
+          </div>
+      </div>
+
+    </div>
+
+
+  <!--************************* CONTAINER PRINCIPAL REGISTRAR VENTA *****************************-->
+    <div class="container-venta">
+      <div class="formulario-venta" style="border-left: 2px solid #575757;">
+        <div class="container-titulos d-flex justify-content-between" style="height: 6vh;">
+          <h5 class="m-0 d-flex align-items-center" style="color: #f3f3f3;">Venta</h5>
+          <button class="btn btn-danger p-0" style="width: 20%; background: #198754; border: none;" (click)="Limpiar_Datos_Venta()">Nuevo</button>
+          <button class="btn btn-danger p-0" style="width: 8%; background: #9d3030; border: none;" (click)="cambiar_Pantalla()">X</button>
         </div>
 
-        <!--****************** FOOTER FORMULARIO ******************-->
-        <div class="footer-form" style="color: #f3f3f3;">
-          <!-- CUENTA TOTAL -->
-          <div class="botones-venta p-1" style="height: 18vh; display: flex; flex-direction: column; justify-content: flex-end;">
-            <div class="pagar mb-1">
-              <!-- <button class="btn btn-danger" style="width:50%; background: #873232;" [disabled]="this.ventaForm.estado_transaccion==0" (click)="showModal_Eliminar(ventaForm)">ELIMINAR</button> -->
-              <button class="btn btn-success d-flex justify-content-center" style="width: 100%;" (click)="showModal_Pagar()">PAGAR            
-                <span class="mx-2">Bs. {{ventaForm.bs_total | number}}</span>
-                <span class="mx-2">Ps. {{ventaForm.ps_total | number}}</span>
-              </button>
-            </div>
-            <div class="finalizar mb-1">
-              <button class="btn btn-danger" style="width:33.33%; background: #873232; border: none;" [disabled]="this.ventaForm.estado_transaccion==0" 
-                                              *ngIf="this.ventaForm.estado_transaccion!=2 && this.ventaForm.estado_documento==0" (click)="showModal_Eliminar(ventaForm)">ELIMINAR
-              </button>
-              <button class="btn btn-danger" style="width:50%; background: #873232; border: none;" *ngIf="this.ventaForm.estado_transaccion==2 && this.ventaForm.estado_documento==0" (click)="showModal_Eliminar(ventaForm)">ELIMINAR</button>
+        <form #formVenta="ngForm" class="form-detalle-venta">
+          <!--****************** HEADER FORMULARIO ******************-->
+          <div class="header-form m-0 d-flex align-items-center justify-content-center" style="height: 6vh;">
+              <!-- #NUMERO DE MESA -->
+              <div class="mesa px-1 flex-item">
+                <input type="number" #mesa="ngModel" [(ngModel)]="ventaForm.mesa" name="mesa" class="form-control" placeholder="Mesa">
+              </div>
+              <!-- DESCRIPCIÓN -->
+              <div class="descripcion px-1 flex-item">
+                <input type="text" #descripcion="ngModel" [(ngModel)]="ventaForm.descripcion" name="descripcion" class="form-control" placeholder="descripción">
+              </div>
+              <!-- TODO PARA LLEVAR -->
+              <div class="llevar d-flex align-items-center px-1 no-shrink">
+                <label class="form-label mb-0 ms-1 me-2 text-nowrap" style="color: #f3f3f3;">P/LL</label>
+                <input class="form-check-input checkbox-grande" type="checkbox" #vender_negativo="ngModel" [(ngModel)]="ventaForm.venta_llevar" name="vender_negativo">
+              </div>
+          </div>
+          <!--****************** BODY FORMULARIO ******************-->
+          <div class="body-form" style="color: #f3f3f3;">
+              <form #formListaProductos="ngForm">
+                <!-- LISTA PRODUCTOS SELECCIONADOS -->
+                  <ng-container *ngFor="let producto of lista_Productos_Agregados; let i = index">
+                    <!-- Contenedor flex para organizar el producto y complementos en fila -->
+                    <div class="container-producto d-flex align-items-start" style="border-bottom: 1px solid #545252; padding: 10px;" (click)="showModalDetalle_Producto(i,1)">
+                      <!-- Contenedor flex para producto y complementos -->
 
-              <button class="btn btn-primary" style="width: 33.33%;" (click)="AGREGAR_VENTA('Finalizar venta')"   *ngIf="this.ventaForm.estado_transaccion == 0">FINALIZAR VENTA</button>
-              <button class="btn btn-primary" style="width: 33.33%;" (click)="AGREGAR_VENTA('Agregar sin pagar')" *ngIf="this.ventaForm.estado_transaccion == 0">AGREGAR SIN PAGAR</button>
+                        <!-- PRODUCTO NOMBRE -->
+                        <p class="producto m-0 me-2" style="font-weight: bold; letter-spacing: 1px;" [ngStyle]="{'width':producto.complementos.length>0 ? '30%' : '100%'}">
+                          ({{producto.cantidad_item}}) {{producto.nombre}} <br>
+                          <span class="m-0" *ngIf="producto.item_llevar" style="color: rgb(198, 129, 38);">P/LL</span>
+                        </p>
+                        <!-- COMPLEMENTOS -->
+                        <div class="d-flex flex-wrap" style="color: #c5c5c5;" [ngStyle]="{'width':producto.complementos.length>0 ? '70%' : '0%'}">
+                          <!-- *ngFor="let complemento of producto.complementos" -->
+                          <ng-container *ngFor="let complemento of producto.complementos">
+                            <!-- Iterar sobre cada complemento -->
+                            <div class="complemento-col me-4">
+                              <!-- *ngFor="let opcion of complemento.opciones" -->
+                              <ng-container *ngFor="let opcion of complemento.opciones">
+                                <p class="detalle-producto m-0" *ngIf="opcion.cantidad_op>0">
+                                  ({{opcion.cantidad_op}}) {{opcion.nombre}} 
+                                </p>
+                              </ng-container>
+                            </div>
+                          </ng-container>
+                        </div>
+                        <!-- BOTONES -->
+                        <!-- <div class="opciones" *ngIf="this.ventaForm.estado_transaccion!=2"> -->
+                        <div class="opciones">
+                          <!-- <button class="btn p-0" title="Modificar Producto"> <span class="px-0" (click)="showModalDetalle_Producto(i,1)"><img src="../assets/images/icons/icon-options/editar.png" style="width: 27px;"></span></button> -->
+                          <button class="btn p-0" title="Eliminar Producto"> <span class="px-0" (click)="eliminar_Producto(i)"><img src="../assets/images/icons/icon-options/eliminar.png" style="width: 27px;"></span></button>
+                        </div>
 
-              <button class="btn btn-primary" style="width: 33.33%;" (click)="MODIFICAR_VENTA('Agregar sin pagar')" *ngIf="this.ventaForm.estado_transaccion == 1">AGREGAR SIN PAGAR</button> <!-- M/ -->
-              <button class="btn btn-primary" style="width: 50%;" (click)="MODIFICAR_VENTA('Finalizar venta')" *ngIf="this.ventaForm.estado_transaccion == 1 || this.ventaForm.estado_transaccion == 2">FINALIZAR VENTA</button> <!-- M/ -->
-              
-              <!-- <button class="btn btn-danger" style="width:50%; background: #873232; border: none;" *ngIf="this.ventaForm.estado_transaccion==2 && this.ventaForm.estado_documento==1" (click)="showModal_Eliminar(ventaForm)">ANULAR VENTA</button> -->
-              <!-- <button class="btn btn-primary" style="width:50%;" *ngIf="this.ventaForm.estado_transaccion==2 && this.ventaForm.estado_documento==0" (click)="MODIFICAR_SOLO_DATOS_VENTA()">MODIFICAR DATOS VENTA</button>
-              <button class="btn btn-primary" style="width:50%;" *ngIf="this.ventaForm.estado_transaccion==2 && this.ventaForm.estado_documento==1" (click)="MODIFICAR_SOLO_DATOS_VENTA()">MODIFICAR DATOS VENTA</button> -->
-              <!-- <button class="btn btn-danger" style="width:100%; background: #873232; border: none;" *ngIf="this.ventaForm.estado_documento==2" (click)="showModal_Eliminar(ventaForm)">ELIMINAR DE RESERVA</button> -->
-            </div>
 
-            <div class="ticket">
-              <!-- <button class="btn btn-danger" style="width: 25%; background: #4a5979;">PRE/COMANDA</button> -->
-              <button class="btn btn-secondary" style="width: 50%; background: #3d657d;" (click)="EMITIR_COMANDA()">COMA</button>
-              <button class="btn btn-danger" style="width: 50%; background: #3d657d;" (click)="EMITIR_RECIBO()">PRE-CUENTA</button>
-              <!-- <button class="btn btn-secondary" style="width: 33.33%; background: #3d657d;" (click)="showModal_EmitirFactura(ventaForm)">FACTURA</button> -->
+                    </div>
+                  </ng-container>
+
+              </form>
+          </div>
+
+          <!--****************** FOOTER FORMULARIO ******************-->
+          <div class="footer-form" style="color: #f3f3f3;">
+            <!-- CUENTA TOTAL -->
+            <div class="botones-venta p-1" style="height: 18vh; display: flex; flex-direction: column; justify-content: flex-end;">
+              <div class="pagar mb-1">
+                <!-- <button class="btn btn-danger" style="width:50%; background: #873232;" [disabled]="this.ventaForm.estado_transaccion==0" (click)="showModal_Eliminar(ventaForm)">ELIMINAR</button> -->
+                <button class="btn btn-success d-flex justify-content-center" style="width: 100%;" (click)="showModal_Pagar()">PAGAR            
+                  <span class="mx-2">Bs. {{ventaForm.bs_total | number}}</span>
+                  <span class="mx-2">Ps. {{ventaForm.ps_total | number}}</span>
+                </button>
+              </div>
+              <div class="finalizar mb-1">
+                <button class="btn btn-danger" style="width:33.33%; background: #873232; border: none;" [disabled]="this.ventaForm.estado_transaccion==0" 
+                                                *ngIf="this.ventaForm.estado_transaccion!=2 && this.ventaForm.estado_documento==0" (click)="showModal_Eliminar(ventaForm)">ELIMINAR
+                </button>
+                <button class="btn btn-danger" style="width:50%; background: #873232; border: none;" *ngIf="this.ventaForm.estado_transaccion==2 && this.ventaForm.estado_documento==0" (click)="showModal_Eliminar(ventaForm)">ELIMINAR</button>
+
+                <button class="btn btn-primary" style="width: 33.33%;" (click)="AGREGAR_VENTA('Finalizar venta')"   *ngIf="this.ventaForm.estado_transaccion == 0">FINALIZAR VENTA</button>
+                <button class="btn btn-primary" style="width: 33.33%;" (click)="AGREGAR_VENTA('Agregar sin pagar')" *ngIf="this.ventaForm.estado_transaccion == 0">AGREGAR SIN PAGAR</button>
+
+                <button class="btn btn-primary" style="width: 33.33%;" (click)="MODIFICAR_VENTA('Agregar sin pagar')" *ngIf="this.ventaForm.estado_transaccion == 1">AGREGAR SIN PAGAR</button> <!-- M/ -->
+                <button class="btn btn-primary" style="width: 50%;" (click)="MODIFICAR_VENTA('Finalizar venta')" *ngIf="this.ventaForm.estado_transaccion == 1 || this.ventaForm.estado_transaccion == 2">FINALIZAR VENTA</button> <!-- M/ -->
+                
+                <!-- <button class="btn btn-danger" style="width:50%; background: #873232; border: none;" *ngIf="this.ventaForm.estado_transaccion==2 && this.ventaForm.estado_documento==1" (click)="showModal_Eliminar(ventaForm)">ANULAR VENTA</button> -->
+                <!-- <button class="btn btn-primary" style="width:50%;" *ngIf="this.ventaForm.estado_transaccion==2 && this.ventaForm.estado_documento==0" (click)="MODIFICAR_SOLO_DATOS_VENTA()">MODIFICAR DATOS VENTA</button>
+                <button class="btn btn-primary" style="width:50%;" *ngIf="this.ventaForm.estado_transaccion==2 && this.ventaForm.estado_documento==1" (click)="MODIFICAR_SOLO_DATOS_VENTA()">MODIFICAR DATOS VENTA</button> -->
+                <!-- <button class="btn btn-danger" style="width:100%; background: #873232; border: none;" *ngIf="this.ventaForm.estado_documento==2" (click)="showModal_Eliminar(ventaForm)">ELIMINAR DE RESERVA</button> -->
+              </div>
+
+              <div class="ticket">
+                <!-- <button class="btn btn-danger" style="width: 25%; background: #4a5979;">PRE/COMANDA</button> -->
+                <button class="btn btn-secondary" style="width: 50%; background: #3d657d;" (click)="EMITIR_COMANDA()">COMA</button>
+                <button class="btn btn-danger" style="width: 50%; background: #3d657d;" (click)="EMITIR_RECIBO()">PRE-CUENTA</button>
+                <!-- <button class="btn btn-secondary" style="width: 33.33%; background: #3d657d;" (click)="showModal_EmitirFactura(ventaForm)">FACTURA</button> -->
+
+              </div>
 
             </div>
 
           </div>
 
+        </form>
+      </div>
+    </div>
+  </ng-container>
+
+<!-- ///////////////////////////// MOVIL //////////////////////////// -->
+<!-- ////////////////////////////////////////////////////////////////// -->
+  <ng-container *ngIf="mostrar_movil">
+
+    <!--*********************** CONTAINER PRINCIPAL SELECCIONAR PRODUCTO **************************-->
+    <div class="container-seleccionar-productos" *ngIf="this.pantalla_movil">
+      <!-- CONTAINER: SELECCIONAR CATEGORIA -->
+      <div class="seleccionar-categorias">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h5 class="m-0">Categorías</h5>
+          <button class="btn" style="background: #f3f3f3; font-size: 12px; font-weight: 500;padding: 4px 15px;" (click)="cambiarPantallaMovil()">Ver Venta</button>
+        </div>
+          <div class="categorias-container">
+              <button *ngFor="let categoria of lista_categorias" type="button" (click)="seleccionar_Categoria(categoria.cod_categoria)" [ngClass]="{'selected': categoria.cod_categoria === cod_categoria}"
+              [ngStyle]="{'background-color': categoria.cod_categoria === cod_categoria ? '#258cd1' : ''}">
+                  {{ categoria.nombre }}
+              </button>
+          </div>
+      </div>
+
+      <!-- CONTAINER: SUBCATEGORIA - PRODUCTOS -->
+      <div class="container-subcategoria-productos d-flex">
+
+          <!-- CONTAINER - SUBCATEGORIAS -->
+          <div class="container-subcategorias">
+              <h5>Subcategorías</h5>
+              <div class="subcategorias">
+                  <button *ngFor="let subcategoria of subcategoriasFiltradas" type="button" (click)="seleccionar_SubCategoria(subcategoria.cod_subcategoria)"
+                      [ngStyle]="{'background-color': subcategoria.cod_subcategoria === cod_subcategoria ? '#258cd1' : ''}">
+                      {{ subcategoria.nombre }}
+                  </button>
+              </div>
+          </div>
+
+          <!-- CONTAINER - PRODUCTOS -->
+          <div class="container-productos">
+              <div class="productos-titulo d-flex justify-content-between mb-2">
+                  <h5 class="m-0">Productos</h5>
+                  <!-- Buscador -->
+                  <div class="container-buscador px-1">
+                      <input type="text" class="form-control" placeholder="Buscar..." 
+                            [(ngModel)]="filterPost" 
+                            (ngModelChange)="filtrarProductos()"
+                            style="background: #39404a;color: #f4f4f4; border: none; padding: 3px 5px;">
+                  </div>
+              </div>
+
+              <div class="productos">
+                  <button *ngFor="let producto of productosFiltrados" type="button" (click)="agregar_Producto(producto)">
+                      <span class="producto-nombre" style="font-weight: 700;">{{ producto.nombre }}</span> <br>
+                      <span class="producto-precio">Bs.{{ producto.precio }}</span>
+                  </button>
+              </div>
+          </div>
+      </div>
+
+    </div>
+
+    <!--************************* CONTAINER PRINCIPAL REGISTRAR VENTA *****************************-->
+    <div class="container-venta" *ngIf="!this.pantalla_movil">
+      <div class="formulario-venta" style="border-left: 2px solid #575757;">
+        <div class="container-titulos d-flex justify-content-between align-items-end mx-1" style="height: 6vh;">
+          <!-- <h5 class="m-0 d-flex align-items-center" style="color: #f3f3f3;">Venta</h5> -->
+          <button class="btn p-0" style="height: 30px; width: 30%; background: #f3f3f3;" (click)="cambiarPantallaMovil()">Productos</button>
+          <button class="btn btn-danger p-0" style="height: 30px; width: 30%; background: #198754; border: none;" (click)="Limpiar_Datos_Venta()">Nuevo</button>
+          <button class="btn btn-danger p-0" style="height: 30px; width: 10%; background: #9d3030; border: none;" (click)="cambiar_Pantalla()">X</button>
         </div>
 
-      </form>
-    </div>
-  </div>
+        <form #formVenta="ngForm" class="form-detalle-venta">
+          <!--****************** HEADER FORMULARIO ******************-->
+          <div class="header-form m-0 d-flex align-items-center justify-content-center" style="height: 6vh;">
+              <!-- #NUMERO DE MESA -->
+              <div class="mesa px-1" style="width: 20%;">
+                <input type="number" #mesa="ngModel" [(ngModel)]="ventaForm.mesa" name="mesa" class="form-control" placeholder="Mesa">
+              </div>
+              <!-- DESCRIPCIÓN -->
+              <div class="descripcion px-1">
+                <input type="text" #descripcion="ngModel" [(ngModel)]="ventaForm.descripcion" name="descripcion" class="form-control" placeholder="descripción">
+              </div>
+              <!-- TODO PARA LLEVAR -->
+              <div class="llevar d-flex align-items-center px-1 no-shrink">
+                <!-- <label class="form-label mb-0 ms-1 me-2 text-nowrap" style="color: #f3f3f3;">P/LL</label>
+                <input class="form-check-input checkbox-grande" type="checkbox" #vender_negativo="ngModel" [(ngModel)]="ventaForm.venta_llevar" name="vender_negativo">
+               -->
+                <label class="btn-checkbox d-flex justify-content-center" [ngStyle]="{'background-color': ventaForm.venta_llevar ? '#a16e31' : ''}">
+                  <input class="form-check-input checkbox-grande" type="checkbox" 
+                         #venta_llevar="ngModel" 
+                         [(ngModel)]="ventaForm.venta_llevar" 
+                         name="vender_negativo">
+                  <span>P/LL</span>
+                </label>
+              </div>
 
+ 
+
+          </div>
+          <!--****************** BODY FORMULARIO ******************-->
+          <div class="body-form" style="color: #f3f3f3;">
+              <form #formListaProductos="ngForm">
+                <!-- LISTA PRODUCTOS SELECCIONADOS -->
+                  <ng-container *ngFor="let producto of lista_Productos_Agregados; let i = index">
+                    <!-- Contenedor flex para organizar el producto y complementos en fila -->
+                    <div class="container-producto d-flex align-items-start" style="border-bottom: 1px solid #545252; padding: 10px;" (click)="showModalDetalle_Producto(i,1)">
+                      <!-- Contenedor flex para producto y complementos -->
+
+                        <!-- PRODUCTO NOMBRE -->
+                        <p class="producto m-0 me-2" style="font-weight: bold; letter-spacing: 1px;" [ngStyle]="{'width':producto.complementos.length>0 ? '30%' : '100%'}">
+                          ({{producto.cantidad_item}}) {{producto.nombre}} <br>
+                          <span class="m-0" *ngIf="producto.item_llevar" style="color: rgb(198, 129, 38);">P/LL</span>
+                        </p>
+                        <!-- COMPLEMENTOS -->
+                        <div class="d-flex flex-wrap" style="color: #c5c5c5;" [ngStyle]="{'width':producto.complementos.length>0 ? '70%' : '0%'}">
+                          <!-- *ngFor="let complemento of producto.complementos" -->
+                          <ng-container *ngFor="let complemento of producto.complementos">
+                            <!-- Iterar sobre cada complemento -->
+                            <div class="complemento-col me-4">
+                              <!-- *ngFor="let opcion of complemento.opciones" -->
+                              <ng-container *ngFor="let opcion of complemento.opciones">
+                                <p class="detalle-producto m-0" *ngIf="opcion.cantidad_op>0">
+                                  ({{opcion.cantidad_op}}) {{opcion.nombre}} 
+                                </p>
+                              </ng-container>
+                            </div>
+                          </ng-container>
+                        </div>
+                        <!-- BOTONES -->
+                        <!-- <div class="opciones" *ngIf="this.ventaForm.estado_transaccion!=2"> -->
+                        <div class="opciones">
+                          <!-- <button class="btn p-0" title="Modificar Producto"> <span class="px-0" (click)="showModalDetalle_Producto(i,1)"><img src="../assets/images/icons/icon-options/editar.png" style="width: 27px;"></span></button> -->
+                          <button class="btn p-0" title="Eliminar Producto"> <span class="px-0" (click)="eliminar_Producto(i)"><img src="../assets/images/icons/icon-options/eliminar.png" style="width: 27px;"></span></button>
+                        </div>
+
+
+                    </div>
+                  </ng-container>
+
+              </form>
+          </div>
+
+          <!--****************** FOOTER FORMULARIO ******************-->
+          <div class="footer-form" style="color: #f3f3f3;">
+            <!-- CUENTA TOTAL -->
+            <div class="botones-venta p-1" style="height: 18vh; display: flex; flex-direction: column; justify-content: flex-end;">
+              <div class="pagar mb-1">
+                <!-- <button class="btn btn-danger" style="width:50%; background: #873232;" [disabled]="this.ventaForm.estado_transaccion==0" (click)="showModal_Eliminar(ventaForm)">ELIMINAR</button> -->
+                <button class="btn btn-success d-flex justify-content-center" style="width: 100%;" (click)="showModal_Pagar()">PAGAR            
+                  <span class="mx-2">Bs. {{ventaForm.bs_total | number}}</span>
+                  <span class="mx-2">Ps. {{ventaForm.ps_total | number}}</span>
+                </button>
+              </div>
+              <div class="finalizar mb-1">
+                <button class="btn btn-danger" style="width:33.33%; background: #873232; border: none;" [disabled]="this.ventaForm.estado_transaccion==0" 
+                                                *ngIf="this.ventaForm.estado_transaccion!=2 && this.ventaForm.estado_documento==0" (click)="showModal_Eliminar(ventaForm)">ELIMINAR
+                </button>
+                <button class="btn btn-danger" style="width:50%; background: #873232; border: none;" *ngIf="this.ventaForm.estado_transaccion==2 && this.ventaForm.estado_documento==0" (click)="showModal_Eliminar(ventaForm)">ELIMINAR</button>
+
+                <button class="btn btn-primary" style="width: 33.33%;" (click)="AGREGAR_VENTA('Finalizar venta')"   *ngIf="this.ventaForm.estado_transaccion == 0">FINALIZAR VENTA</button>
+                <button class="btn btn-primary" style="width: 33.33%;" (click)="AGREGAR_VENTA('Agregar sin pagar')" *ngIf="this.ventaForm.estado_transaccion == 0">AGREGAR SIN PAGAR</button>
+
+                <button class="btn btn-primary" style="width: 33.33%;" (click)="MODIFICAR_VENTA('Agregar sin pagar')" *ngIf="this.ventaForm.estado_transaccion == 1">AGREGAR SIN PAGAR</button> <!-- M/ -->
+                <button class="btn btn-primary" style="width: 50%;" (click)="MODIFICAR_VENTA('Finalizar venta')" *ngIf="this.ventaForm.estado_transaccion == 1 || this.ventaForm.estado_transaccion == 2">FINALIZAR VENTA</button> <!-- M/ -->
+                
+                <!-- <button class="btn btn-danger" style="width:50%; background: #873232; border: none;" *ngIf="this.ventaForm.estado_transaccion==2 && this.ventaForm.estado_documento==1" (click)="showModal_Eliminar(ventaForm)">ANULAR VENTA</button> -->
+                <!-- <button class="btn btn-primary" style="width:50%;" *ngIf="this.ventaForm.estado_transaccion==2 && this.ventaForm.estado_documento==0" (click)="MODIFICAR_SOLO_DATOS_VENTA()">MODIFICAR DATOS VENTA</button>
+                <button class="btn btn-primary" style="width:50%;" *ngIf="this.ventaForm.estado_transaccion==2 && this.ventaForm.estado_documento==1" (click)="MODIFICAR_SOLO_DATOS_VENTA()">MODIFICAR DATOS VENTA</button> -->
+                <!-- <button class="btn btn-danger" style="width:100%; background: #873232; border: none;" *ngIf="this.ventaForm.estado_documento==2" (click)="showModal_Eliminar(ventaForm)">ELIMINAR DE RESERVA</button> -->
+              </div>
+
+              <div class="ticket">
+                <!-- <button class="btn btn-danger" style="width: 25%; background: #4a5979;">PRE/COMANDA</button> -->
+                <button class="btn btn-secondary" style="width: 50%; background: #3d657d;" (click)="EMITIR_COMANDA()">COMA</button>
+                <button class="btn btn-danger" style="width: 50%; background: #3d657d;" (click)="EMITIR_RECIBO()">PRE-CUENTA</button>
+                <!-- <button class="btn btn-secondary" style="width: 33.33%; background: #3d657d;" (click)="showModal_EmitirFactura(ventaForm)">FACTURA</button> -->
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </form>
+      </div>
+    </div>
+
+  </ng-container>
 </div>
 
 
@@ -392,20 +580,24 @@
     <div class="modal-content content-modal">
       <div class="modal-header">
         <h1 class="modal-title fs-4" id="exampleModalLabel">Detalle Producto</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
       </div>
 
       <div class="modal-body">
 
         <!-- CANTIDAD PRODUCTO -->
         <div class="producto d-flex justify-content-between">
-          <div class="producto d-flex align-items-center">
-            <!-- BOTONES -->
-            <button class="btn btn-primary" (click)="disminuir_cantidad()"  [disabled]="lista_Productos_Agregados[index_producto]?.cantidad_item === 1" [ngStyle]="{'background-color': lista_Productos_Agregados[index_producto]?.cantidad_item === 1 ? '#244e4e' : ''}">-</button>
-            <div class="producto_nombre mx-3">{{lista_Productos_Agregados[index_producto]?.cantidad_item}}</div>
-            <button class="btn btn-primary" (click)="aumentar_cantidad()">+</button>
+          <div class="d-flex align-items-center" style="width: 85%;">
+            <div class="d-flex align-items-center" >
+               <!-- BOTONES -->
+              <button class="btn btn-primary" (click)="disminuir_cantidad()"  [disabled]="lista_Productos_Agregados[index_producto]?.cantidad_item === 1" [ngStyle]="{'background-color': lista_Productos_Agregados[index_producto]?.cantidad_item === 1 ? '#244e4e' : ''}">-</button>
+              <div class="producto-cantidad mx-1">{{lista_Productos_Agregados[index_producto]?.cantidad_item}}</div>
+              <button class="btn btn-primary" (click)="aumentar_cantidad()">+</button>
+            </div>
             <!-- PRODUCTO NOMBRE -->
-            <div class="producto_nombre mx-3">{{lista_Productos_Agregados[index_producto]?.nombre}}</div>
+            <div class="producto-nombre mx-2">
+              {{lista_Productos_Agregados[index_producto]?.nombre}}
+            </div>
           </div>
 
           <!-- CHEBOX PARA LLEVAR -->
@@ -413,14 +605,14 @@
             <label class="form-label mb-0" style="color: #f3f3f3;">Para Llevar</label>
             <input class="form-check-input checkbox-grande" type="checkbox" #item_llevar="ngModel" [(ngModel)]="lista_Productos_Agregados[index_producto].item_llevar" name="vender_negativo">
           </div> -->
-          <div class="d-flex align-items-center" *ngIf="lista_Productos_Agregados[index_producto]">      
+          <div class="d-flex align-items-center" style="width: 15%;" *ngIf="lista_Productos_Agregados[index_producto]">      
             <!-- Custom styled checkbox acting as a button -->
             <label class="btn-checkbox" style="margin-left: 10px;" [ngStyle]="{'background-color': lista_Productos_Agregados[index_producto]?.item_llevar ? '#a16e31' : ''}">
               <input class="form-check-input checkbox-grande" type="checkbox" 
                      #item_llevar="ngModel" 
                      [(ngModel)]="lista_Productos_Agregados[index_producto].item_llevar" 
                      name="vender_negativo">
-              <span>Para Llevar</span>
+              <span>P/LL</span>
             </label>
           </div>
           
@@ -429,32 +621,32 @@
         <hr *ngIf="lista_Productos_Agregados[index_producto]?.complementos.length>0">
 
         <!-- LISTA COMPLEMENTOS -->
-        <h5 class="text-center" *ngIf="lista_Productos_Agregados[index_producto]?.complementos.length>0">Complementos</h5>
+        <h6 class="text-center" *ngIf="lista_Productos_Agregados[index_producto]?.complementos.length>0">Complementos</h6>
 
         <div class="complemento">
           <ng-container *ngFor="let complemento of lista_Productos_Agregados[index_producto]?.complementos ; let i = index">
-            <h5 style="font-weight: 300;margin-top: 10px;">{{complemento.nombre}}</h5>
-            <ul class="list-group p-0">
+            <!-- <h5 style="font-weight: 300;margin-top: 10px;">{{complemento.nombre}}</h5> -->
+            <ul class="list-group p-0 mb-3">
               <!-- Titulos -->
               <li class="list-group-item py-0">
                 <div class="row mx-0 d-flex align-items-center">
-                  <div class="col-3 px-1">Operaciones</div>
-                  <div class="col-6 px-1">Complemento</div>
+                  <!-- <div class="col-3 px-1">Op</div> -->
+                  <div class="col-9 px-1">{{complemento.nombre}}</div>
                   <div class="col-3 px-1">Cantidad</div>
                 </div>
               </li>
-              <!-- Lista Cajas -->
-              <li class="list-group-item"*ngFor="let opcion of complemento.opciones; let j = index">
+              <!-- LISTA COMPLEMENTOS -->
+              <li class="lista-opciones list-group-item"*ngFor="let opcion of complemento.opciones; let j = index">
                 <div class="row mx-0 d-flex align-items-center">
                     <!-- OPERACIONES -->
-                    <div class="col-3 d-flex align-items-center"> 
-                      <button class="btn btn-secondary btn-complemento-menos me-2" (click)="disminuir_cantidad_opcion(i,j)"  [ngStyle]="{'background-color': opcion?.cantidad_op === 0 ? '#5e2929' : ''}">-</button>
-                      <button class="btn btn-primary btn-complemento-mas" (click)="aumentar_cantidad_opcion(i,j)">+</button>
+                    <div class="col-lg-3 col-5 d-flex align-items-center"> 
+                      <button class="btn btn-secondary btn-complemento-menos me-2" (click)="disminuir_cantidad_opcion(i,j)"  [ngStyle]="{'background-color': opcion?.cantidad_op === 0 ? '#5e2929' : '#973a3a'}">-</button>
+                      <button class="btn btn-primary btn-complemento-mas" (click)="aumentar_cantidad_opcion(i,j)" [ngStyle]="{'background-color': opcion?.cantidad_op === 0 ? '#234f3d' : '#048c22'}">+</button>
                     </div>
                     <!-- PRODUCTO -->
-                    <div class="col-6" style="color: #d4da8f"> {{opcion.nombre}} </div>
+                    <div class="col-lg-6 col-5" style="color: #d4da8f"> {{opcion.nombre}} </div>
                     <!-- BS. PRECIO C/U-->
-                    <div class="col-3">{{opcion.cantidad_op}}</div>
+                    <div class="col-lg-3 col-2" [ngStyle]="{'color': opcion?.cantidad_op === 0 ? '#787878' : '#ffffff'}">{{opcion.cantidad_op}}</div>
   
                 </div>
               </li>

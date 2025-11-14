@@ -68,11 +68,11 @@ onChangeVista(event: any) {
 page_v:any
 // page_p:any
 itemsPerPage = 6; // valor por defecto (desktop)
-
+mostrar_movil=false;
 setItemsPerPage() {
     const width = window.innerWidth;
-  
-    if (width < 400) {
+    // PARA LISTAR VENTA CARDS
+    if (width < 600) {
       // móvil
       this.itemsPerPage = 2;
     } else if (width < 800) {
@@ -82,8 +82,18 @@ setItemsPerPage() {
       // desktop
       this.itemsPerPage = 6;
     }
+    // PARA MOSTRAR INTERFAZ VENTA EN MOVIL
+    if (width<600) {
+      this.mostrar_movil=true;
+    }else{
+      this.mostrar_movil=false;
+    }
 }
 
+pantalla_movil=false;
+cambiarPantallaMovil(){
+  this.pantalla_movil= !this.pantalla_movil;
+}
 
 
 pantalla_principal=1;

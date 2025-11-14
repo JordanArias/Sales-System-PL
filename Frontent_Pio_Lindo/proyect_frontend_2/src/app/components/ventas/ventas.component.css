@@ -271,8 +271,8 @@
 }
 #modalDetalleProducto .producto button{
   padding: 0;
-  width: 35px;
-  height: 35px;
+  width: 50px;
+  height: 44px;
   background: #018181;
   border: none;
 }
@@ -283,15 +283,17 @@
   color: #f3f3f3;
   background: #243347;
 }
-#modalDetalleProducto  .btn-complemento-mas{
+#modalDetalleProducto  .btn-complemento-mas, #modalDetalleProducto  .btn-complemento-menos{
   border: none;
   background: #277e1b;
-}
-#modalDetalleProducto  .btn-complemento-menos{
-  border: none;
-  background: #973a3a;
+  padding: 10px 20px;
 }
 
+#modalDetalleProducto .producto-cantidad{
+  width: 30px;
+  text-align: center;
+  letter-spacing: 1px;
+}
 
 #modalFacturaVenta label{
   font-weight: 100;
@@ -564,10 +566,12 @@ input[type="number"] {
   margin-left: 0.1rem;
 }
 
-/* .header-form .mesa{width: 20%;} 
-.header-form .descripcion{width: 75%;}
-.header-form .llevar{width: 15%;} */
-
+#agregar-venta-desktop{
+  display: block;
+}
+#agregar-venta-movil{
+  display: none;
+}
 
 /* ------------------------- @MEDIAS PARA DESKTOP-TABLET ---------------------*/
 /* -------------------------------------------------------------------------- */
@@ -692,6 +696,92 @@ input[type="number"] {
     font-size: 14px;
     padding: 0px 5px;
     height: 30px;
+  }
+
+  /***** Container Productos y Venta ****/
+  .container-principal-agregar h5{
+    font-size: 13px;
+  }
+  .container-seleccionar-productos, .container-venta {
+    width: 100%;
+  }
+  /***** Productos ****/
+  .container-subcategorias{
+    width: 25%; 
+  }
+  .container-productos{
+    width: 75%;
+  }
+  /****** Lista Productos *****/
+  .productos-titulo h5{
+    display: none;
+  }
+  .container-buscador input{
+    height: 25px;
+  }
+  .productos button{
+    min-width: 45%;
+    font-size: 12px;
+  }
+  .subcategorias button{
+    font-size: 12px;
+    padding: 0px;
+    margin: 0px 1px;
+  }
+  .categorias-container button{
+    min-height: 40px;
+    font-size: 12px;
+  }
+
+  /*** Modal Detalle Producto ***/
+  #modalDetalleProducto .modal-lg-custom{
+    max-width: 100%;
+  }
+  #modalDetalleProducto .content-modal, .btn-checkbox{
+    font-size: 15px;
+  }
+  #modalDetalleProducto .producto-nombre{
+    font-size: 16px;
+  }
+  #modalDetalleProducto .btn-checkbox{
+    /* height: 30px; */
+    padding: 3px 5px;
+  }
+
+  #modalDetalleProducto ul li{
+    padding: 5px 0px;
+  }
+  #modalDetalleProducto .lista-opciones div{
+    padding: 0px 0px 0px 3px;
+  }
+  /*** Formulario Venta ***/
+  .btn-checkbox {
+    padding: 0px;
+    font-size: 12px;
+    height: 24px;
+    width: 45px;
+  }
+}
+
+
+
+/* ------------------------- @MEDIAS PARA MOVIL-SMALL ---------------------*/
+/* ----------------------------------------------------------------- */
+
+/* === Móvil === */
+@media (max-width: 350px) {
+  #modalDetalleProducto .content-modal,  #modalDetalleProducto .producto-nombre, .btn-checkbox{
+    font-size: 12px;
+  }
+  #modalDetalleProducto .producto button{
+    width: 35px;
+    height: 35px;
+
+  }
+  #modalDetalleProducto  .btn-complemento-mas, #modalDetalleProducto  .btn-complemento-menos{
+    border: none;
+    background: #277e1b;
+    padding: 4px 12px;
   }
 
 }
