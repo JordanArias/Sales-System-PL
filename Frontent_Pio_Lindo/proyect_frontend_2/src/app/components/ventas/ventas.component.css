@@ -344,7 +344,15 @@
 #modalPagar .ps-atajo-monto-positivo button, #modalPagar .ps-atajo-monto-negativo button{
   width: 60px;
 }
-
+#modalPagar .pagos .divisa{
+  width: 40%;
+}
+#modalPagar .pagos .atajos{
+  width: 60%;
+}
+/* #modalPagar .container-pago .descuento div{
+  width: 35%;
+} */
 /************************* FORMS(INPUTS - OPTIONS) ************************/
 .custom-select{
   width: 100%;
@@ -658,6 +666,28 @@ input[type="number"] {
   .productos button{
     min-width: 90%;
   }
+
+  /***** MODALES ******/
+  .content-modal{
+    font-size: 15px;
+  }
+  /**** Modal Pagar ****/
+  #modalPagar .modal-lg-custom{
+    max-width: 100%;
+  }
+  #modalPagar .container-pago .descuento > div:first-child{
+    margin-bottom: 5px;
+  }
+  #modalPagar .pagos .divisa{
+    width: 100%;
+  }
+  #modalPagar .pagos .atajos{
+    display: none;
+  }
+  #toast{
+    max-width: 55%;
+    right: -6%;
+    }
 }
 
 
@@ -761,6 +791,21 @@ input[type="number"] {
     height: 24px;
     width: 45px;
   }
+
+  #modalPagar .modal-lg-custom container-pagar{
+    font-size: 12px;
+  }
+  #modalPagar .modal-body{
+    padding: 0px;
+  }
+  #modalPagar ul li{
+    padding: 0px 2px;
+    font-size: 8px;
+  }
+  #toast{
+    max-width: 99%;
+    right: -50%;
+  }
 }
 
 
@@ -783,5 +828,8 @@ input[type="number"] {
     background: #277e1b;
     padding: 4px 12px;
   }
-
+  #toast{
+    max-width: 99%;
+    right: -50%;
+  }
 }

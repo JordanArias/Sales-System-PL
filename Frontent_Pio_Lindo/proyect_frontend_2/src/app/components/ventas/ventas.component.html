@@ -674,7 +674,7 @@
 <!-- ******************************************************************************************************************************************** -->
 <div #modalPagar id="modalPagar" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom">
-    <div class="modal-content content-modal">
+    <div class="container-pagar modal-content content-modal">
       <div class="modal-header">
         <h1 class="modal-title fs-4" id="exampleModalLabel">Pagar</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -713,23 +713,23 @@
                   <!-- PS. PRECIO C/U-->
                   <div class="col-2 px-1"> Ps. {{pro.ps_precio | number}} </div>
                   <!-- PS. TOTAL -->
-                  <div class="col-2 px-1"> Ps. {{math_Ceil(pro.precio, pro.cantidad_item) | number}} </div>
+                  <div class="col-2 px-1"> Ps. {{(pro.ps_precio * pro.cantidad_item) | number}} </div>
               </div>
             </li>
           </ul>
 
         </div>
-            <div class="container-pago p-3">
-               <!-- DESCUENTO -->
-               <div class="descuento d-flex">
-               <div class="d-flex" style="width: 25%;">
-                    <label class="me-3">Bs. descuento:</label>
-                    <input type="number" #bs_descuento="ngModel" [(ngModel)]="ventaForm.bs_descuento" name="bs_descuento" class="form-control py-0" style="width: 35%;" (keyup)="calcular_descuento()">
-               </div>
-                <div class="d-flex" style="width: 25%;">
-                    <label class="me-3">Ps. descuento:</label>
-                    <input type="number" #ps_descuento="ngModel" [(ngModel)]="ventaForm.ps_descuento" name="ps_descuento" class="form-control py-0" style="width: 35%;" (keyup)="calcular_descuento()">
-                 </div>
+            <div class="container-pago p-1 p-sm-2 p-md-3">
+              <!-- DESCUENTO -->
+              <div class="descuento row m-0 d-flex">
+                  <div class="col-12 col-md-6 col-lg-6 d-flex">
+                      <label class="me-3">Bs. descuento:</label>
+                      <input type="number" #bs_descuento="ngModel" [(ngModel)]="ventaForm.bs_descuento" name="bs_descuento" class="form-control py-0" style="width: 35%;" (keyup)="calcular_descuento()">
+                  </div>
+                  <div class="col-12 col-md-6 col-lg-6 d-flex">
+                      <label class="me-3">Ps. descuento:</label>
+                      <input type="number" #ps_descuento="ngModel" [(ngModel)]="ventaForm.ps_descuento" name="ps_descuento" class="form-control py-0" style="width: 35%;" (keyup)="calcular_descuento()">
+                  </div>
              </div>
               <hr>
                 <!-- DIVISA -->
@@ -740,27 +740,27 @@
                     <button class="btn me-1" (click)="seleccionar_divisa(3)" [ngStyle]="{'background-color': divisa_seleccionada === 3 ? '#1f4574' : '','border': divisa_seleccionada === 3 ? 'none' : ''}">Banca</button>
               </div>
               <!-- SUB TOTALES -->
-              <div class="subtotal d-flex mb-2">
-                  <p class="m-0" style="width: 10%;">Sub Total:</p>
-                  <p class="m-0 me-5">Bs. {{ventaForm.bs_total  | number}}</p>
-                  <p class="m-0">Ps. {{ventaForm.ps_total  | number}}</p>
+              <div class="subtotal row m-0 mb-2">
+                  <p class="col-4 col-md-3 col-lg-2 m-0 p-0">Sub Total:</p>
+                  <p class="col-3 col-md-3 col-lg-2 m-0 p-0">Bs. {{ventaForm.bs_total  | number}}</p>
+                  <p class="col-5 col-md-3 col-lg-2 m-0 p-0">Ps. {{ventaForm.ps_total  | number}}</p>
               </div>
                 <!-- FALTA -->
-                <div class="falta d-flex mb-3" style="font-weight: 500; width: 40%; color: #cdba70;">
-                    <p class="m-0 mb-0" style="width: 25%;">Falta:</p>
-                    <p class="m-0 mb-0" style="width: 25%;">Bs. {{ventaForm.bs_falta | number}}</p>
-                    <p class="m-0 mb-0" style="width: 25%;">Ps. {{ventaForm.ps_falta | number}}</p>
+                <div class="falta row m-0 mb-3" style="font-weight: 500; color: #cdba70;">
+                    <p class="col-4 col-md-3 col-lg-2 m-0 p-0">Falta:</p>
+                    <p class="col-3 col-md-3 col-lg-2 m-0 p-0">Bs. {{ventaForm.bs_falta | number}}</p>
+                    <p class="col-5 col-md-3 col-lg-2 m-0 p-0">Ps. {{ventaForm.ps_falta | number}}</p>
                 </div>
                 <!-- INPUTS -->
                 <div class="pagos d-flex">
                   <!-- DIVISA INPUTS -->
-                  <div class="divisa mb-3" style="width: 40%;">
+                  <div class="divisa mb-3">
 
                     <!-- BOLIVIANOS -->
                     <div class="boliviano row m-0 p-0" *ngIf="divisa_seleccionada == 1">
                       <div class="d-flex col-12 p-0 mb-3">
                         <label style="width: 25%;">Monto</label>
-                        <input type="number" #bs_pagado="ngModel" [(ngModel)]="ventaForm.bs_pagado" (input)="actualizarMontos('bs')" [disabled]="ventaForm.bs_falta === 0" name="bs_pagado" class="form-control py-0" style="width: 65%; letter-spacing: 1px;">
+                        <input type="number" #bs_pagado="ngModel" [(ngModel)]="ventaForm.bs_pagado" (input)="actualizarMontos('bs')" name="bs_pagado" class="form-control py-0" style="width: 65%; letter-spacing: 1px;">
                       </div>
                       <div class="col-12 mb-0 p-0 d-flex"> 
                         <p class="mb-0" style="width: 25%;"> Cambio: </p> 
@@ -788,7 +788,7 @@
 
                   </div>
                   <!-- ATAJOS --> 
-                  <div class="atajos mb-2" style="width: 60%;">
+                  <div class="atajos mb-2">
                       <!-- BOLIVIANOS MONTO POSITIVO -->
                       <div class="bs-atajo-monto-positivo mb-1" *ngIf="divisa_seleccionada == 1 || divisa_seleccionada == 3">
                         <button class="btn" (click)="actualizarValor('monto', 0.5)">+0.5</button>
@@ -844,7 +844,7 @@
 
 
         <!-- PAGADOS -->
-        <div class="saldos d-flex" style="letter-spacing: 1px; width: 100%;" *ngIf="ventaForm.estado_transaccion == 2">
+        <!-- <div class="saldos d-flex" style="letter-spacing: 1px; width: 100%;" *ngIf="ventaForm.estado_transaccion == 2">
             <div class="pagados" style="width: 20%;">
               <p class="m-0 mb-0 me-1">Pagado:</p>
               <p class="m-0 mb-0 me-1" *ngIf="ventaForm.bs_pagado ?? 0 >0">Bs. {{ventaForm.bs_pagado | number}}</p>
@@ -861,7 +861,7 @@
               <p class="m-0 mb-0 me-1" *ngIf="ventaForm.bs_descuento ?? 0 >0">Bs. {{ventaForm.bs_descuento | number}}</p>
               <p class="m-0 mb-0 me-1" *ngIf="ventaForm.ps_descuento ?? 0 >0">Ps. {{ventaForm.ps_descuento | number}}</p>
             </div>
-        </div>
+        </div> -->
       </div>
 
       <!-- BOTONES AGREGAR Y MODIFICAR -->
