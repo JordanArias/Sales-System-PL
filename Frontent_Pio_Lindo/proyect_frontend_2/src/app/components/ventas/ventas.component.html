@@ -106,9 +106,9 @@
                 <div class="d-flex flex-wrap" style="color: #c5c5c5; width: 70%;">
                   <ng-container *ngFor="let opcion of detalle.detalle_opcion">
                     <!-- Iterar sobre cada complemento -->
-                    <div class="complemento-col me-3">
+                    <div class="complemento-col me-3 d-flex flex-wrap">
                       <p class="detalle-producto m-0" *ngFor="let o of opcion">
-                        <span>{{o.cantidad_op}} {{ o.nombre }}</span> 
+                        <span style="font-weight: 400;">{{o.cantidad_op}}</span>  {{ o.nombre }}
                       </p>
                     </div>
                   </ng-container>
@@ -143,12 +143,13 @@
 
   </div>
 
-  <div class="custom-pagination">
+  <div class="custom-pagination" style="height: 6vh;">
     <!-- Controles de paginación -->
     <pagination-controls 
       (pageChange)="page_v = $event" 
       previousLabel="Anterior" 
-      nextLabel="Siguiente"        
+      nextLabel="Siguiente"
+      [responsive]="true"        
       style="text-align: center;">
    </pagination-controls>
   </div>
@@ -157,8 +158,8 @@
 <!-- ******************************************************************* AGREGAR - VENTA ***************************************************************** -->
 <!-- ***************************************************************************************************************************************************** -->
 <div class="container-principal-agregar d-flex" *ngIf="pantalla_principal==2">
-<!-- ///////////////////////////// DESKTOP //////////////////////////// -->
-<!-- ////////////////////////////////////////////////////////////////// -->
+<!-- :::::::::::::::::::::::::::::::::::::::::::: DESKTOP ::::::::::::::::::::::::::::::::::::::::::: -->
+<!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
   <ng-container *ngIf="!mostrar_movil">
   <!--*********************** CONTAINER PRINCIPAL SELECCIONAR PRODUCTO **************************-->
     <div class="container-seleccionar-productos">
@@ -327,12 +328,12 @@
     </div>
   </ng-container>
 
-<!-- ///////////////////////////// MOVIL //////////////////////////// -->
-<!-- ////////////////////////////////////////////////////////////////// -->
+<!-- :::::::::::::::::::::::::::::::::::::::::::: MOVIL ::::::::::::::::::::::::::::::::::::::::::::: -->
+<!-- :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
   <ng-container *ngIf="mostrar_movil">
 
     <!--*********************** CONTAINER PRINCIPAL SELECCIONAR PRODUCTO **************************-->
-    <div class="container-seleccionar-productos" *ngIf="this.pantalla_movil">
+    <div class="container-seleccionar-productos" *ngIf="!this.pantalla_movil">
       <!-- CONTAINER: SELECCIONAR CATEGORIA -->
       <div class="seleccionar-categorias">
         <div class="d-flex justify-content-between align-items-center mb-2">
@@ -386,7 +387,7 @@
     </div>
 
     <!--************************* CONTAINER PRINCIPAL REGISTRAR VENTA *****************************-->
-    <div class="container-venta" *ngIf="!this.pantalla_movil">
+    <div class="container-venta" *ngIf="this.pantalla_movil">
       <div class="formulario-venta" style="border-left: 2px solid #575757;">
         <div class="container-titulos d-flex justify-content-between align-items-end mx-1" style="height: 6vh;">
           <!-- <h5 class="m-0 d-flex align-items-center" style="color: #f3f3f3;">Venta</h5> -->

@@ -41,7 +41,7 @@
     <!-- **************************************************** LISTA VENTAS ****************************************************************  -->
     <div class="container-lista">
   
-      <ng-container *ngFor="let v of lista_Ventas | paginate: { itemsPerPage: 6, currentPage: page_v } ; let i = index">
+      <ng-container *ngFor="let v of lista_Ventas | paginate: { itemsPerPage: itemsPerPage, currentPage: page_v } ; let i = index">
         <!--******************************** CARD VENTA PRINCIPAL **************************-->
         <div class="card" [ngClass]="{'selected-card': selectedCardIndex === i}">
           <!-- *********** TITULO CARD VENTA **************-->
@@ -70,20 +70,21 @@
               <!-- Contenedor flex para organizar el producto y complementos en fila -->
               <div style="border-bottom: 1px solid #636363; padding:4px 10px;">
                 <!-- Contenedor flex para producto y complementos -->
-                <div class="d-flex align-items-start">
+                <div class="container-producto-complemento align-items-start">
                   <!-- Producto Nombre -->
-                  <p class="producto m-0 me-2" style="font-weight: bold; letter-spacing: 1px;" [ngStyle]="{ 'width': detalle.detalle_opcion.length === 0 ? '100%' : '35%' }">
-                    {{detalle.cantidad_item}} {{ detalle.nombre }}
+                  <p class="producto m-0 me-2" style="font-weight: bold; letter-spacing: 1px;">
+                    {{detalle.cantidad_item}} x {{ detalle.nombre }}
                     <span *ngIf="detalle.item_llevar" style="color: #c17927;"> P/LL</span>
                   </p>
           
                   <!-- Contenedor de complementos en una fila -->
-                  <div class="d-flex flex-wrap" style="width: 75%;">
+                  <div class="d-flex flex-wrap">
                     <ng-container *ngFor="let opcion of detalle.detalle_opcion">
                       <!-- Iterar sobre cada complemento -->
-                      <div class="complemento-col me-3">
-                        <p class="detalle-producto m-0" *ngFor="let o of opcion">
-                          <span>{{o.cantidad_op}} {{ o.nombre }}</span> 
+                      <div class="complemento-col me-3 d-flex flex-wrap">
+                        <p style="background: #ececec;border-radius: 10px;" class="detalle-producto m-0 me-2 mb-2" *ngFor="let o of opcion; let last = last">
+                          <span>{{o.cantidad_op}} </span>  {{ o.nombre }}
+                          <!-- <span style="font-weight: 500;" *ngIf="!last"> | </span> -->
                         </p>
                       </div>
                     </ng-container>
@@ -117,12 +118,13 @@
   
     </div>
 
-    <div class="custom-pagination" style="height: 13vh;">
+    <div class="custom-pagination" style="height: 6vh;">
       <!-- Controles de paginación -->
       <pagination-controls 
         (pageChange)="page_v = $event"
         previousLabel="Anterior" 
-        nextLabel="Siguiente"        
+        nextLabel="Siguiente"
+        [responsive]="true"        
         style="text-align: center;">
      </pagination-controls>
     </div>

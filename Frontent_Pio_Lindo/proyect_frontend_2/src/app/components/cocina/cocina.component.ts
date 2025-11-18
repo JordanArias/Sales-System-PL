@@ -25,9 +25,39 @@ export class CocinaComponent {
   ){
     this.listar_Last_Caja();
   }
-  page_v: number = 1;
 
+  ngOnInit() {
+    this.setItemsPerPage();
+  
+    window.addEventListener('resize', () => this.setItemsPerPage());
+  }
+  // page_v: number = 1;
 
+// filterPost:any;
+page_v:any
+// page_p:any
+itemsPerPage = 6; // valor por defecto (desktop)
+mostrar_movil=false;
+setItemsPerPage() {
+    const width = window.innerWidth;
+    // PARA LISTAR VENTA CARDS
+    if (width < 600) {
+      // móvil
+      this.itemsPerPage = 2;
+    } else if (width < 800) {
+      // tablet
+      this.itemsPerPage = 4;
+    } else {
+      // desktop
+      this.itemsPerPage = 6;
+    }
+    // PARA MOSTRAR INTERFAZ VENTA EN MOVIL
+    if (width<600) {
+      this.mostrar_movil=true;
+    }else{
+      this.mostrar_movil=false;
+    }
+}
 
 
 selectedCardIndex: number = -1; // Índice de la tarjeta seleccionada
@@ -163,6 +193,7 @@ today:any;
 lista_Ventas:any[] = [];
 vista_ventas:any
 LISTAR_VENTAS_NUEVAS(){
+  this.page_v = 1;
   this.lista_Ventas = [];
   this.vista_ventas =1;
   const fecha = this.transformar_Fecha(this.select_Fecha);
@@ -184,6 +215,7 @@ LISTAR_VENTAS_NUEVAS(){
   ) 
 }
 LISTAR_VENTAS_EN_PROCESO(){
+  this.page_v = 1;
   this.lista_Ventas = [];
   this.vista_ventas =2;
   const fecha = this.transformar_Fecha(this.select_Fecha);
@@ -205,6 +237,7 @@ LISTAR_VENTAS_EN_PROCESO(){
   ) 
 }
 LISTAR_VENTAS_FINALIZADAS(){
+  this.page_v = 1;
   this.lista_Ventas = [];
   this.vista_ventas =3;
   const fecha = this.transformar_Fecha(this.select_Fecha);

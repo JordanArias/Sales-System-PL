@@ -104,7 +104,8 @@ cambiar_Pantalla(){
       return;
     }
     this.lista_Ventas=[];
-    this.pantalla_principal = 2; //PANTALLA AGREGAR VENTA
+    this.pantalla_principal = 2; // PANTALLA AGREGAR VENTA
+    this.pantalla_movil = false; // MUESTRA SELECCIONAR PRODUCTO PRIMERO
     // this.cargarDatos_Para_AgregarVenta();
   }else{
     this.pantalla_principal= 1; //PANTALLA LISTA VENTAS
