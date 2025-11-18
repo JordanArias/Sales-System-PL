@@ -25,7 +25,7 @@ export class UsuariosComponent {
     }
 
 filterPost='';
-page: number = 1; // Página inicial
+//page: number = 1; // Página inicial
 //Variable para Listar usuarios
   usuarios:any = [{
     ci_usuario:0,
@@ -83,9 +83,39 @@ mostrarAdvertencia: boolean = false; // Advertencia en caso de error en el formu
 
 
  ngOnInit(){
-  this.ListarUsuarios()
+  this.ListarUsuarios();
+  
+  this.setItemsPerPage();
+  window.addEventListener('resize', () => this.setItemsPerPage());
  }
 
+
+
+ // filterPost:any;
+page:any
+// page_p:any
+itemsPerPage = 9; // valor por defecto (desktop)
+mostrar_movil=false;
+setItemsPerPage() {
+    const width = window.innerWidth;
+    // PARA LISTAR VENTA CARDS
+    if (width < 600) {
+      // móvil
+      this.itemsPerPage = 7;
+    } else if (width < 800) {
+      // tablet
+      this.itemsPerPage = 8;
+    } else {
+      // desktop
+      this.itemsPerPage = 9;
+    }
+    // PARA MOSTRAR INTERFAZ VENTA EN MOVIL
+    if (width<600) {
+      this.mostrar_movil=true;
+    }else{
+      this.mostrar_movil=false;
+    }
+}
 
  limpiarUserForm(){
   this.user.ci_usuario='',

@@ -27,43 +27,84 @@
           <div class="row mx-0 d-flex align-items-center">
             <div class="col-1 col-sm-1 col-md-1 col-lg-1">#</div>
             <div class="col-3 col-sm-3 col-md-3 col-lg-2">CI</div>
-            <div class="col-2 col-sm-2 col-md-2 col-lg-2">Nombre</div>
-            <div class="col-2 col-sm-2 col-md-2 col-lg-2">Apellidos</div>
-            <div class="col-4 col-sm-4 col-md-4 col-lg-5 text-center">Opciones</div>
+            <!-- Nombre y Apellido Usuario DESKTOP-->
+            <div class="opciones-desktop col-3 col-sm-3 col-md-2 col-lg-2">Nombre</div>
+            <div class="opciones-desktop col-3 col-sm-3 col-md-2 col-lg-2">Apellidos</div>
+            <!-- Nombre y Apellido Usuario MOVIL-->
+            <div class="opciones-movil col-5 col-sm-5 col-md-2 col-lg-2">Nombres</div>
+            <div class="col-2 col-sm-2 col-md-4 col-lg-5 text-center">Op</div>
           </div>
         </li>
         <!-- LISTA USUARIOS -->
-        <li class="list-group-item" *ngFor="let usu of usuarios | paginate: { itemsPerPage: 9, currentPage: page } | filter:filterPost: ['nom_usu', 'ap_usu', 'ci_usuario']; let i = index">
+        <li class="list-group-item" *ngFor="let usu of usuarios | paginate: { itemsPerPage: itemsPerPage, currentPage: page } | filter:filterPost: ['nom_usu', 'ap_usu', 'ci_usuario']; let i = index">
           <div class="row mx-0 d-flex align-items-center">
             <!-- # -->
-            <div class="col-1 col-sm-1 col-md-1 col-lg-1">
-               {{i+1}}
-            </div>
+            <div class="col-1 col-sm-1 col-md-1 col-lg-1 ">{{i+1}}</div>
             <!-- CI Usuario -->
-            <div class="col-3 col-sm-3 col-md-3 col-lg-2">
-                  <div class="col-12 px-0" style="color: #d4da8f">{{usu.ci_usuario}}</div>
-            </div>
-            <!-- Nombre Usuario -->
-            <div class="col-2 col-sm-2 col-md-2 col-lg-2">
-                  <div class="col-12 px-0">{{usu.nom_usu}}</div>    
-            </div>
-            <!-- Apellido Usuario -->
-            <div class="col-2 col-sm-2 col-md-2 col-lg-2">{{usu.ap_usu}}</div>
+            <div class="col-3 col-sm-3 col-md-3 col-lg-2" style="color: #d4da8f">{{usu.ci_usuario}}</div>
+            <!-- Nombre Usuario DESKTOP-->
+            <div class="opciones-desktop col-3 col-sm-3 col-md-2 col-lg-2">{{usu.nom_usu}}</div>
+            <!-- Apellido Usuario DESKTOP-->
+            <div class="opciones-desktop col-3 col-sm-3 col-md-2 col-lg-2">{{usu.ap_usu}}</div>
+
+            <!-- Nombre Apellido Usuario MOVIL -->
+            <div class="opciones-movil col-5 col-sm-5 col-md-2 col-lg-2">{{usu.nom_usu}} {{usu.ap_usu}}</div>
+
             <!-- Opciones -->
-            <div class="col-4 col-sm-4 col-md-4 col-lg-5 d-flex justify-content-evenly container-btn">
-              <button class="btn p-0" title="Modificar usuario" (click)="showModalModificar(usu)"> <span class="px-0"><img src="../assets/images/icons/icon-options/editar.png"></span></button>
-              <button class="btn p-0" title="Eliminar usuario" (click)="showModalEliminar(modalAgregarUsuario,usu.ci_usuario,usu.nom_usu)"> <span class="px-0"><img src="../assets/images/icons/icon-options/eliminar.png"></span></button>
-              <button class="btn p-0" title="Agregar roles" (click)="showModalRolesUsuario(modalRolesUsuario, usu.ci_usuario)"> <span class="px-0"><img src="../assets/images/icons/icon-options/addrol.png"></span></button>
-              <button class="btn p-0" title="Restablecer contraseña" (click)="enviarSolicitudRecuperacion(usu)"> <span class="px-0"><img src="../assets/images/icons/icon-options/recuperar.png"></span></button>
+            <div class="col-2 col-sm-2 col-md-4 col-lg-5 p-0 d-flex justify-content-evenly container-btn">
+
+              <div class="opciones-desktop">
+                <button class="btn p-0" title="Modificar usuario" (click)="showModalModificar(usu)"> <span class="px-0"><img src="../assets/images/icons/icon-options/editar.png"></span></button>
+                <button class="btn p-0" title="Eliminar usuario" (click)="showModalEliminar(modalAgregarUsuario,usu.ci_usuario,usu.nom_usu)"> <span class="px-0"><img src="../assets/images/icons/icon-options/eliminar.png"></span></button>
+                <button class="btn p-0" title="Agregar roles" (click)="showModalRolesUsuario(modalRolesUsuario, usu.ci_usuario)"> <span class="px-0"><img src="../assets/images/icons/icon-options/addrol.png"></span></button>
+                <button class="btn p-0" title="Restablecer contraseña" (click)="enviarSolicitudRecuperacion(usu)"> <span class="px-0"><img src="../assets/images/icons/icon-options/recuperar.png"></span></button>
+              </div>
+
+              <div class="opciones-movil">
+                <div ngbDropdown class="d-inline-block">
+
+                  <!-- Botón que abre el menú -->
+                  <button class="btn"
+                          id="dropdownOpciones"
+                          ngbDropdownToggle
+                          style="background: #f3f3f3; margin-left: 10px; padding: 0px; width: 30px; height: 29px;">
+                  </button>
+              
+                  <!-- Menú desplegable -->
+                  <div ngbDropdownMenu aria-labelledby="dropdownOpciones" style="min-width: 190px; background: #3c4a64; color: #fff; font-size: 17px; letter-spacing: 1px;">
+              
+                    <div class="dropdown-item-opcion" (click)="showModalModificar(usu)">
+                      Modificar usuario
+                    </div>
+              
+                    <div class="dropdown-item-opcion" (click)="showModalEliminar(modalAgregarUsuario, usu.ci_usuario, usu.nom_usu)">
+                      Eliminar usuario
+                    </div>
+              
+                    <div class="dropdown-item-opcion" (click)="showModalRolesUsuario(modalRolesUsuario, usu.ci_usuario)">
+                      Agregar roles
+                    </div>
+              
+                    <div class="dropdown-item-opcion" (click)="enviarSolicitudRecuperacion(usu)">
+                      Restablecer contraseña
+                    </div>
+              
+                  </div>
+              
+                </div>
+                
+              </div>
+
             </div>
           </div>
         </li>
-        <li class="list-group-item custom-pagination pt-2">
+        <li class="list-group-item custom-pagination pt-2 d-flex justify-content-between">
           <!-- Controles de paginación -->
           <pagination-controls 
           (pageChange)="page = $event" 
           previousLabel="Anterior" 
-          nextLabel="Siguiente"        
+          nextLabel="Siguiente"   
+          [responsive]="true"      
           style="text-align: center;">
          </pagination-controls>
         </li>
