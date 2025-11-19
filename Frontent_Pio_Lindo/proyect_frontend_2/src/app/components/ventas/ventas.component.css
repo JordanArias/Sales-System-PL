@@ -11,25 +11,30 @@
 
 /************************************** MENSAJE TOAST ****************************************/
 #toast {
-  max-width: 30%;
-  min-width: 25%;
   position: fixed;
-  bottom: -3%;
-  right: 22%;
-  transform: translate(-50%, -50%); /* Alinea al centro de la pantalla */
+  bottom: 20px;          /* separación desde abajo */
+  left: 50%;
+  transform: translateX(-50%);
+  
+  min-width: 30%;              /* DESKTOP */
+  max-width: 500px;      /* opcional: no se expande demasiado */
   user-select: none;
   /* visibility: visible;
-  display: block;  */
+  display: block; */
+
+  z-index: 99999;        /* siempre arriba */
 }
-#toast .toast-body{
+
+#toast .toast-body {
   display: flex;
+  align-items: center;
   font-weight: 500;
   color: #f3f3f3;
   font-size: 18px;
   letter-spacing: 1px;
-  align-items: center;
 }
-#toast img{
+
+#toast img {
   width: 30px;
 }
 
@@ -827,9 +832,5 @@ input[type="number"] {
     border: none;
     background: #277e1b;
     padding: 4px 12px;
-  }
-  #toast{
-    max-width: 99%;
-    right: -50%;
   }
 }

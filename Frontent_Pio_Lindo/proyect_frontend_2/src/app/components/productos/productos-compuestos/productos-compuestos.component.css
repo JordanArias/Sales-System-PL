@@ -1,25 +1,32 @@
 /************************************** MENSAJE TOAST ****************************************/
 #toast {
-  width: 22%;
   position: fixed;
-  bottom: 0%; /* Centra verticalmente */
-  right: -10%; /* Centra horizontalmente */
-  transform: translate(-50%, -50%); /* Alinea al centro de la pantalla */
+  bottom: 20px;          /* separación desde abajo */
+  left: 50%;
+  transform: translateX(-50%);
+  
+  min-width: 30%;            /* DESKTOP */
+  max-width: 500px;      /* opcional: no se expande demasiado */
   user-select: none;
   /* visibility: visible;
-  display: block;  */
+  display: block; */
+
+  z-index: 99999;        /* siempre arriba */
 }
-#toast .toast-body{
+
+#toast .toast-body {
   display: flex;
+  align-items: center;
   font-weight: 500;
   color: #f3f3f3;
   font-size: 18px;
   letter-spacing: 1px;
-  align-items: center;
 }
-#toast img{
+
+#toast img {
   width: 30px;
 }
+
 
 .container-agregar button {
   font-weight: 500;
@@ -188,10 +195,10 @@
 
 /* CHECK - BOX GRANDE */
 .checkbox-grande {
-  transform: scale(1.5);
+  transform: scale(1.5); /* Ajusta el valor según el tamaño que desees */
   -webkit-transform: scale(1.7);
   background-color: #30445f;
-  width: 7%;
+  width: 25px;
   height: 21px;
   border: none;
 }
@@ -346,7 +353,9 @@
   #modalProductoUnico .insumo label, #modalProductoUnico .cantidad-insumo label{
     width: 120px;
   }
-
+  #toast{
+    width: 99%;
+  }
 }
 
 

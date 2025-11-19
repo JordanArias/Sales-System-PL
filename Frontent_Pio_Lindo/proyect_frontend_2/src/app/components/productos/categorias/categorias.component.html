@@ -13,7 +13,10 @@
         </div>
         <!-- Boton Agregar -->
         <div class="container-agregar">
-          <button class="btn btn-secondary" (click)="showModal_Categoria(0,1)">Agregar Categoría</button>
+          <button class="btn btn-secondary" (click)="showModal_Categoria(0,1)">
+            <span class="desktop">Agregar Categoría</span>
+            <span class="movil">Agregar</span>
+          </button>
         </div>
   
     </div>
@@ -22,33 +25,65 @@
     <div class="container-lista">
    
       <ul class="list-group p-0">
+
           <!-- Titulo Principal -->
         <li class="list-group-item d-flex justify-content-between">
           <h3 class="m-0 px-2 py-2">Categorías</h3>
-        </li>        
-        <!-- Titulos -->
+        </li>      
+
+        <!-- TITULOS -->
         <li class="list-group-item">
           <div class="row mx-0 d-flex align-items-center">
-            <div class="col-4 cell">Nombre</div>
-            <div class="col-4 cell text-center">Opciones</div>
-            <div class="col-4 text-center">Subcategorías</div>
+            <div class="col-6 px-1 col-sm-4">NOMBRE</div>
+            <div class="col-4 px-0 text-center"><span class="desktop">SUBCATEGORÍA</span> <span class="movil">SUB-C</span></div>
+            <div class="col-2 px-0 col-sm-4 cell text-center"><span class="desktop">OPCIONES</span> <span class="movil">OP</span></div>
           </div>
         </li>
-        <!-- Lista Opciones -->
-        <li class="list-group-item" *ngFor="let cat of lista_categorias | paginate: { itemsPerPage: 8, currentPage: page } | filter:filterPost: ['nombre']; let i = index">
+
+        <!-- LISTA CATEGORÍAS -->
+        <li class="list-group-item d-flex flex-column justify-content-center " *ngFor="let cat of lista_categorias | paginate: { itemsPerPage: 8, currentPage: page } | filter:filterPost: ['nombre']; let i = index">
           <div class="row mx-0 d-flex align-items-center">
             <!-- Nombre -->
-            <div class="col-4 cell">
+            <div class="col-6 px-1 col-sm-4 ">
                   <div class="col-12 px-0" style="color: #d4da8f">{{cat.nombre}}</div>
             </div>
-            <!-- Opciones -->
-            <div class="col-4 d-flex justify-content-evenly container-btn cell">
-              <button class="btn p-0" > <span class="px-0" (click)="showModal_Categoria(cat,2)"><img src="../assets/images/icons/icon-options/editar.png"></span></button>
-              <button class="btn p-0" > <span class="px-0" (click)="showModalEliminar_Categoria(cat)"><img src="../assets/images/icons/icon-options/eliminar.png"></span></button>
-            </div>
             <!-- Subcategorias -->
-            <div class="col-4 d-flex justify-content-evenly container-btn">
+            <div class="col-4 px-0 d-flex justify-content-evenly container-btn">
               <button class="btn p-0" > <span class="px-0" (click)="showModal_Subcategoria(cat)"><img src="../assets/images/icons/icon-options/subcategoria.png"></span></button>
+            </div>
+            <!-- Opciones -->
+            <div class="col-2 px-0 col-sm-4 d-flex justify-content-evenly container-btn">
+              <div class="desktop">
+                <button class="btn p-0" > <span class="px-0" (click)="showModal_Categoria(cat, 2)"><img src="../assets/images/icons/icon-options/editar.png"></span></button>
+                <button class="btn p-0" > <span class="px-0" (click)="showModalEliminar_Categoria(cat)"><img src="../assets/images/icons/icon-options/eliminar.png"></span></button>            
+              </div>
+
+              <div class="movil">
+                  <div ngbDropdown class="d-inline-block">
+  
+                    <!-- Botón que abre el menú -->
+                    <button class="btn"
+                            id="dropdownOpciones"
+                            ngbDropdownToggle
+                            style="background: #495977; color: #fff; padding: 0px; width: 30px; height: 29px;">
+                    </button>
+                
+                    <!-- Menú desplegable -->
+                    <div ngbDropdownMenu aria-labelledby="dropdownOpciones" style="min-width: 190px; background: #495977; color: #fff; font-size: 15px; letter-spacing: 1px;">
+                
+                      <div class="dropdown-item-opcion" (click)="showModal_Categoria(cat,2)">
+                        Modificar Categoría
+                      </div>
+                
+                      <div class="dropdown-item-opcion" (click)="showModalEliminar_Categoria(cat)">
+                        Eliminar Categoría
+                      </div>
+                
+                
+                    </div>
+                
+                  </div>           
+              </div>
             </div>
           </div>
         </li>
@@ -57,7 +92,8 @@
           <pagination-controls 
           (pageChange)="page = $event" 
           previousLabel="Anterior" 
-          nextLabel="Siguiente"        
+          nextLabel="Siguiente"
+          [responsive]="true"          
           style="text-align: center;">
          </pagination-controls>
         </li>

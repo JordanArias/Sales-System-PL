@@ -1,23 +1,29 @@
 /************************************** MENSAJE TOAST ****************************************/
 #toast {
-  width: 22%;
   position: fixed;
-  bottom: 0%; /* Centra verticalmente */
-  right: -10%; /* Centra horizontalmente */
-  transform: translate(-50%, -50%); /* Alinea al centro de la pantalla */
+  bottom: 20px;          /* separación desde abajo */
+  left: 50%;
+  transform: translateX(-50%);
+  
+  min-width: 30%;            /* DESKTOP */
+  max-width: 500px;      /* opcional: no se expande demasiado */
   user-select: none;
   /* visibility: visible;
-  display: block;  */
+  display: block; */
+
+  z-index: 99999;        /* siempre arriba */
 }
-#toast .toast-body{
+
+#toast .toast-body {
   display: flex;
+  align-items: center;
   font-weight: 500;
   color: #f3f3f3;
   font-size: 18px;
   letter-spacing: 1px;
-  align-items: center;
 }
-#toast img{
+
+#toast img {
   width: 30px;
 }
 
@@ -64,7 +70,7 @@
   font-size: 18px;
   font-weight: 400;
   padding: 0px;
-  height: 49px;
+  min-height: 49px;
   color: #dcdcdc;
   background: #252d3c;
   border: none;
@@ -257,4 +263,98 @@
   color: #ffffff !important;
   /* border: 1px solid #5a5a5a !important; */
   outline: none !important;
+}
+
+
+
+
+
+
+
+
+
+.dropdown-item-opcion {
+  padding: 8px 15px;
+  cursor: pointer;
+  border-bottom: 1px solid #4c5b77;
+}
+
+.dropdown-item-opcion:last-child {
+  border-bottom: none;
+}
+
+.dropdown-item-opcion:hover {
+  background: #50607d;
+}
+.ngx-pagination {
+  padding: 0px;
+}
+.desktop{
+  display: block;
+}
+.movil{
+  display: none;
+}
+@media(max-width:1000px){
+  #toast{
+    width: 40%;
+  }
+}
+
+@media(max-width:800px){
+  .desktop{
+    display: none;
+  }
+  .movil{
+    display: block;
+  }
+
+  /*** Encabezado ***/
+  .container-buscador input{
+    width: 90px;
+  }
+  .container-agregar button {
+    font-size: 15px;
+  }
+  .container_volver img{
+    width: 30px;
+  }
+
+  .container-lista ul li h3{
+    font-size: 17px;
+  }
+  .container-lista ul li{
+    font-size: 15px;
+  }
+  .container-buscador input[type="text"]::placeholder{
+    font-size: 15px;
+    color: #d6d6d6a2;
+  }
+
+  /* GENERAL */
+  .content-modal{
+    font-size: 15px;
+  }
+  #modalAgregarComplemento .modal-lg-custom{
+    max-width: 100%; /* Puedes ajustar este valor según lo necesites */
+  }
+  #modalEliminarComplemento .modal-lg-custom, #modalEstadoComplemento .modal-lg-custom{
+    max-width: 100%;
+  }
+  .content-modal form input[type="text"],
+  .content-modal form input[type="password"],
+  .content-modal form input[type="number"],
+  .custom-select{
+    font-size: 15px;
+  }
+  #toast{
+    width: 99%;
+  }
+}
+
+
+@media(max-width:300px){
+  .container-lista ul li{
+    font-size: 13px;
+  }
 }

@@ -15,7 +15,10 @@
         </div>
         <!-- Boton Agregar -->
         <div class="container-agregar">
-          <button class="btn btn-secondary" (click)="showModalAgregar_Complemento()">Agregar Complemento</button>
+          <button class="btn btn-secondary" (click)="showModalAgregar_Complemento()">
+            <span class="desktop">Agregar Complemento</span>
+            <span class="movil">Agregar</span>
+          </button>
         </div>
   
     </div>
@@ -26,45 +29,92 @@
           <!-- Titulo Principal -->
         <li class="list-group-item d-flex" style="flex-direction: row; justify-content: space-between;">
           <h3 class="m-0 px-2 py-2">Complementos</h3>
-           <div class="m-0 px-2 d-flex">
+          <div class="m-0 px-2 desktop">
+            <div class="d-flex">
               <button class="btn px-3" type="button" style="color: #f4f4f4;font-size: 17px;" (click)="seleccionarOpcion(2)">Todo</button>
               <button class="btn px-3" type="button" style="color: #f4f4f4;font-size: 17px;" (click)="seleccionarOpcion(0)">Activos</button>
               <button class="btn px-3" type="button" style="color: #f4f4f4;font-size: 17px;" (click)="seleccionarOpcion(1)">Inactivos</button>
-           </div>
+            </div>
+
+          </div>
+         
+          <div class="m-0 px-2 movil">
+            <select class="form-select"
+                    style="font-size: 16px; background-color: #495977;; color: #f3f3f3; border: none;"
+                    (change)="seleccionarOpcion( +$any($event.target).value )">
+
+              <option [value]="2">Todo</option>
+              <option [value]="0">Activos</option>
+              <option [value]="1">Inactivos</option>
+
+            </select>
+
+          </div>
         </li>        
         <!-- Titulos -->
-        <li class="list-group-item">
+        <li class="list-group-item" style="min-height: 49px;">
           <div class="row mx-0 d-flex align-items-center">
-            <div class="col-3 cell"><h5>Nombre</h5></div>
-            <div class="col-5 cell"><h5>Descripción</h5></div>
-            <div class="col-2 cell"><h5>Estado</h5></div>
-            <div class="col-2 text-center"><h5>Opciones</h5></div>
+            <div class="col-4 col-sm-3 cell px-1 px-sm-2">NOMBRE</div>
+            <div class="col-4 col-sm-5 cell px-1 px-sm-2">DESCRIPCIÓN</div>
+            <div class="col-2 cell text-center px-0 px-sm-2"><span class="desktop">ESTADO</span> <span class="movil">E</span></div>
+            <div class="col-2 text-center px-0 px-sm-2"><span class="desktop">OPCIONES</span> <span class="movil">OP</span></div>
           </div>
         </li>
         <!-- Lista Opciones -->
         <li class="list-group-item" *ngFor="let com of lista_complementos_filtrados  | paginate: { itemsPerPage: 8, currentPage: page }| filter:filterPost: ['nombre']; let i = index">
           <div class="row mx-0 d-flex align-items-center">
             <!-- NOMBRE -->
-            <div class="col-3 cell">
-                  <div class="col-12 px-0" style="color: #d4da8f">{{com.nombre}}</div>
+            <div class="col-4 col-sm-3 cell px-1 px-sm-2" style="color: #d4da8f">
+                {{com.nombre}}
             </div>
             <!-- DESCRIPCION -->
-            <div class="col-5 cell">
-                  <div class="col-12 px-0">{{com.descripcion}}</div>    
+            <div class="col-4 col-sm-5 cell px-1 px-sm-2">
+                {{com.descripcion}}
             </div>
             <!-- ESTADO -->
-            <div class="col-2 cell">
-              <div class="btn py-1" title="Desactivar Complemento" style="color: #f4f4f4;background: #335843;width: 60%;" *ngIf="com.estado==0" (click)="showModalEstado_Complemento(com)">Activo</div>
-              <div class="btn" title="Activar Complemento" style="color: #f4f4f4;background: #583333;width: 60%" *ngIf="com.estado==1" (click)="showModalEstado_Complemento(com)">Inactivo</div> 
+            <div class="col-2 cell px-0 px-sm-2 d-flex justify-content-center">
+              <div class="btn py-1" title="Desactivar Complemento" style="color: #f4f4f4;background: #335843;width: 60%;" *ngIf="com.estado==0" (click)="showModalEstado_Complemento(com)">
+                <span class="desktop">Activo</span>
+                <span class="movil">A</span>
+              </div>
+              <div class="btn" title="Activar Complemento" style="color: #f4f4f4;background: #583333;width: 60%" *ngIf="com.estado==1" (click)="showModalEstado_Complemento(com)">
+                <span class="desktop">Inactivo</span>
+                <span class="movil">I</span>
+              </div> 
             </div>
             <!-- Opciones -->
-            <div class="col-2 d-flex justify-content-evenly container-btn">
-              <button class="btn p-0" > <span class="px-0" title="Modificar Complemento" (click)="showModalModificar_Complemento(com)">
-                <img src="../assets/images/icons/icon-options/editar.png"></span>
-              </button>
-              <button class="btn p-0" > <span class="px-0" title="Eliminar Complemento" (click)="showModalEliminar_Complemento(com)">
-                <img src="../assets/images/icons/icon-options/eliminar.png"></span>
-              </button>
+            <div class="col-2 px-0 px-sm-2 d-flex justify-content-evenly container-btn">
+              <div class="desktop">
+                <button class="btn p-0" > <span class="px-0" (click)="showModalModificar_Complemento(com)"><img src="../assets/images/icons/icon-options/editar.png"></span></button>
+                <button class="btn p-0" > <span class="px-0" (click)="showModalEliminar_Complemento(com)"><img src="../assets/images/icons/icon-options/eliminar.png"></span></button>            
+              </div>
+
+              <div class="movil">
+                  <div ngbDropdown class="d-inline-block">
+  
+                    <!-- Botón que abre el menú -->
+                    <button class="btn"
+                            id="dropdownOpciones"
+                            ngbDropdownToggle
+                            style="background: #495977; color: #fff; margin-left: 10px; padding: 0px; width: 30px; height: 29px;">
+                    </button>
+                
+                    <!-- Menú desplegable -->
+                    <div ngbDropdownMenu aria-labelledby="dropdownOpciones" style="min-width: 190px; background: #495977; color: #fff; font-size: 15px; letter-spacing: 1px;">
+                
+                      <div class="dropdown-item-opcion" (click)="showModalModificar_Complemento(com)">
+                        Modificar Complemento
+                      </div>
+                
+                      <div class="dropdown-item-opcion" (click)="showModalEliminar_Complemento(com)">
+                        Eliminar Complemento
+                      </div>
+                
+                
+                    </div>
+                
+                  </div>           
+              </div>
             </div>
           </div>
         </li>
@@ -73,7 +123,8 @@
           <pagination-controls 
           (pageChange)="page = $event" 
           previousLabel="Anterior" 
-          nextLabel="Siguiente"        
+          nextLabel="Siguiente"  
+          [responsive]="true"       
           style="text-align: center;">
          </pagination-controls>
       </li>
@@ -110,7 +161,7 @@
           <!-- <form #formInsumo="ngForm" class="row g-3" (ngSubmit)="Agregar_Insumo()"> -->
             <form #formComplemento="ngForm" class="row g-3">
               <!-- MOMBRE PRODUCTO -->
-              <div class="col-5 mb-1 mt-2">
+              <div class="col-12 col-sm-5 mb-1 mt-2">
                 <label class="form-label">Nombre:</label>
                 <input type="text" #nombre="ngModel" [(ngModel)]="complementoForm.nombre" name="nombre" placeholder="Nombre" [class.is-invalid]="(nombre.touched || mostrarAdvertencias) && complementoForm.nombre.length == 0" class="form-control" required>
                 <div class="advertencias" *ngIf="(nombre.touched || mostrarAdvertencias) && complementoForm.nombre.length == 0">
@@ -119,7 +170,7 @@
                 </div>
               </div>
               <!-- DESCRIPCION -->
-              <div class="col-7 mb-1 mt-2">
+              <div class="col-12 col-sm-7 mb-1 mt-2">
                 <label class="form-label">Descripcion:</label>
                 <input type="text" #descripcion="ngModel" [(ngModel)]="complementoForm.descripcion" name="descripcion" [class.is-invalid]="(descripcion.touched || mostrarAdvertencias) && complementoForm.descripcion.length == 0" class="form-control" class="form-control" placeholder="Descripción" required>
                 <div class="advertencias" *ngIf="(descripcion.touched || mostrarAdvertencias) && complementoForm.descripcion.length == 0">
@@ -129,11 +180,11 @@
               </div>
       <!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
             <hr>
-            <h4 class="my-1 px-1">Opciones</h4>
+            <h4 class="my-1 px-1 text-center">Opciones</h4>
             <!-- FORMULARIO DE SELECCION DE OPCIONES -->
-            <form #formOpcion="ngForm" class="row g-3">  
+            <form #formOpcion="ngForm" class="row g-3 px-0">  
                 <!-- SELECCIONAR OPCION -->
-                  <div class="col-9 mb-0 mt-0">
+                  <div class="col-12 col-sm-9 mb-2 mb-sm-0 mt-0">
                     <div class="d-flex">
                       <label class="form-label m-0 mb-2 me-2 text-center">Opción:</label>
                       <div style="width: 100%;">
@@ -177,7 +228,7 @@
                   </div>
 
                   <!-- BOTON ADICIONAR OPCION -->
-                  <div class="col-3 mb-2 mt-0">
+                  <div class="col-12 colsm-3 mb-2 mt-0">
                     <button type="button" class="btn btn-secondary" style="border: none; background: #1d5da2; padding: 0px; height: 30px; width: 100%; font-weight: 500;" 
                             (click)="adicionar_Complemento_Opcion(formOpcion)">Adicionar
                     </button>
@@ -190,24 +241,24 @@
                 <!-- TITULO OPCION SELECCIONADA -->
                 <li class="list-group-item">
                   <div class="row mx-0 d-flex align-items-center">
-                    <div class="col-3 cell">Opción</div>
-                    <div class="col-7 cell">Descripción</div>
-                    <div class="col-2 text-center">Eliminar</div>
+                    <div class="col-4 col-sm-3 cell">Opción</div>
+                    <div class="col-6 col-sm-7 cell">Descripción</div>
+                    <div class="col-2 text-center"><span class="desktop">Eliminar</span> <span class="movil">E</span></div>
                   </div>
                 </li>
                 <!-- OPCIONES SELECCIONADOS -->
                 <li class="list-group-item" *ngFor="let co of complemento_opcion; let i = index">
                   <div class="row mx-0 d-flex align-items-center">
                     <!-- NOMBRE -->
-                    <div class="col-3 cell">
+                    <div class="col-4 col-sm-3  cell">
                       <div class="col-12 px-0" style="color: #d4da8f">{{co.nom_opcion}}</div>
                     </div>
                     <!-- DESCRIPCION -->
-                    <div class="col-7 cell">
+                    <div class="col-6 col-sm-7 cell">
                       <div class="col-12 px-0">{{co.descripcion}}</div>
                     </div>
                     <!-- BOTON ELIMINAR -->
-                    <div class="col-2 d-flex justify-content-evenly container-btn">
+                    <div class="col-2 px-0 d-flex justify-content-evenly container-btn">
                       <button type="button" class="btn p-0" (click)="eliminar_Complemento_Opcion(i)"> <span class="px-0"><img src="../assets/images/icons/icon-options/eliminar.png"></span></button>
                     </div>
                   </div>

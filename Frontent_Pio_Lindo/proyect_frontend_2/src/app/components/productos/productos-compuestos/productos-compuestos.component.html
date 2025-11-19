@@ -238,9 +238,9 @@
             </ng-select>
            </div>
            <!-- Para Cocina -->          
-            <div class="col-12 mb-6 mt-1">
+            <div class="col-12 mb-6 mt-3 d-flex">
               <label class="form-label mb-0">Para Cocina:</label>
-              <div class="form-check ms-2">
+              <div class="form-check" style="margin-left: 15px;">
                 <input class="form-check-input checkbox-grande" type="checkbox" #cocina="ngModel" [(ngModel)]="productoForm.cocina" name="cocina">
               </div>
             </div>
@@ -325,9 +325,9 @@
                     <!-- TITULO INSUMO SELECCIONADO -->
                     <li class="list-group-item">
                         <div class="row mx-0 d-flex align-items-center">
-                        <div class="col-4 px-1 px-sm-1 cell">Insumo</div>
-                        <div class="col-3 px-0 px-sm-1 cell">Medida</div>
-                        <div class="col-3 px-0 px-sm-1 cell"> <span class="desktop">Cantidad</span> <span class="movil">Cant.</span></div>
+                        <div class="col-4 px-1 px-sm-1">Insumo</div>
+                        <div class="col-3 px-0 px-sm-1">Medida</div>
+                        <div class="col-3 px-0 px-sm-1"> <span class="desktop">Cantidad</span> <span class="movil">Cant.</span></div>
                         <div class="col-2 px-0 px-sm-1 text-center">
                           <span class="desktop">Eliminar</span>
                           <span class="movil">E</span>
@@ -338,15 +338,15 @@
                     <li class="list-group-item" *ngFor="let ins of insumos_productos_Form; let i = index">
                       <div class="row mx-0 d-flex align-items-center">
                         <!-- NOMBRE -->
-                        <div class="col-4 px-1 mx-sm-1 cell" style="color: #d4da8f">
+                        <div class="col-4 px-1" style="color: #d4da8f">
                             {{ins.nombre}}
                         </div>
                         <!-- MEDIDA -->
-                        <div class="col-3 px-0 mx-sm-1 cell">
+                        <div class="col-3 px-0">
                             {{ins.nom_medida}}
                         </div>
                         <!-- CANTIDAD -->
-                        <div class="col-3 px-0 mx-sm-1 cell">
+                        <div class="col-3 px-0">
                             <input type="number" #cantidad="ngModel" [(ngModel)]="ins.cantidad" [name]="'cantidad' + i" class="form-control" placeholder="cantidad" min="1" required>
                             <div class="advertencias" *ngIf="ins.cantidad<=0" title="Cantidad debe ser > 0 ">
                             <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
@@ -354,7 +354,7 @@
                             </div>
                         </div>
                         <!-- BOTON ELIMINAR -->
-                        <div class="col-2 px-0 mx-sm-1 d-flex justify-content-evenly container-btn">
+                        <div class="col-2 px-0 d-flex justify-content-evenly container-btn">
                             <button type="button" class="btn p-0" (click)="eliminar_Insumo_Producto(i)"> 
                               <span class="px-0"><img src="../assets/images/icons/icon-options/eliminar.png"></span>
                             </button>
@@ -368,7 +368,7 @@
         <!-- -------------------------------------------------------------------------------------------------------------------------------------------- -->
         <!-- CONTAINER COMPLEMENTOS -->
             <div class="px-0" *ngIf="opcion_insumo_complemento == 2">
-                <!-- ------------------------------------------------------------- INSUMOS --------------------------------------------------------------------------------->
+                <!-- ------------------------------------------------------------- COMPLEMENTOS --------------------------------------------------------------------------------->
                 <!-- COMPLEMENTO FORM ADICIONAR -->
                 <h4 class="mb-4 px-1 text-center">Complementos</h4>
                 <form #formComplemento="ngForm" class="row g-3 m-0">  
