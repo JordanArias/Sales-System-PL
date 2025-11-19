@@ -64,7 +64,7 @@
   font-size: 18px;
   font-weight: 400;
   padding: 0px;
-  height: 49px;
+  min-height: 49px;
   color: #dcdcdc;
   background: #252d3c;
   border: none;
@@ -344,7 +344,7 @@
     max-width: 100%;
   }
   #modalProductoUnico .insumo label, #modalProductoUnico .cantidad-insumo label{
-    width: 95px;
+    width: 120px;
   }
 
 }

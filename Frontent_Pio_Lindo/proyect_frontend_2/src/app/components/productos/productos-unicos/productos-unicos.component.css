@@ -326,10 +326,11 @@
   #modalEliminarProductoUnico .modal-lg-custom, #modalEstadoProductoUnico .modal-lg-custom{
     max-width: 100%;
   }
+}
 
-  @media(max-width:300px){
-    .container-lista ul li{
-      font-size: 13px;
-    }
+
+@media(max-width:300px){
+  .container-lista ul li{
+    font-size: 13px;
   }
 }
