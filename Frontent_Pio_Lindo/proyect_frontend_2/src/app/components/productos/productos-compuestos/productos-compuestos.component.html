@@ -15,7 +15,10 @@
       </div>
       <!-- Boton Agregar -->
       <div class="container-agregar">
-        <button class="btn btn-secondary" (click)="showModalAgregar_Producto()">Agregar Compuesto</button>
+        <button class="btn btn-secondary" (click)="showModalAgregar_Producto()">
+          <span class="desktop">Agregar Compuesto</span>
+          <span class="movil">Agregar</span>
+        </button>
       </div>
 
     </div>
@@ -27,47 +30,110 @@
               <!-- Titulo Principal -->
         <li class="list-group-item d-flex" style="flex-direction: row; justify-content: space-between;">
           <h3 class="m-0 px-2 py-2">Productos Compuestos</h3>
-          <div class="m-0 px-2 d-flex">
-            <button class="btn px-3" type="button" style="color: #f4f4f4;font-size: 17px;" (click)="seleccionarOpcion(2)">Todo</button>
-            <button class="btn px-3" type="button" style="color: #f4f4f4;font-size: 17px;" (click)="seleccionarOpcion(0)">Activos</button>
-            <button class="btn px-3" type="button" style="color: #f4f4f4;font-size: 17px;" (click)="seleccionarOpcion(1)">Inactivos</button>
-         </div>
+          <div class="m-0 px-2 desktop">
+            <div class="d-flex">
+              <button class="btn px-3" type="button" style="color: #f4f4f4;font-size: 17px;" (click)="seleccionarOpcion(2)">Todo</button>
+              <button class="btn px-3" type="button" style="color: #f4f4f4;font-size: 17px;" (click)="seleccionarOpcion(0)">Activos</button>
+              <button class="btn px-3" type="button" style="color: #f4f4f4;font-size: 17px;" (click)="seleccionarOpcion(1)">Inactivos</button>
+            </div>
+
+          </div>
+         
+          <div class="m-0 px-2 movil">
+            <select class="form-select"
+                    style="font-size: 16px; background-color: #495977;; color: #f3f3f3; border: none;"
+                    (change)="seleccionarOpcion( +$any($event.target).value )">
+
+              <option [value]="2">Todo</option>
+              <option [value]="0">Activos</option>
+              <option [value]="1">Inactivos</option>
+
+            </select>
+
+          </div>
         </li>        
         <!-- Titulos -->
         <li class="list-group-item">
           <div class="row mx-0 d-flex align-items-center">
-            <div class="col-4 cell">NOMBRE</div>
-            <div class="col-2 cell">PRECIO</div>
-            <div class="col-2 cell">PS. PRECIO</div>
-            <div class="col-2 cell text-center">ACTIVO</div>
-            <div class="col-2 text-center">OP</div>
+            <div class="col-4 cell px-0 px-sm-2">NOMBRE</div>
+            <!-- DESKTOP -->
+            <div class="col-2 cell desktop">PRECIO</div>
+            <div class="col-2 cell desktop">PS PRECIO</div>
+            <!-- MOVIL -->
+            <div class="col-4 cell px-0 px-sm-2 movil">PRECIO</div>
+            
+            <div class="col-2 cell text-center px-0 px-sm-2">ACTIVO</div>
+            <div class="col-2 text-center px-0 px-sm-2">OP</div>
           </div>
         </li>
         <!-- Lista Cajas -->
         <li class="list-group-item" *ngFor="let pro of lista_productos_filtradas | paginate: { itemsPerPage: 8, currentPage: page } | filter:filterPost: ['nombre']; let i = index">
           <div class="row mx-0 d-flex align-items-center">
             <!-- Nombre -->
-            <div class="col-4 cell">
+            <div class="col-4 cell px-0 px-sm-2">
                   <div class="col-12 px-0" style="color: #d4da8f">{{pro.nombre}}</div>
             </div>
-            <!-- Precio -->
-            <div class="col-2 cell">
+             <!-- Precio  DESKTOP-->
+            <div class="col-2 cell desktop">
                   <div class="col-12 px-0">Bs. {{pro.precio}}</div>    
             </div>
-            <!-- PS. Precio -->
-            <div class="col-2 cell">
+            <!--Ps. Precio DESKTOP-->
+            <div class="col-2 cell desktop">
                   <div class="col-12 px-0">Ps. {{pro.ps_precio}}</div>    
             </div>
+            <!-- Precio MOVIL-->
+            <div class="col-4 cell px-0 px-sm-2 movil">
+              <div class="col-12 px-0">Bs. {{pro.precio}}</div>  
+              <div class="col-12 px-0">Ps. {{pro.ps_precio}}</div>   
+            </div>
+
             <!-- Estado -->
-            <div class="col-2 cell text-center">
-              <div class="btn" title="Desactivar Producto" style="color: #f4f4f4;background: #335843; width: 60%;" *ngIf="pro.estado==0" (click)="showModalEstado_Producto(pro)">Activo</div>
-              <div class="btn" title="Activar Producto" style="color: #f4f4f4;background: #583333; width: 60%;" *ngIf="pro.estado==1" (click)="showModalEstado_Producto(pro)">Inactivo</div>
+            <div class="col-2 cell text-center estado-producto px-0 px-sm-2">
+                <div class="btn px-0 px-sm-2" title="Desactivar Producto" style="color: #f4f4f4;background: #335843; width: 60%;" *ngIf="pro.estado==0" (click)="showModalEstado_Producto(pro)">
+                 <span class="desktop">Activo</span>
+                 <span class="movil">A</span>
+                </div>
+                <div class="btn" title="Activar Producto" style="color: #f4f4f4;background: #583333; width: 60%;" *ngIf="pro.estado==1" (click)="showModalEstado_Producto(pro)">
+                  <span class="desktop">Inactivo</span>
+                  <span class="movil">I</span>
+                </div>
             </div>
             <!-- Opciones -->
-            <div class="col-2 d-flex justify-content-evenly container-btn">
-              <button class="btn p-0" > <span class="px-0" (click)="showModalModificar_Producto(pro)"><img src="../assets/images/icons/icon-options/editar.png"></span></button>
-              <button class="btn p-0" > <span class="px-0" (click)="showModalEliminar_Producto(pro)"><img src="../assets/images/icons/icon-options/eliminar.png"></span></button>
+            <div class="col-2 d-flex justify-content-evenly container-btn px-0 px-sm-2">
+              <div class="desktop">
+                <button class="btn p-0" > <span class="px-0" (click)="showModalModificar_Producto(pro)"><img src="../assets/images/icons/icon-options/editar.png"></span></button>
+                <button class="btn p-0" > <span class="px-0" (click)="showModalEliminar_Producto(pro)"><img src="../assets/images/icons/icon-options/eliminar.png"></span></button>            
+              </div>
+
+              <div class="movil">
+                  <div ngbDropdown class="d-inline-block">
+  
+                    <!-- Botón que abre el menú -->
+                    <button class="btn"
+                            id="dropdownOpciones"
+                            ngbDropdownToggle
+                            style="background: #495977; color: #fff; margin-left: 10px; padding: 0px; width: 30px; height: 29px;">
+                    </button>
+                
+                    <!-- Menú desplegable -->
+                    <div ngbDropdownMenu aria-labelledby="dropdownOpciones" style="min-width: 190px; background: #495977; color: #fff; font-size: 15px; letter-spacing: 1px;">
+                
+                      <div class="dropdown-item-opcion" (click)="showModalModificar_Producto(pro)">
+                        Modificar Producto
+                      </div>
+                
+                      <div class="dropdown-item-opcion" (click)="showModalEliminar_Producto(pro)">
+                        Eliminar Producto
+                      </div>
+                
+                
+                    </div>
+                
+                  </div>           
+              </div>
+            
             </div>
+            
           </div>
         </li>
         <li class="list-group-item custom-pagination pt-2">
@@ -75,7 +141,8 @@
           <pagination-controls 
           (pageChange)="page = $event" 
           previousLabel="Anterior" 
-          nextLabel="Siguiente"        
+          nextLabel="Siguiente" 
+          [responsive]="true"           
           style="text-align: center;">
          </pagination-controls>
       </li>
@@ -111,7 +178,7 @@
       <div class="modal-body">
           <form #formProducto="ngForm" class="row g-3">
             <!-- MOMBRE PRODUCTO -->
-            <div class="col-5 mb-1 mt-1">
+            <div class="col-12 col-md-5 mb-1 mt-1">
               <label class="form-label mb-0">Nombre:</label>
               <input type="text" #nombre="ngModel" [(ngModel)]="productoForm.nombre" name="nombre" placeholder="Nombre" [class.is-invalid]="(nombre.touched || mostrarAdvertencias) && productoForm.nombre.length == 0" class="form-control" required>
               <div class="advertencias" *ngIf="(nombre.touched || mostrarAdvertencias) && productoForm.nombre.length == 0">
@@ -120,7 +187,7 @@
               </div>
             </div>
             <!-- PRECIO DE VENTA -->
-            <div class="col-3 mb-6 mt-1">
+            <div class="col-12 col-md-3 mb-6 mt-1">
               <label class="form-label mb-0">Precio de venta:</label>
               <input type="number" #precio="ngModel" [(ngModel)]="productoForm.precio" name="precio" placeholder="Precio" [class.is-invalid]="(precio.touched || mostrarAdvertencias) && (productoForm.precio==0 || productoForm.precio==null)" class="form-control" required>
               <div class="advertencias" *ngIf="(precio.touched || mostrarAdvertencias) && (productoForm.precio==0 || productoForm.precio==null)">
@@ -129,7 +196,7 @@
               </div>
             </div>
             <!-- PS. PRECIO DE VENTA -->
-            <div class="col-3 mb-6 mt-1">
+            <div class="col-12 col-md-3 mb-6 mt-1">
               <label class="form-label mb-0">Precio Arg:</label>
               <input type="number" #ps_precio="ngModel" [(ngModel)]="productoForm.ps_precio" name="ps_precio" placeholder="Ps. Precio" [class.is-invalid]="(ps_precio.touched || mostrarAdvertencias) && (productoForm.ps_precio==0 || productoForm.ps_precio==null)" class="form-control" required>
               <div class="advertencias" *ngIf="(ps_precio.touched || mostrarAdvertencias) && (productoForm.ps_precio==0 || productoForm.ps_precio==null)">
@@ -138,7 +205,7 @@
               </div>
             </div>
             <!-- SELECCIONAR CATEGORIA -->
-           <div class="col-4 mb-0 mt-1">
+           <div class="col-6 col-md-4 mb-0 mt-1">
               <label class="form-label mb-0">Categoria:</label>
               <ng-select class="custom-ng-select" 
                         [items]="lista_categorias"
@@ -157,7 +224,7 @@
               </div>
            </div>
            <!-- SELECCIONAR SUB-CATEGORIA -->
-           <div class="col-4 mb-0 mt-1">
+           <div class="col-6 mb-0 mt-1">
             <label class="form-label mb-0">Subcategoria:</label>
             <ng-select class="custom-ng-select"
                       [items]="sub_categorias_filtradas"
@@ -171,7 +238,7 @@
             </ng-select>
            </div>
            <!-- Para Cocina -->          
-            <div class="col-4 mb-6 mt-1">
+            <div class="col-12 mb-6 mt-1">
               <label class="form-label mb-0">Para Cocina:</label>
               <div class="form-check ms-2">
                 <input class="form-check-input checkbox-grande" type="checkbox" #cocina="ngModel" [(ngModel)]="productoForm.cocina" name="cocina">
@@ -190,67 +257,67 @@
             <div class="px-0" *ngIf="opcion_insumo_complemento == 1">
                 <!-- ------------------------------------------------------------- INSUMOS --------------------------------------------------------------------------------->
                 <!-- INSUMO FORM ADICIONAR -->
-                <h4 class="mb-4 px-1 text-center">Insumos</h4>
+                <h4 class="mb-4 px-1">Insumos</h4>
                 <form #formInsumo="ngForm" class="row g-3 m-0">  
                     <!-- SELECCIONAR INSUMO -->
-                        <div class="col-6 mb-0 mt-0">
-                        <div class="d-flex">
-                            <label class="form-label m-0 mb-2 me-2 text-center">Insumo:</label>
-                            <div style="width: 100%;">
-                              <ng-select class="custom-ng-select" 
-                                          [items]="lista_Insumos"
-                                          [(ngModel)]="insumo_Seleccionado"
-                                          placeholder=""
-                                          [searchable]="true"
-                                          [bindLabel]="'nombre'"
-                                          #insumo="ngModel"
-                                          name="insumo_Seleccionado"
-                                          style="height: 30px;"
-                                          required
-                                          [class.is-invalid]="mostrarAdvertenciasInsumo && !insumo_Seleccionado && insumo_producto_Seleccionado.cantidad">
-                                          <!-- Plantilla personalizada para mostrar las etiquetas -->
-                                          <ng-template ng-label-tmp let-item="item">
-                                            <span> 
-                                              <span [ngStyle]="{'color': '#d4da8f', 'font-weight': 'bold'}">{{ item.nombre }}</span>  ({{ item.nom_medida }})
-                                            </span>
-                                          </ng-template>
-                                          <!-- Plantilla personalizada para mostrar las opciones -->
-                                          <ng-template ng-option-tmp let-item="item">
-                                            <span>
-                                              <span [ngStyle]="{'color': '#d4da8f', 'font-weight': 'bold'}">{{ item.nombre }}</span>  ({{ item.nom_medida }})
-                                            </span>
-                                          </ng-template>
-                              </ng-select>
-                              <!-- <div class="advertencias" *ngIf="(insumo.touched || mostrarAdvertenciasInsumo) && !insumo_Seleccionado"> -->
-                              <div class="advertencias" *ngIf="mostrarAdvertenciasInsumo && !insumo_Seleccionado && insumo_producto_Seleccionado.cantidad">
-                                  <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
-                                  <p class="m-0">Seleccionar Insumo</p>
+                        <div class="insumo col-12 col-md-6 mb-0 mt-0 mb-1 mb-md-0">
+                          <div class="d-flex">
+                              <label class="form-label m-0 mb-2 me-2 text-center">Insumo:</label>
+                              <div style="width: 100%;">
+                                <ng-select class="custom-ng-select" 
+                                            [items]="lista_Insumos"
+                                            [(ngModel)]="insumo_Seleccionado"
+                                            placeholder=""
+                                            [searchable]="true"
+                                            [bindLabel]="'nombre'"
+                                            #insumo="ngModel"
+                                            name="insumo_Seleccionado"
+                                            style="height: 30px;"
+                                            required
+                                            [class.is-invalid]="mostrarAdvertenciasInsumo && !insumo_Seleccionado && insumo_producto_Seleccionado.cantidad">
+                                            <!-- Plantilla personalizada para mostrar las etiquetas -->
+                                            <ng-template ng-label-tmp let-item="item">
+                                              <span> 
+                                                <span [ngStyle]="{'color': '#d4da8f', 'font-weight': 'bold'}">{{ item.nombre }}</span>  ({{ item.nom_medida }})
+                                              </span>
+                                            </ng-template>
+                                            <!-- Plantilla personalizada para mostrar las opciones -->
+                                            <ng-template ng-option-tmp let-item="item">
+                                              <span>
+                                                <span [ngStyle]="{'color': '#d4da8f', 'font-weight': 'bold'}">{{ item.nombre }}</span>  ({{ item.nom_medida }})
+                                              </span>
+                                            </ng-template>
+                                </ng-select>
+                                <!-- <div class="advertencias" *ngIf="(insumo.touched || mostrarAdvertenciasInsumo) && !insumo_Seleccionado"> -->
+                                <div class="advertencias" *ngIf="mostrarAdvertenciasInsumo && !insumo_Seleccionado && insumo_producto_Seleccionado.cantidad">
+                                    <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+                                    <p class="m-0">Seleccionar Insumo</p>
+                                </div>
+                                <!-- ADVERTENCIA -->
+                                <div class="col-12 advertencias" *ngIf="existeInsumoSeleccionado()">
+                                    <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+                                    <p class="m-0">Insumo Repetido</p>
+                                </div>
                               </div>
-                              <!-- ADVERTENCIA -->
-                              <div class="col-12 advertencias" *ngIf="existeInsumoSeleccionado()">
-                                  <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
-                                  <p class="m-0">Insumo Repetido</p>
-                              </div>
-                            </div>
-                        </div>
+                          </div>
                         </div>
                         <!-- CANTIDAD -->
-                        <div class="col-4 mb-2 mt-0">
-                        <div class="d-flex">
-                            <label class="form-label m-0 me-2">Cantidad:</label>
-                            <div style="width: 100%;">
-                            <input type="number" #cantidad="ngModel" [(ngModel)]="insumo_producto_Seleccionado.cantidad" name="cantidad" class="form-control" required 
-                                    [class.is-invalid]="mostrarAdvertenciasInsumo && insumo_Seleccionado && (!insumo_producto_Seleccionado.cantidad || insumo_producto_Seleccionado.cantidad<=0)">
-                            <div class="advertencias" *ngIf="mostrarAdvertenciasInsumo && insumo_Seleccionado && (!insumo_producto_Seleccionado.cantidad || insumo_producto_Seleccionado.cantidad<=0)" title="Cantidad debe ser > 0 ">
-                                <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
-                                <p class="m-0">Invalido</p>
-                            </div>
-                            </div>
-                        
-                        </div>
+                        <div class="cantidad-insumo col-12 col-md-4 mb-2 mt-0">
+                          <div class="d-flex">
+                              <label class="form-label m-0 me-2">Cantidad:</label>
+                              <div style="width: 100%;">
+                              <input type="number" #cantidad="ngModel" [(ngModel)]="insumo_producto_Seleccionado.cantidad" name="cantidad" class="form-control" required 
+                                      [class.is-invalid]="mostrarAdvertenciasInsumo && insumo_Seleccionado && (!insumo_producto_Seleccionado.cantidad || insumo_producto_Seleccionado.cantidad<=0)">
+                              <div class="advertencias" *ngIf="mostrarAdvertenciasInsumo && insumo_Seleccionado && (!insumo_producto_Seleccionado.cantidad || insumo_producto_Seleccionado.cantidad<=0)" title="Cantidad debe ser > 0 ">
+                                  <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
+                                  <p class="m-0">Invalido</p>
+                              </div>
+                              </div>
+                          
+                          </div>
                         </div>
                         <!-- BOTON ADICIONAR -->
-                        <div class="col-2 mb-2 mt-0">
+                        <div class="col-12 col-md-2 mb-2 mt-0">
                         <button type="button" class="btn btn-secondary" style="border: none; background: #1d5da2; padding: 0px; height: 30px; width: 88px; font-weight: 500;" 
                                 (click)="adicionar_Insumo_Producto(formInsumo)">Adicionar
                         </button>

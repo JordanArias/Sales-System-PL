@@ -380,7 +380,7 @@ filtrarLista(){
   }
 }
 
-seleccionarOpcion(opcion: number) {
+seleccionarOpcion(opcion: any) {
   this.opcionSeleccionada = opcion;
   this.filtrarLista();
 }

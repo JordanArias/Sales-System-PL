@@ -49,7 +49,7 @@
   display: flex;
   /* flex-direction: column; */
   justify-content: center;
-  overflow: auto;
+  /* overflow: auto; */
   max-height: 77vh;
   min-height: 50vh;
   margin: 18px 0px;
@@ -276,4 +276,82 @@
   color: #ffffff !important;
   /* border: 1px solid #5a5a5a !important; */
   outline: none !important;
+}
+
+
+
+.dropdown-item-opcion {
+  padding: 8px 15px;
+  cursor: pointer;
+  border-bottom: 1px solid #4c5b77;
+}
+
+.dropdown-item-opcion:last-child {
+  border-bottom: none;
+}
+
+.dropdown-item-opcion:hover {
+  background: #50607d;
+}
+.ngx-pagination {
+  padding: 0px;
+}
+.desktop{
+  display: block;
+}
+.movil{
+  display: none;
+}
+
+@media(max-width:800px){
+  .desktop{
+    display: none;
+  }
+  .movil{
+    display: block;
+  }
+
+  /*** Encabezado ***/
+  .container-buscador input{
+    width: 90px;
+  }
+  .container-agregar button {
+    font-size: 15px;
+  }
+  .container_volver img{
+    width: 30px;
+  }
+
+  .container-lista ul li h3{
+    font-size: 17px;
+  }
+  .container-lista ul li{
+    font-size: 15px;
+  }
+  .container-buscador input[type="text"]::placeholder{
+    font-size: 15px;
+    color: #d6d6d6a2;
+  }
+
+  /* GENERAL */
+  .content-modal{
+    font-size: 15px;
+  }
+  #modalProductoUnico .modal-lg-custom{
+    max-width: 100%; /* Puedes ajustar este valor según lo necesites */
+  }
+  #modalEliminarProductoUnico .modal-lg-custom, #modalEstadoProductoUnico .modal-lg-custom{
+    max-width: 100%;
+  }
+  #modalProductoUnico .insumo label, #modalProductoUnico .cantidad-insumo label{
+    width: 95px;
+  }
+
+}
+
+
+@media(max-width:300px){
+  .container-lista ul li{
+    font-size: 13px;
+  }
 }
