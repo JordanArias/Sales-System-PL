@@ -9,10 +9,11 @@
     </div> -->
     <!-- Buscador -->
     <div class="container-buscador px-2">
-      <button class="btn btn-secondary"  title="Filtrar Movimientos" (click)="showModalSelectFecha()"> 
-        <span class="px-0 d-flex align-items-center">
+      <button class="btn btn-secondary px-2 px-sm-3"  title="Filtrar Movimientos" (click)="showModalSelectFecha()"> 
+        <span class="desktop px-0 ">
           <img src="../assets/images/icons/icon-options/buscar.png" class="me-1">Filtrar Cajas
-         </span>
+        </span>
+        <span class="movil">Filtrar</span>
       </button>
     </div>
     <!-- Boton Agregar -->
@@ -21,11 +22,9 @@
     </div> -->
     <!-- BOTON NUEVO MOVIMIENTO -->
     <div class="container-agregar px-2">
-      <button class="btn btn-secondary" (click)="showModal_Caja()">
-        <span class="px-0 d-flex align-items-center">
-          <img src="../assets/images/icons/icon-options/agregar.png" class="me-1">
-          Agregar Caja
-        </span>
+      <button class="btn btn-secondary px-2 px-sm-3" (click)="showModal_Caja()">
+        <span class="desktop"> Agregar Caja </span>
+        <span class="movil"> Agregar </span>
       </button>
     </div>
     
@@ -42,83 +41,138 @@
       </li>        
       <!-- TITULOS -->
       <li class="list-group-item">
-        <div class="row mx-0 d-flex align-items-center">
-          <div class="col-3 row mx-0 px-0">
-            <div class="col-2 cell-t text-center">N°</div>
-            <div class="col-5 cell-t">FECHA APERTURA</div>
-            <div class="col-5 cell-t">FECHA CIERRE</div>
+        <!-- DESKTOP -->
+        <div class="desktop">
+          <div class="row mx-0 d-flex align-items-center">         
+              <div class="col-3 row mx-0 px-0">
+                  <div class="col-2 cell-t text-center">N°</div>
+                  <div class="col-5 cell-t">FECHA APERTURA</div>
+                  <div class="col-5 cell-t">FECHA CIERRE</div>
+              </div>
+              <div class="col-7 row mx-0 px-0">
+                  <div class="col-3 cell-t">SALDO INICIAL</div>
+                  <div class="col-3 cell-t">EGRESO</div>
+                  <div class="col-3 cell-t">INGRESO POR VENTAS</div>
+                  <div class="col-3 cell-t">SALDO PRELIMINAR</div>
+              </div>
+              <div class="col-1 cell-t">ESTADO</div>
+              <div class="col-1 text-center cell-t">OP</div>
           </div>
-          <div class="col-7 row mx-0 px-0">
-            <div class="col-3 cell-t">SALDO INICIAL</div>
-            <div class="col-3 cell-t">EGRESO</div>
-            <div class="col-3 cell-t">INGRESO POR VENTAS</div>
-            <div class="col-3 cell-t">SALDO PRELIMINAR</div>
-          </div>
-          <div class="col-1 cell-t">ESTADO</div>
-          <div class="col-1 text-center cell-t">OP</div>
+        </div>
+        <!-- MOVIL -->
+        <div class="movil">
+            <div class="row mx-0 d-flex align-items-center">
+                <div class="col-7 row mx-0 px-0">
+                  <div class="col-2 cell-t text-center">N°</div>
+                  <div class="col-10 cell-t">FECHA</div>
+                  <!-- <div class="col-5 cell-t">FECHA CIERRE</div> -->
+                </div>
+                <div class="col-3 cell-t">ESTADO</div>
+                <div class="col-2 text-center cell-t">OP</div>
+            </div>
         </div>
       </li>
       <!-- LISTA DE CAJAS -->
       <li class="list-group-item" *ngFor="let c of lista_cajas | paginate: { itemsPerPage: 4, currentPage: page }; let i = index">
-        <div class="row mx-0 d-flex align-items-center" [style.background]="c.estado==0 ? '#233431' : {}">
-          <!-- N° , FECHA APERTURA , FECHA FINAL -->
-          <div class="col-3 row mx-0 px-0">
-
+        <!-- ***************** DESKTOP *****************-->
+        <div class="desktop">
+          <div class="row mx-0 d-flex align-items-center" [style.background]="c.estado==0 ? '#233431' : {}">
+            <!-- N° , FECHA APERTURA , FECHA FINAL -->
+            <div class="col-3 row mx-0 px-0">
                 <div class="col-2 cell text-center">{{i+1}}</div>
                 <div class="col-5 cell">
-                  <div class="col-12 px-0" style="color: #73b574">{{c.fecha_i}}</div>
-                  <div class="col-12 px-0">{{c.hora_i}}</div>
+                    <div class="col-12 px-0" style="color: #73b574; overflow-wrap: break-word;">{{c.fecha_i}}</div>
+                    <div class="col-12 px-0">{{c.hora_i}}</div>
                 </div>
                 <div class="col-5 cell">
-                  <div class="col-12 px-0" style="color: #cc7365">{{c.fecha_c}}</div>
-                  <div class="col-12 px-0">{{c.hora_c}}</div>
+                    <div class="col-12 px-0" style="color: #cc7365; overflow-wrap: break-word;">{{c.fecha_c}}</div>
+                    <div class="col-12 px-0">{{c.hora_c}}</div>
                 </div>
-          </div>
-          <!-- SALDO DE PRELIMINAR -->
-          <div class="col-7 row mx-0 px-0">
-              <!-- SALDO INICIAL -->
-              <div class="col-3 cell">
-                <div class="px-0 d-flex"> <span class="moneda">Bol:</span> {{c.bs_saldoi | number}}</div>
-                <div class="px-0 d-flex"> <span class="moneda">Arg:</span> {{c.ps_saldoi | number}}</div>
-              </div>
-              <!-- EGRESO -->
-              <div class="col-3 cell">
-                    <div class="px-0 d-flex"><span class="moneda">Bol:</span> {{c.bs_egreso | number}}</div>
-                    <div class="px-0 d-flex"><span class="moneda">Arg:</span> {{c.ps_egreso | number}}</div>  
-              </div>
-              <!-- INGRESO POR VENTAS  -->
-              <div class="col-3 cell">
-                <div class="px-0 d-flex"><span class="moneda">Bol:</span> {{c.bs_ingreso | number}}</div>
-                <div class="px-0 d-flex"><span class="moneda">Arg:</span> {{c.ps_ingreso | number}}</div>   
-                <div class="px-0 d-flex"><span class="moneda">Banco:</span> {{c.banca_ingreso | number}}</div>    
-              </div>
-              <!-- SALDO PRELIMINAR -->
-              <div class="col-3 cell">
-                <div class="col-12 px-0"><span class="moneda">Bol:</span> {{c.bs_saldo_pre | number}}</div>
-                <div class="col-12 px-0"><span class="moneda">Arg:</span> {{c.ps_saldo_pre | number}}</div>   
-              </div>
-          </div>
-          <!-- ESTADO -->
-          <div class="col-1 cell">
-            <div class="btn py-1" title="Desactivar Opcion" style="color: #f4f4f4;background: #335843;width: 95%;" *ngIf="c.estado==0" (click)="showModal_Cerrar(c)">Abierto</div>
-            <div class="btn" title="Activar Opcion" style="color: #f4f4f4;background: #583333;width: 95%" *ngIf="c.estado==1">Cerrado</div> 
-          </div>
-
-          <!-- OPCIONES -->
-          <div class="col-1 btn-group container-btn">
-            <button class="btn p-0" title="Ver Reporte de Caja" (click)="showModal_Reporte(c)"> <span class="px-0" ><img src="../assets/images/icons/icon-options/ver_reporte.png"></span></button>
-            <button class="btn p-0" title="Ajuste de caja" *ngIf="c.estado == 0" (click)="showModal_Ajustes(c)"> <span class="px-0"><img src="../assets/images/icons/icon-options/ajustes.png"></span></button>
-            <!-- <button class="btn p-0" title="Eliminar caja" *ngIf="c.bs_saldoi == c.bs_saldo_pre"> <span class="px-0"><img src="../assets/images/icons/icon-options/eliminar.png"></span></button> -->
+            </div>
+            <!-- SALDO DE PRELIMINAR -->
+            <div class="col-7 row mx-0 px-0">
+                <!-- SALDO INICIAL -->
+                <div class="col-3 cell">
+                  <div class="px-0 d-flex"> <span class="moneda">Bol:</span> {{c.bs_saldoi | number}}</div>
+                  <div class="px-0 d-flex"> <span class="moneda">Arg:</span> {{c.ps_saldoi | number}}</div>
+                </div>
+                <!-- EGRESO -->
+                <div class="col-3 cell">
+                      <div class="px-0 d-flex"><span class="moneda">Bol:</span> {{c.bs_egreso | number}}</div>
+                      <div class="px-0 d-flex"><span class="moneda">Arg:</span> {{c.ps_egreso | number}}</div>  
+                </div>
+                <!-- INGRESO POR VENTAS  -->
+                <div class="col-3 cell">
+                  <div class="px-0 d-flex"><span class="moneda">Bol:</span> {{c.bs_ingreso | number}}</div>
+                  <div class="px-0 d-flex"><span class="moneda">Arg:</span> {{c.ps_ingreso | number}}</div>   
+                  <div class="px-0 d-flex"><span class="moneda">Banco:</span> {{c.banca_ingreso | number}}</div>    
+                </div>
+                <!-- SALDO PRELIMINAR -->
+                <div class="col-3 cell">
+                  <div class="col-12 px-0"><span class="moneda">Bol:</span> {{c.bs_saldo_pre | number}}</div>
+                  <div class="col-12 px-0"><span class="moneda">Arg:</span> {{c.ps_saldo_pre | number}}</div>   
+                </div>
+            </div>
+            <!-- ESTADO -->
+            <div class="col-1 cell container-estado">
+              <div class="btn py-1 px-0" title="Desactivar Opcion" style="color: #f4f4f4;background: #335843;width: 95%;" *ngIf="c.estado==0" (click)="showModal_Cerrar(c)">Abierto</div>
+              <div class="btn py-1 px-0" title="Activar Opcion" style="color: #f4f4f4;background: #583333;width: 95%" *ngIf="c.estado==1">Cerrado</div> 
+            </div>
+  
+            <!-- OPCIONES -->
+            <div class="col-1 btn-group container-btn">
+              <button class="btn p-0" title="Ver Reporte de Caja" (click)="showModal_Reporte(c)"> <span class="px-0" ><img src="../assets/images/icons/icon-options/ver_reporte.png"></span></button>
+              <button class="btn p-0" title="Ajuste de caja" *ngIf="c.estado == 0" (click)="showModal_Ajustes(c)"> <span class="px-0"><img src="../assets/images/icons/icon-options/ajustes.png"></span></button>
+              <!-- <button class="btn p-0" title="Eliminar caja" *ngIf="c.bs_saldoi == c.bs_saldo_pre"> <span class="px-0"><img src="../assets/images/icons/icon-options/eliminar.png"></span></button> -->
+            </div>
           </div>
         </div>
+        <!-- ***************** MOVIL *****************-->
+        <div class="movil">
+          <div class="row mx-0 d-flex align-items-center" [style.background]="c.estado==0 ? '#233431' : {}">
+            <!-- N° , FECHA APERTURA , FECHA FINAL -->
+            <div class="col-7 row mx-0 px-0">
+                <div class="col-2 cell text-center">{{i+1}}</div>
+                <div class="col-10 row m-0 cell">
+                    <div class="col-12 px-0">
+                      <span style="color: #73b574; overflow-wrap: break-word;"> {{c.fecha_i}} </span> 
+                      {{c.hora_i}}
+                    </div>
+                    <div class="col-12 px-0">
+                      <span style="color: #cc7365; overflow-wrap: break-word;">{{c.fecha_c}}</span>
+                      {{c.hora_c}}
+                    </div>
+                </div>
+                <!-- <div class="col-5 cell">
+                    <div class="col-12 px-0" style="color: #cc7365; overflow-wrap: break-word;">{{c.fecha_c}}</div>
+                    <div class="col-12 px-0">{{c.hora_c}}</div>
+                </div> -->
+            </div>
+
+            <!-- ESTADO -->
+            <div class="col-3 cell container-estado">
+              <div class="btn py-1 px-0" title="Desactivar Opcion" style="color: #f4f4f4;background: #335843;width: 95%;" *ngIf="c.estado==0" (click)="showModal_Cerrar(c)">Abierto</div>
+              <div class="btn py-1 px-0" title="Activar Opcion" style="color: #f4f4f4;background: #583333;width: 95%" *ngIf="c.estado==1">Cerrado</div> 
+            </div>
+  
+            <!-- OPCIONES -->
+            <div class="col-2 btn-group container-btn">
+              <button class="btn p-0" title="Ver Reporte de Caja" (click)="showModal_Reporte(c)"> <span class="px-0" ><img src="../assets/images/icons/icon-options/ver_reporte.png"></span></button>
+              <button class="btn p-0" title="Ajuste de caja" *ngIf="c.estado == 0" (click)="showModal_Ajustes(c)"> <span class="px-0"><img src="../assets/images/icons/icon-options/ajustes.png"></span></button>
+              <!-- <button class="btn p-0" title="Eliminar caja" *ngIf="c.bs_saldoi == c.bs_saldo_pre"> <span class="px-0"><img src="../assets/images/icons/icon-options/eliminar.png"></span></button> -->
+            </div>
+          </div>
+        </div>
+
       </li>
-      <li class="list-group-item custom-pagination py-2" *ngIf="paginacionActiva">
+      <li class="list-group-item custom-pagination py-2 px-0" *ngIf="paginacionActiva">
           <!-- Controles de paginación -->
           <pagination-controls 
           (pageChange)="page = $event" 
           previousLabel="Anterior" 
-          nextLabel="Siguiente"        
-          style="text-align: center;">
+          nextLabel="Siguiente"
+          [responsive]="true"           
+          style="text-align: center; ">
          </pagination-controls>
       </li>
     </ul>
@@ -150,7 +204,7 @@
         <!-- <form #formInsumo="ngForm" class="row g-3" (ngSubmit)="Agregar_Insumo()"> -->
           <form #formCaja="ngForm" class="row g-3">
             <!-- SALDO INICIAL BS. -->
-            <div class="col-6 mb-4 mt-3">
+            <div class="col-12 col-sm-6 mb-1 mb-sm-3">
               <label class="form-label">Saldo Inicial Bolivianos:</label>
               <input type="number" #bs_saldoi="ngModel" [(ngModel)]="caja_form.bs_saldoi" name="bs_saldoi" placeholder="" [class.is-invalid]="mostrarAdvertencias && ((caja_form.bs_saldoi ?? 0) <= 0 && (caja_form.ps_saldoi ?? 0) <= 0)" class="form-control" required>
               <div class="advertencias" *ngIf="mostrarAdvertencias && ((caja_form.bs_saldoi ?? 0) <= 0 && (caja_form.ps_saldoi ?? 0) <= 0)">
@@ -159,7 +213,7 @@
               </div>
             </div>
             <!-- SALDO INICIAL PS. -->
-            <div class="col-6 mb-4 mt-3">
+            <div class="col-12 col-sm-6 mb-1 mb-sm-3">
               <label class="form-label">Saldo Inicial Pesos:</label>
               <input type="number" #ps_saldoi="ngModel" [(ngModel)]="caja_form.ps_saldoi" name="ps_saldoi" placeholder="" [class.is-invalid]="mostrarAdvertencias && ((caja_form.ps_saldoi ?? 0) <= 0 && (caja_form.bs_saldoi ?? 0) <= 0)" class="form-control" required>
               <div class="advertencias" *ngIf="(ps_saldoi.touched || mostrarAdvertencias) && ((caja_form.ps_saldoi ?? 0) <= 0 && (caja_form.bs_saldoi ?? 0) <= 0)">
@@ -168,7 +222,7 @@
               </div>
             </div>
             <!-- TIPO DE CAMBIO. -->
-            <div class="col-6 mb-4 mt-3">
+            <div class="col-12 col-sm-6 ">
               <label class="form-label">Tipo de Cambio en Pesos</label>
               <input type="number" #tipo_cambio="ngModel" [(ngModel)]="caja_form.tipo_cambio" name="tipo_cambio" placeholder="" [class.is-invalid]="mostrarAdvertencias && ((caja_form.tipo_cambio ?? 0) <= 0 )" class="form-control" required>
               <div class="advertencias" *ngIf="mostrarAdvertencias && ((caja_form.tipo_cambio ?? 0) <= 0)">
@@ -201,9 +255,9 @@
       <div class="modal-body">
         <!-- <form #formInsumo="ngForm" class="row g-3" (ngSubmit)="Agregar_Insumo()"> -->
           <form #formAjuste="ngForm" class="row g-3">
-            <div class="col-12 mb-2 mt-1 d-flex"> 
-              <div class="saldo_pre" style="background: #475466; font-size: 19px; letter-spacing: 2px;height: 60px;"><p class="mb-1">Saldo Bolivianos</p> <span>{{caja_form.bs_saldo_pre}}</span></div>
-              <div class="saldo_pre" style="background: #353f4c; font-size: 19px; letter-spacing: 2px;height: 60px;"><p class="mb-1">Saldo Pesos</p> <span>{{caja_form.ps_saldo_pre}}</span></div>
+            <div class="col-12 mb-2 mt-3 d-flex"> 
+              <div class="saldo_pre py-1"><p class="mb-1">Saldo Bs.</p> <span>{{caja_form.bs_saldo_pre}}</span></div>
+              <div class="saldo_pre py-1" style="background: #243b5a;"><p class="mb-1">Saldo Ps.</p> <span>{{caja_form.ps_saldo_pre}}</span></div>
             </div>
             <!-- TIPO DE AJUSTE -->
             <div class="col-12 mb-4 mt-1">
@@ -219,8 +273,11 @@
               </div>
             </div>
             <!-- AJUSTE BS. -->
-            <div class="col-6 mb-4 mt-1">
-              <label class="form-label">Ajuste Bolivianos:</label>
+            <div class="col-6 col mb-4 mt-1">
+              <label class="form-label">
+                <span class="desktop">Ajuste Bolivianos:</span>
+                <span class="movil">Ajuste Bs:</span>
+              </label>
               <input type="number" #bs_ajuste="ngModel" [(ngModel)]="ajuste_form.bs_ajuste" name="bs_ajuste" placeholder="" [class.is-invalid]="mostrarAdvertenciasAjuste &&
               ((ajuste_form.bs_ajuste ?? 0) <= 0 && (ajuste_form.ps_ajuste ?? 0) <= 0 || (ajuste_form.tipo == 2 && (ajuste_form.bs_ajuste ?? 0) > caja_form.bs_saldo_pre))" class="form-control" required>
               <!-- ADVERTENCIAS AJUSTE BS -->
@@ -236,7 +293,10 @@
             </div>
             <!-- AJUSTE PS. -->
             <div class="col-6 mb-4 mt-1">
-              <label class="form-label">Ajuste Pesos:</label>
+              <label class="form-label">
+                <span class="desktop">Ajuste Pesos:</span>
+                <span class="movil">Ajuste Ps:</span>
+              </label>
               <input type="number" #ps_ajuste="ngModel" [(ngModel)]="ajuste_form.ps_ajuste" name="ps_ajuste" placeholder="" [class.is-invalid]="mostrarAdvertenciasAjuste && 
               ((ajuste_form.ps_ajuste ?? 0) <= 0 && (ajuste_form.bs_ajuste ?? 0) <= 0 || (ajuste_form.tipo == 2 && (ajuste_form.ps_ajuste ?? 0) > caja_form.ps_saldo_pre))" class="form-control" required>
               <!-- ADVERTENCIAS AJUSTE PS -->
@@ -250,7 +310,7 @@
                 <p class="m-0">La Cantidad de Salida no debe ser mayor al Saldo</p>
               </div>
             </div>
-              <!-- AJUSTE PS. -->
+            <!-- DESCRIPCIÓN -->
             <div class="col-12 mb-4 mt-1">
               <label class="form-label">Descripcion</label>
               <input type="text" #descripcion="ngModel" [(ngModel)]="ajuste_form.descripcion" name="descripcion" placeholder="" [class.is-invalid]="mostrarAdvertenciasAjuste && (ajuste_form.descripcion==null || ajuste_form.descripcion.length == 0)" class="form-control" required>
@@ -261,7 +321,7 @@
             </div>
 
             <!-- BOTONES -->
-            <div class="modal-footer btn-principal">
+            <div class="modal-footer btn-principal px-1 px-sm-2">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
               <button class="btn btn-secondary" style="border: none;background: #006bb0;" (click)="CREAR_AJUSTE()">Agregar</button>
             </div>
@@ -304,9 +364,9 @@
       <div class="modal-body">
     
         <form #formFecha="ngForm" class="row g-3">
-          <div class="col-8 row m-0 mt-4">
+          <div class="col-7 col-sm-8 row m-0 mt-4 p-1">
               <!-- FECHA INICIAL -->
-              <div class="col-6 mb-1 mt-0">
+              <div class="col-12 mb-1 mt-0 ms px-0">
                 <label class="form-label">Fecha Inicial:</label>
                 <input type="date" #fechaIni="ngModel" [(ngModel)]="selectFecha.fechaI" name="fechaIni" [max]="today" [class.is-invalid]="mostrarAdvertenciasFechaI && !isFormValid_Fecha()" required style="width: 100%;" class="form-control">
                 <div class="advertencias" *ngIf="mostrarAdvertenciasFechaI && !isFormValid_Fecha()">
@@ -315,7 +375,7 @@
                 </div>
               </div>
               <!-- FECHA FINAL -->
-              <div class="col-6 mb-1 mt-0">
+              <div class="col-12 mb-1 mt-0 px-0">
                 <label class="form-label">Fecha Final:</label>
                 <input type="date" #fechaFin="ngModel" [(ngModel)]="selectFecha.fechaF" [max]="today" [class.is-invalid]="mostrarAdvertenciasFecha && !isFormValid_Fecha()" name="fechaFin" class="form-control"  required style="width: 100%;">
                 <div class="advertencias" *ngIf="mostrarAdvertenciasFecha && !isFormValid_Fecha()">
@@ -327,10 +387,10 @@
 
 
 
-          <div class="col-4 m-0 atajos mt-4">
-            <button type="button" class="btn btn-secondary" (click)="seleccionar_Atajo(7)">Últimos 7 días</button>
-            <button type="button" class="btn btn-secondary" (click)="seleccionar_Atajo(15)">Últimos 15 días</button>
-            <button type="button" class="btn btn-secondary" (click)="seleccionar_Atajo(30)">Últimos 30 días</button>
+          <div class="col-5 col-sm-4 m-0 mt-4 px-1 d-flex flex-column justify-content-evenly atajos">
+            <button type="button" class="btn btn-secondary px-0" (click)="seleccionar_Atajo(7)">Últimos 7 días</button>
+            <button type="button" class="btn btn-secondary px-0" (click)="seleccionar_Atajo(15)">Últimos 15 días</button>
+            <button type="button" class="btn btn-secondary px-0" (click)="seleccionar_Atajo(30)">Últimos 30 días</button>
           </div>
 
           <!-- BOTONES -->
@@ -356,32 +416,36 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 
-      <div class="modal-body p-2" style="font-size: 17px; font-weight: 400; letter-spacing: 1px;">
+      <div class="modal-body p-2" style="font-weight: 400; letter-spacing: 1px;">
     <!-------------------------------- FECHAS - CI USUAIRO -------------------------------->
         <!-- DATOS APERTURA Y CIERRE -->
         <div class="section-inicio row m-0 mb-3">
           <!-- APERTURA -->
-          <div class="col-6 row m-0" style="background: #3a5859;">
-              <h4>Datos Apertura</h4>
-              <div class="col-12">
-                <label style="width: 30%;">Fecha</label>
-                <span>{{caja.fecha_i}} - {{caja.hora_i}}</span>
+          <div class="col-6 row m-0 py-2 py-sm-1" style="background: #3a5859;">
+              <div class="col-12 px-0">
+                <h5 style="font-weight: bold;">Apertura</h5>
               </div>
-              <div class="col-12">
-                <label style="width: 30%;">Usuario</label>
-                <span>{{caja.ci_usuario_i}}</span>
+              <div class="col-12 row m-0 px-0">
+                <div class="col-12 col-sm-4 px-0"><b>Fecha</b></div>
+                <div class="col-12 col-sm-8 px-0">{{caja.fecha_i}}  {{caja.hora_i}}</div>
+              </div>
+              <div class="col-12 row m-0 px-0">
+                <div class="col-12 col-sm-4 px-0"><b>Usuario</b></div>
+                <div class="col-12 col-sm-8 px-0">{{caja.ci_usuario_i}}</div>
               </div>
           </div>
           <!-- CIERRE -->
-          <div class="col-6 row m-0" style="background: #594646;">
-              <h4>Datos Cierre</h4>
-              <div class="col-12">
-                <label style="width: 30%;">Fecha</label>
-                <span *ngIf="caja.estado == 1">{{caja.fecha_c}} - {{caja.hora_c}}</span>
+          <div class="col-6 row m-0 py-2 py-sm-1" style="background: #594646;">
+              <div class="col-12 px-0">
+                <h5 style="font-weight: bold;">Cierre</h5>
               </div>
-              <div class="col-12">
-                <label style="width: 30%;">Usuario</label>
-                <span>{{caja.ci_usuario_c}}</span>
+              <div class="col-12 row m-0 px-0">
+                <div class="col-12 col-sm-4 px-0"><b>Fecha</b></div>
+                <div class="col-12 col-sm-8 px-0">{{caja.fecha_c}}  {{caja.hora_c}}</div>
+              </div>
+              <div class="col-12 row m-0 px-0">
+                <div class="col-12 col-sm-4 px-0"><b>Usuario</b></div>
+                <div class="col-12 col-sm-8 px-0">{{caja.ci_usuario_c}}</div>
               </div>
           </div>
         </div>
@@ -389,21 +453,21 @@
         <!-- SALDO INICIAL -->
         <div class="section-saldoi row m-0 mb-4">
           <!-- APERTURA -->
-          <div class="col-7 row m-0" style="display: flex; align-items: center; border-bottom: 2px solid #7e7e7e">
-            <h5 class="col-4">Saldo Incial</h5>
-            <div class="col-4">
-              <label style="width: 58%;">Bolivianos</label>
-              <span >{{caja.bs_saldoi}}</span>
-            </div>
-            <div class="col-4">
-              <label style="width: 35%;">Pesos</label>
-              <span>{{caja.ps_saldoi}}</span>
-            </div>
+          <div class="col-12 col-sm-6 row m-0 px-0 mb-2 mb-sm-0" style="display: flex; align-items: center; border-bottom: 2px solid #7e7e7e">
+              <h5 class="col-5 m-0 px-0">Saldo Incial</h5>
+              <div class="col-3 row m-0 px-0">
+                  <div class="col-3 px-0">Bs. </div>
+                  <div class="col-9 px-0 ps-1">{{caja.bs_saldoi}}</div>
+              </div>
+              <div class="col-4 row m-0 px-0">
+                  <div class="col-3 px-0">Ps. </div>
+                  <div class="col-9 px-0 ps-1">{{caja.ps_saldoi}}</div>
+              </div>
           </div>
           <!-- TIPO DE CAMBIO -->
-          <div class="col-5 row m-0" style="display: flex; align-items: center; border-bottom: 2px solid #7e7e7e">
-              <h5 class="col-6">Tipo de Cambio</h5>
-              <span class="col-6">{{caja.tipo_cambio}}</span>
+          <div class="col-12 col-sm-6 row m-0 px-0" style="display: flex; align-items: center; border-bottom: 2px solid #7e7e7e">
+              <h5 class="col-5 col-sm-6 m-0 px-0">Tipo de Cambio</h5>
+              <span class="col-4 col-sm-6 px-0">{{caja.tipo_cambio}}</span>
           </div>
         </div>
 
@@ -411,10 +475,10 @@
     <!---------------------- BOTONES:: SALDOS CONTABLES - AJUSTES CAJA --------------------->
         <!-- BOTONES VISTA -->
         <div class="section-botones mb-0" style="display: flex; justify-content: flex-end; background: #46515e; border-bottom: 1px solid #7e7e7e7d;">
-          <button class="btn" style="color: #f3f3f3; font-size: 17px; letter-spacing: 1px;" (click)="cambiarVista_Reporte(1)" [ngStyle]="vista_reporte==1 ? {'background': '#56626f'} : {}">
+          <button class="btn px-1 px-sm-2" (click)="cambiarVista_Reporte(1)" [ngStyle]="vista_reporte==1 ? {'background': '#56626f'} : {}">
             Saldos Contables
           </button> 
-          <button class="btn" style="color: #f3f3f3; font-size: 17px; letter-spacing: 1px;" (click)="cambiarVista_Reporte(2)" [ngStyle]="vista_reporte==2 ? {'background': '#56626f'} : {}">
+          <button class="btn px-1 px-sm-2" (click)="cambiarVista_Reporte(2)" [ngStyle]="vista_reporte==2 ? {'background': '#56626f'} : {}">
             Ajustes de Caja
           </button>
         </div>
@@ -424,54 +488,54 @@
           <!-- DATOS INGRESOS Y EGRESOS -->
           <div class="section-ingreso-egreso row m-0 mb-4" style="border-bottom: 1px solid #7e7e7e7d;">
             <!-- INGRESO POR VENTAS -->
-            <div class="col-4 row m-0 ">
-                <h5 style="color: #73b574;">Ingresos por Ventas</h5>
-                <div class="col-12">
-                  <label style="width: 50%;">Bolivianos</label>
-                  <span style="color: #73b574;">{{caja.bs_ingreso | number}}</span>
+            <div class="col-4 row m-0 px-0 px-sm-3">
+                <h5 class="col-12 px-0" style="color: #73b574;"> <span class="desktop">Ingresos por Ventas</span> <span class="movil">Ingresos</span></h5>
+                <div class="col-12 row m-0 px-0">
+                  <div class="col-3 col-sm-6 px-0"> <span class="desktop">Bolivianos</span> <span class="movil">Bs.</span> </div>
+                  <div class="col-9 col-sm-6 px-0" style="color: #73b574;">{{caja.bs_ingreso | number}}</div>
                 </div>
-                <div class="col-12">
-                  <label style="width: 50%;">Pesos</label>
-                  <span style="color: #73b574;">{{caja.ps_ingreso | number}}</span>
+                <div class="col-12 row m-0 px-0">
+                  <div class="col-3 col-sm-6 px-0"> <span class="desktop">Pesos</span> <span class="movil">Ps.</span> </div>
+                  <div class="col-9 col-sm-6 px-0" style="color: #73b574;"> {{caja.ps_ingreso | number}} </div>
                 </div>
-                <div class="col-12">
-                  <label style="width: 50%;">Banco</label>
-                  <span style="color: #73b574;">{{caja.banca_ingreso | number}}</span>
+                <div class="col-12 row m-0 px-0">
+                  <div class="col-3 col-sm-6 px-0" ><span class="desktop">Banca</span> <span class="movil">Bc.</span></div>
+                  <div class="col-9 col-sm-6 px-0" style="color: #73b574;">{{caja.banca_ingreso | number}}</div>
                 </div>
             </div>
             <!-- EGRESOS -->
-            <div class="col-4 row m-0 px-1" style="display: flex; align-content: flex-start;">
-              <h5 style="color:#b5686a">Egresos</h5>
-              <div class="col-12">
-                <label style="width: 50%;">Bolivianos</label>
-                <span style="color: #b5686a;">{{caja.bs_egreso | number}}</span>
+            <div class="col-4 row m-0 px-0 px-sm-3" style="display: flex; align-content: flex-start;">
+              <h5 class="col-12 px-0" style="color:#b5686a">Egresos</h5>
+              <div class="col-12 row m-0 px-0">
+                <div class="col-3 col-sm-6 px-0"><span class="desktop">Bolivianos</span> <span class="movil">Bs.</span> </div>
+                <span class="col-9 col-sm-6 px-0" style="color: #b5686a;">{{caja.bs_egreso | number}}</span>
               </div>
-              <div class="col-12">
-                <label style="width: 50%;">Pesos</label>
-                <span style="color: #b5686a;">{{caja.ps_egreso | number}}</span>
+              <div class="col-12 row m-0 px-0">
+                <div class="col-3 col-sm-6 px-0"><span class="desktop">Pesos</span> <span class="movil">Ps.</span> </div>
+                <div class="col-9 col-sm-6 px-0" style="color: #b5686a;">{{caja.ps_egreso | number}}</div>
               </div>
             </div>
             <!-- SALDO PRELIMINAR -->
-            <div class="col-4 row m-0 px-0" style="display: flex; align-content: flex-start;">
-              <h5 class="px-2" style="color:powderblue">Saldo Preliminar</h5>
-              <div class="col-12 px-2">
-                <label style="width: 50%;">Bolivianos</label>
-                <span style="color: powderblue;">{{caja.bs_saldo_pre | number}}</span>
+            <div class="col-4 row m-0 px-0 px-sm-3" style="display: flex; align-content: flex-start;">
+              <h5 class="col-12 px-0" style="color:powderblue"><span class="desktop">Saldo Preliminar</span> <span class="movil">Saldo Pre.</span></h5>
+              <div class="col-12 row m-0 px-0">
+                <div class="col-3 col-sm-6 px-0"> <span class="desktop">Bolivianos</span> <span class="movil">Bs.</span> </div>
+                <div class="col-9 col-sm-6 px-0" style="color: powderblue;">{{caja.bs_saldo_pre | number}}</div>
               </div>
-              <div class="col-12 px-2">
-                <label style="width: 50%;">Pesos</label>
-                <span style="color: powderblue;">{{caja.ps_saldo_pre | number}}</span>
+              <div class="col-12 row m-0 px-0">
+                <div class="col-3 col-sm-6 px-0"> <span class="desktop">Pesos</span> <span class="movil">Ps.</span> </div>
+                <span class="col-9 col-sm-6 px-0" style="color: powderblue;">{{caja.ps_saldo_pre | number}}</span>
               </div>
             </div>
           </div>
           <!-- COSTO DE INSUMOS Y SALDO BRUTO-->
           <div class="section-insumo-bruto row m-0 mb-4" style="border-bottom: 1px solid #7e7e7e7d;">
             <!-- COSTO DE INSUMOS -->
-            <div class="col-12 row m-0">
-              <h6 class="col-4" style="color:#b5686a">Costo de Insumos</h6>
-              <div class="col-4">
-                <label style="width: 50%;">Bolivianos</label>
-                <span style="color: #b5686a;">{{caja.bs_insumo | number}}</span>
+            <div class="col-12 row m-0 px-0 px-sm-3">
+              <h5 class="col-7 col-sm-4 px-0" style="color:#b5686a">Costo de Insumos</h5>
+              <div class="col-5 col-sm-4 row m-0 px-0">
+                <div class="col-3 col-sm-6 px-0"> <span class="desktop">Bolivianos</span> <span class="movil">Bs.</span> </div>
+                <div class="col-9 col-sm-6 px-0">{{caja.bs_insumo | number}}</div>
               </div>
               <!-- <div class="col-4">
                 <label style="width: 50%;">Pesos</label>
@@ -479,11 +543,11 @@
               </div> -->
             </div>
             <!-- SALDO BRUTO -->
-            <div class="col-12 row m-0">
-              <h6 class="col-4">Ganancia Bruta</h6>
-              <div class="col-4">
-                <label style="width: 50%;">Bolivianos</label>
-                <span>{{caja.bs_bruto | number}}</span>
+            <div class="col-12 row m-0 px-0 px-sm-3">
+              <h5 class="col-7 col-sm-4 px-0">Ganancia Bruta</h5>
+              <div class="col-5 col-sm-4 row m-0 px-0">
+                <div class="col-3 col-sm-6 px-0"> <span class="desktop">Bolivianos</span> <span class="movil">Bs.</span> </div>
+                <div class="col-9 col-sm-6 px-0">{{caja.bs_bruto | number}}</div>
               </div>
               <!-- <div class="col-4">
                 <label style="width: 50%;">Pesos</label>
@@ -494,20 +558,20 @@
           <!-- SALDO FINAL , DESCUENTO , IVA-->
           <div class="section-insumo-bruto row m-0 mb-4">
             <!-- IVA -->
-            <div class="col-12 row m-0">
+            <!-- <div class="col-12 row m-0">
               <h6 class="col-4" style="color:#b5686a">Iva</h6>
               <div class="col-4">
                 <label style="width: 50%;">Bolivianos</label>
                 <span style="color: #b5686a;">{{caja.bs_iva | number}}</span>
               </div>
 
-            </div>
+            </div> -->
             <!-- DESCUENTOS -->
-            <div class="col-12 row m-0">
-              <h6 class="col-4" style="color:#b5686a">Descuento de Ventas</h6>
-              <div class="col-4">
-                <label style="width: 50%;">Bolivianos</label>
-                <span style="color: #b5686a;">{{caja.bs_descuento | number}}</span>
+            <div class="col-12 row m-0 px-0 px-sm-3">
+              <h5 class="col-7 col-sm-4 px-0" style="color:#b5686a">Descuento de Ventas</h5>
+              <div class="col-5 col-sm-4 row m-0 px-0">
+                <div class="col-3 col-sm-6 px-0"> <span class="desktop">Bolivianos</span> <span class="movil">Bs.</span> </div>
+                <div class="col-9 col-sm-6 px-0">{{caja.bs_descuento | number}}</div>
               </div>
               <!-- <div class="col-4">
                 <label style="width: 50%;">Pesos</label>
@@ -515,11 +579,11 @@
               </div> -->
             </div>
             <!-- SALDO FINAL -->
-            <div class="col-12 row m-0">
-              <h6 class="col-4">Saldo Final</h6>
-              <div class="col-4">
-                <label style="width: 50%;">Bolivianos</label>
-                <span>{{caja.bs_saldo_final | number}}</span>
+            <div class="col-12 row m-0 px-0 px-sm-3">
+              <h5 class="col-7 col-sm-4 px-0">Saldo Final</h5>
+              <div class="col-5 col-sm-4 row m-0 px-0">
+                <div class="col-3 col-sm-6 px-0"> <span class="desktop">Bolivianos</span> <span class="movil">Bs.</span> </div>
+                <div class="col-9 col-sm-6 px-0">{{caja.bs_saldo_final | number}}</div>
               </div>
               <!-- <div class="col-4">
                 <label style="width: 50%;">Pesos</label>
@@ -533,57 +597,70 @@
          <div class="lista-ajustes" *ngIf="vista_reporte==2">
             <ul class="list-group p-0" style="border: none;">       
               <!-- TITULOS -->
-              <li class="list-group-item">
+              <li class="list-group-item d-flex flex-column justify-content-center px-0 px-md-3 px-lg-4" style="min-height: 49px;">
                 <div class="row mx-0 d-flex align-items-center">
                   <!-- N° , USUARIO , FECHA  -->
-                  <div class="col-3 row mx-0 px-0">
-                    <div class="col-4 cell">USUARIO</div>
-                    <div class="col-8 cell text-center">FECHA</div>
+                  <div class="col-3 col-lg-3 row mx-0 px-0">
+                    <!-- DESKTOP - AJUSTE -->
+                    <div class="desktop-ajuste col-4 px-0">USUARIO</div>
+                    <div class="desktop-ajuste col-8 px-0 text-center">FECHA</div>
+                    <!-- DESKTOP - MOVIL -->
+                    <div class="movil-ajuste col-12 px-0 text-center">USUARIO</div>               
                   </div>
                   <!-- SALDOS -->
-                  <div class="col-5 row mx-0 px-0">
-                    <div class="col-4 cell">ANTERIOR</div>
-                    <div class="col-4 cell">AJUSTE</div>
-                    <div class="col-4 cell">SALDO</div>
+                  <div class="col-6 col-lg-5 row mx-0 px-0">
+                    <!-- DESKTOP - AJUSTE -->
+                    <div class="desktop-ajuste col-4 px-0">ANTERIOR</div>
+                    <div class="desktop-ajuste col-4 px-0">AJUSTE</div>
+                    <div class="desktop-ajuste col-4 px-0">SALDO</div>
+                    <!-- DESKTOP - MOVIL -->
+                    <div class="movil-ajuste col-12 px-0 text-center">AJUSTE CAJA</div>
                   </div>
                   <!-- DESCRIPCION -->
-                  <div class="col-4 cell p-0">DESCRIPCION</div>
+                  <div class="col-3 col-lg-4 px-0 p-0">DESCRIPCION</div>
                 </div>
               </li>
               <!-- LISTA DE CAJAS -->
-              <li class="list-group-item" *ngFor="let j of lista_ajustes | paginate: { itemsPerPage: 4, currentPage: page_ajuste }; let i = index">
+              <li class="list-group-item px-0 px-md-3 py-2 py-lg-0" *ngFor="let j of lista_ajustes | paginate: { itemsPerPage: 4, currentPage: page_ajuste }; let i = index">
                 <div class="row mx-0 d-flex align-items-center">
                   <!-- N° , USUARIO , FECHA  -->
-                  <div class="col-3 row mx-0 px-0">
-                        <div class="col-4 cell">{{j.ci_usuario}}</div>
-                        <div class="col-8 cell text-center"><span>{{j.fecha}}</span> <span>{{j.hora}}</span></div>
+                  <div class="col-3 col-lg-3 row mx-0 px-0">
+                        <div class="col-12 col-lg-4 px-0 text-center">{{j.ci_usuario}}</div>
+                        <div class="col-12 col-lg-8 px-0 text-center">
+                            <span style="overflow-wrap: break-word;">{{j.fecha}}</span> <br>  <span>{{j.hora}}</span>
+                        </div>
                   </div>
                   <!-- SALDOS -->
-                  <div class="col-5 row mx-0 px-0">
+                  <div class="col-6 col-lg-5 row mx-0 px-0">
                       <!-- ANTERIOR -->
-                      <div class="col-4 cell">
-                        <div class="px-0 d-flex"> <span class="moneda">Bs.</span> {{j.bs_saldo_pre | number}}</div>
-                        <div class="px-0 d-flex"> <span class="moneda">Ps.</span> {{j.ps_saldo_pre | number}}</div>
+                      <div class="col-12 col-lg-4 row m-0 px-0">
+                        <div class="col-12 px-0 movil-ajuste text-center" style="font-weight: bold;">Anterior</div>
+                        <div class="col-6 col-lg-12 px-0"> <span class="moneda">Bs.</span> {{j.bs_saldo_pre | number}}</div>
+                        <div class="col-6 col-lg-12 px-0"> <span class="moneda">Ps.</span> {{j.ps_saldo_pre | number}}</div>
                       </div>
+                      <div class="movil-ajuste" style="border-bottom: 1px dashed  #797979;"></div>
                       <!-- AJUSTE -->
-                      <div class="col-4 cell">
-                            <div class="px-0 d-flex"><span class="moneda">Bs.</span> 
-                              <span *ngIf="j.tipo==1">+ {{j.bs_ajuste | number}}</span>
-                              <span *ngIf="j.tipo==2">- {{j.bs_ajuste | number}}</span>
+                      <div class="col-12 col-lg-4 row m-0 px-0">
+                            <div class="col-12 px-0 movil-ajuste text-center" style="font-weight: bold;">Ajuste</div>
+                            <div class="col-6 col-lg-12 px-0"><span class="moneda">Bs. </span> 
+                              <span *ngIf="j.tipo==1">+{{j.bs_ajuste | number}}</span>
+                              <span *ngIf="j.tipo==2">-{{j.bs_ajuste | number}}</span>
                             </div>
-                            <div class="px-0 d-flex"><span class="moneda">Ps.</span> 
-                              <span *ngIf="j.tipo==1">+ {{j.ps_ajuste | number}}</span>
-                              <span *ngIf="j.tipo==2">- {{j.ps_ajuste | number}}</span>
+                            <div class="col-6 col-lg-12 px-0"><span class="moneda">Ps. </span> 
+                              <span *ngIf="j.tipo==1">+{{j.ps_ajuste | number}}</span>
+                              <span *ngIf="j.tipo==2">-{{j.ps_ajuste | number}}</span>
                             </div>  
                       </div>
+                      <div class="movil-ajuste" style="border-bottom: 1px dashed #797979;"></div>
                       <!-- SALDO  -->
-                      <div class="col-4 cell">
-                        <div class="px-0 d-flex"><span class="moneda">Bs.</span> {{j.bs_saldo | number}}</div>
-                        <div class="px-0 d-flex"><span class="moneda">Ps.</span> {{j.ps_saldo | number}}</div>   
+                      <div class="col-12 col-lg-4 row m-0 px-0">
+                        <div class="col-12 px-0 movil-ajuste text-center" style="font-weight: bold;">Saldo</div>
+                        <div class="col-6 col-lg-12 px-0"><span class="moneda">Bs.</span> {{j.bs_saldo | number}}</div>
+                        <div class="col-6 col-lg-12 px-0"><span class="moneda">Ps.</span> {{j.ps_saldo | number}}</div>   
                       </div>
                   </div>
                   <!-- DESCRIPCION -->
-                  <div class="col-4 mx-0 px-0 d-flex">
+                  <div class="col-3 col-lg-4 mx-0 px-0 d-flex">
                     <span class="p-0" *ngIf="j.tipo==1">Entrada:: {{j.descripcion}}</span>
                     <span class="p-0" *ngIf="j.tipo==2">Salida:: {{j.descripcion}}</span>
                   </div>

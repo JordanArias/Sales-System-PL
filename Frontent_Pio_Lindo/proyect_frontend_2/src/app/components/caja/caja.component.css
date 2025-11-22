@@ -1,24 +1,29 @@
-
 /************************************** MENSAJE TOAST ****************************************/
 #toast {
-  width: 22%;
   position: fixed;
-  bottom: 0%; /* Centra verticalmente */
-  right: -10%; /* Centra horizontalmente */
-  transform: translate(-50%, -50%); /* Alinea al centro de la pantalla */
+  bottom: 20px;          /* separación desde abajo */
+  left: 50%;
+  transform: translateX(-50%);
+  
+  min-width: 30%;            /* DESKTOP */
+  max-width: 500px;      /* opcional: no se expande demasiado */
   user-select: none;
   /* visibility: visible;
-  display: block;  */
+  display: block; */
+
+  z-index: 99999;        /* siempre arriba */
 }
-#toast .toast-body{
+
+#toast .toast-body {
   display: flex;
+  align-items: center;
   font-weight: 500;
   color: #f3f3f3;
   font-size: 18px;
   letter-spacing: 1px;
-  align-items: center;
 }
-#toast img{
+
+#toast img {
   width: 30px;
 }
 .container-agregar button,.container-buscador button, .modificar {
@@ -61,6 +66,7 @@
 .container-lista ul li{
   font-size: 18px;
   font-weight: 400;
+  min-height: 49px;
   padding: 0px;
   color: #dcdcdc;
   background: #252d3c;
@@ -70,7 +76,7 @@
 .container-lista .cell{
   border-right: 1px solid #424347;
   padding: 3px 0px 2px 5px;
-  height: 88px;
+  min-height: 88px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -99,9 +105,8 @@
 }
 /* ESTILOS PARA PESO ARGENTINO Y BANCO */
 .moneda{
-  padding-right: 8px;
+  /* padding-right: 8px; */
   font-weight: 600;
-  font-size: 17px;
   color: #f2f2f2;
 }
 /*************************************************** MODALES *************************************/
@@ -144,19 +149,19 @@
 
 
 #modalCaja .modal-lg-custom {
-  max-width: 55vw; 
+  max-width: 55%; 
   margin: auto;
 }
 #modalAjuste .modal-lg-custom {
-  max-width: 85vw; 
+  max-width: 85%; 
   margin: auto;
 }
 #modalCerrarCaja .modal-lg-custom {
-  max-width: 45vw; 
+  max-width: 30%; 
   margin: auto;
 }
 #modalSelectFecha .modal-lg-custom {
-  max-width: 55vw; 
+  max-width: 40%; 
   margin: auto;
 }
 #modalSelectFecha .atajos button{
@@ -171,9 +176,11 @@
 #modalAjuste .saldo_pre{
   width: 50%;
   text-align: center;
-  background: #355841;
-  border-radius: 4px;
-  font-size: 23px;  
+  background: #3a5376;
+  border-radius: 4px; 
+  font-size: 19px; 
+  letter-spacing: 2px; 
+  min-height: 60px;
 }
 
 .opciones-lista{
@@ -187,8 +194,13 @@
 
 /****************************** REPORTE CAJA *********************************/
 #modalReporteCaja .modal-lg-custom {
-  max-width: 95vw; 
+  max-width: 95%; 
   margin: auto;
+}
+#modalReporteCaja .section-botones button{
+  color: #f3f3f3;
+  font-size: 17px;
+  letter-spacing: 1px;
 }
 .section-botones button:hover{
   background: #56626f;
@@ -212,6 +224,7 @@
 .lista-ajustes ul li{
   padding: 0px 0px 0px 16px;
   color: #dcdcdc;
+  min-height: 65px;
   background: #46515e00;
   border: none;
   border-bottom: 2px solid #7e7e7e;
@@ -334,8 +347,144 @@
   margin-bottom: 0 !important; /* Elimina el margen inferior */
 }
 
+ul.list-group {
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+}
 
 
 
 
+.desktop, .desktop-ajuste{
+  display: block;
+}
+.movil, .movil-ajuste{
+  display: none;
+}
 
+/* 
+md = 768px 
+lg = 992px
+*/
+
+@media(max-width:992px){
+  .desktop-ajuste{
+    display: none;
+  }
+  .movil-ajuste{
+    display: block;
+  }
+}
+
+@media(max-width:1000px){
+  .container-lista ul li .container-estado div{
+    font-size: 15px;
+  }
+  #modalCaja .modal-lg-custom{
+    max-width: 70%; /* Puedes ajustar este valor según lo necesites */
+    font-size: 12px;
+  }
+  #modalSelectFecha .modal-lg-custom {
+    max-width: 55%; 
+  }
+}
+
+@media(max-width:800px){
+  .desktop{
+    display: none;
+  }
+  .movil{
+    display: block;
+  }
+
+  /*** Encabezado ***/
+  .container-buscador input{
+    width: 90px;
+  }
+  .container-agregar button {
+    font-size: 15px;
+  }
+  .container_volver img{
+    width: 30px;
+  }
+  .container-lista ul li{
+    font-size: 15px;
+  }
+  .container-lista ul li h3{
+    font-size: 17px;
+  }
+  .container-buscador input[type="text"]::placeholder{
+    font-size: 15px;
+    color: #d6d6d6a2;
+  }
+
+  /* GENERAL */
+  .content-modal{
+    font-size: 15px;
+  }
+
+  .content-modal form input[type="text"],
+  .content-modal form input[type="password"],
+  .content-modal form input[type="number"],
+  .content-modal form input[type="date"],
+  .custom-select{
+  font-size: 15px;
+  padding: 3px 4px;
+  }
+  #modalSelectFecha .atajos button{
+    font-size: 14px;
+  }
+  #modalCaja .modal-lg-custom, #modalCerrarCaja .modal-lg-custom, #modalAjuste .modal-lg-custom{
+    max-width: 100%; /* Puedes ajustar este valor según lo necesites */
+    font-size: 12px;
+  }
+  #modalSelectFecha .modal-lg-custom {
+    max-width: 70%; 
+    font-size: 12px;
+  }
+  #modalProductoUnico .insumo label, #modalProductoUnico .cantidad-insumo label{
+    width: 120px;
+  }
+  #modalAjuste .saldo_pre{
+    font-size: 15px; 
+  }
+  #modalReporteCaja .modal-lg-custom {
+    max-width: 100%; 
+  }
+  
+  #modalReporteCaja .modal-lg-custom h5, #modalReporteCaja .section-botones button{
+    font-size: 16px;
+  }
+
+  #toast{
+    width: 99%;
+  }
+}
+
+@media(max-width:500px){
+  #modalSelectFecha .modal-lg-custom {
+    max-width: 100%; 
+  }
+  .lista-ajustes ul li{
+    font-size: 12px;
+  }
+}
+@media(max-width:300px){
+  .container-lista ul li{
+    font-size: 11px;
+  }
+  .container-lista ul li .container-estado div{
+    font-size: 10px;
+  }
+  .container-lista .cell{
+    border-right: 1px solid #424347;
+    padding: 3px 0px 2px 3px;
+  }
+  /* GENERAL */
+  .content-modal{
+    font-size: 13px;
+  }
+  #modalReporteCaja .modal-lg-custom h5, #modalReporteCaja .section-botones button{
+    font-size: 14px;
+  }
+}
