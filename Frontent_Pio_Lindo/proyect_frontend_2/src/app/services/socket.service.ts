@@ -9,7 +9,9 @@ import {configuration} from "./configuration"
 export class SocketService {
   private socket: any;
   constructor() {
-    this.socket = io('http://localhost:3000', { 
+    // Extraer la URL base de la configuración (remover /api)
+    const baseUrl = configuration.url.replace('/api', '');
+    this.socket = io(baseUrl, { 
       withCredentials: true,
       extraHeaders: {
         "my-custom-header": "abcd" // Se puede agregar encabezados personalizados aquí

@@ -23,14 +23,16 @@ const app = express();
 
 // Crear un servidor HTTP
 const server = http.createServer(app);
-// Configura el servidor de Socket.IO con CORS
+// Configura CORS para Express
 app.use(cors({
+    origin: ["http://localhost:4200", "http://192.168.3.125:4200", "file://"],
     methods: ['GET', 'POST','PUT','DELETE'],
+    credentials: true
   }));
 const io = socketIo(server, {
   cors: {
     //origin: "http://localhost:4200", // Cambia esta URL al origen de tu aplicación Angular
-    origin: ["http://localhost:4200", "http://192.168.1.100:4200", "file://"],
+    origin: ["http://localhost:4200", "http://192.168.3.125:4200", "file://"],
     methods: ["GET", "POST","PUT", "DELETE"],
     allowedHeaders: ["my-custom-header"],
     credentials: true
@@ -54,7 +56,7 @@ const io = socketIo(server, {
   
   const PORT = process.env.PORT || 3000;
   server.listen(PORT, '0.0.0.0', () => {
-    console.log(`Servidor escuchando en http://192.168.1.100:${PORT}`);
+    console.log(`Servidor escuchando en http://192.168.3.125:${PORT}`);
   });
  
   

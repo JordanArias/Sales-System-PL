@@ -1,27 +1,32 @@
-
 /************************************** MENSAJE TOAST ****************************************/
 #toast {
-    width: 25%;
-    position: fixed;
-    bottom: 0%; /* Centra verticalmente */
-    right: -10%; /* Centra horizontalmente */
-    transform: translate(-50%, -50%); /* Alinea al centro de la pantalla */
-    user-select: none;
-    /* visibility: visible;
-    display: block;  */
-  }
-  #toast .toast-body{
-    display: flex;
-    font-weight: 500;
-    color: #f3f3f3;
-    font-size: 18px;
-    letter-spacing: 1px;
-    align-items: center;
-  }
-  #toast img{
-    width: 30px;
-  }
+  position: fixed;
+  bottom: 20px;          /* separación desde abajo */
+  left: 50%;
+  transform: translateX(-50%);
   
+  min-width: 30%;            /* DESKTOP */
+  max-width: 500px;      /* opcional: no se expande demasiado */
+  user-select: none;
+  /* visibility: visible;
+  display: block; */
+
+  z-index: 99999;        /* siempre arriba */
+}
+
+#toast .toast-body {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  color: #f3f3f3;
+  font-size: 18px;
+  letter-spacing: 1px;
+}
+
+#toast img {
+  width: 30px;
+}
+
   /************************************** STYLES EN COMUN ****************************************/
   .container-opciones{
     background: #212837;
@@ -76,13 +81,12 @@
     width: 30px;
   }
   
-  .container-agregar button,.container-buscador button, .modificar {
+  .container-agregar button,.container-buscador button, .modificar-movimiento button{
     font-weight: 500;
     font-size: 16px;
     background: #004d81;
     border: none;
-    height: 36px;
-    padding: 0 15px;
+    min-height: 36px;
   }
   .container-opciones img{
     width: 20px;
@@ -218,7 +222,6 @@
     border-radius: 4px;
     margin: 3px 0;
     width: 100%;
-  
   }
   /************************* FORMS(INPUTS - OPTIONS) ************************/
   .custom-select{
@@ -250,7 +253,7 @@
     color: #c0c0c04b; /* Cambia el color según tu preferencia */
   }
   
-  .container-buscador input[type="text"]::placeholder{
+  .buscador-insumo input[type="text"]::placeholder{
     font-size: 15px;
     color: #d6d6d6a2;
   }
@@ -342,3 +345,113 @@
     font-weight: 700;
   }
   
+
+
+  
+.dropdown-item-opcion {
+  padding: 8px 15px;
+  cursor: pointer;
+  border-bottom: 1px solid #4c5b77;
+}
+
+.dropdown-item-opcion:last-child {
+  border-bottom: none;
+}
+
+.dropdown-item-opcion:hover {
+  background: #50607d;
+}
+.ngx-pagination {
+  padding: 0px;
+}
+.desktop{
+  display: block;
+}
+.movil{
+  display: none;
+}
+
+@media(max-width:800px){
+  .desktop{
+    display: none;
+  }
+  .movil{
+    display: block;
+  }
+  /*** Encabezado ***/
+  .container-buscador input{
+    width: 90px;
+  }
+  .container-agregar button,.container-buscador button, .modificar-movimiento button{
+    font-size: 13px;
+  }
+  .container_volver img{
+    width: 30px;
+  }
+
+  .container-lista ul li h3{
+    font-size: 17px;
+  }
+  .container-lista ul li{
+    font-size: 15px;
+  }
+  .container-buscador input[type="text"]::placeholder{
+    font-size: 15px;
+    color: #d6d6d6a2;
+  }
+
+  /* GENERAL */
+  .content-modal{
+    font-size: 15px;
+  }
+  /* MODAL DETALLE-MOVIMIENTO INSUMO*/
+  #modalDetalleMovimiento .modal-lg-custom {
+    max-width: 100%; 
+  }
+  /* MODAL DETALLE-MOVIMIENTO TODO*/
+  #modalDetalleMovimientoTodo .modal-lg-custom {
+    max-width: 100%; 
+  }
+  #modalModificarInsumo .modal-lg-custom, #modalAgregarInsumo .modal-lg-custom{
+    max-width: 100%; 
+  }
+  #modalEstadoInsumo .modal-lg-custom, #modalEliminarInsumo .modal-lg-custom, #modalEliminarMovimiento .modal-lg-custom{
+    max-width: 100%; 
+  }
+  #modalSelectFecha .modal-lg-custom,#modalSelectFechaTodo .modal-lg-custom {
+    max-width: 100%; 
+  }
+  #toast{
+    width: 99%;
+  }
+
+
+  .filtrar-insumo select, .buscador-insumo input{
+    font-size: 12px;
+  }
+
+  .buscador-insumo input[type="text"]::placeholder{
+    font-size: 12px;
+  }
+}
+
+.filtrar-insumo select{
+  font-size: 13px;
+  background-color: #495977;
+  color: #f3f3f3;
+  border: none;
+}
+.buscador-insumo input{
+  background: #39404a;
+  color: #f4f4f4;
+  border: none;
+}
+
+@media(max-width:300px){
+  .container-lista ul li{
+    font-size: 13px;
+  }
+  .container-agregar button,.container-buscador button, .modificar-movimiento button{
+    font-size: 11px;
+  }
+}

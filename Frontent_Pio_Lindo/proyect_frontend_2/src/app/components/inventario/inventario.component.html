@@ -3,7 +3,7 @@
 <!-- ********************************************************************************************* -->
 <div class="container-principal-Insumos">
   <!-- OPCIONES: VOLVER - BUSCAR - AGREGAR -->
-  <div class="d-flex align-items-center justify-content-between px-3 container-opciones">
+  <div class="d-flex align-items-center justify-content-between px-1 px-sm-3 container-opciones">
       <!-- Boton Volver -->
       <!-- <div class="container_volver px-5">
           <div class="btn p-0" routerLink="/inventario">
@@ -11,23 +11,26 @@
           </div>
       </div> -->
         <!-- Buscador -->
-        <div class="container-buscador px-2">
-          <button class="btn btn-secondary"  title="Filtrar Movimientos" (click)="showModalSelectFecha_Todo()"> 
-            <span class="px-0 d-flex align-items-center">
-              <img src="../assets/images/icons/icon-options/buscar.png" class="me-1">Filtrar Movimientos
-            </span>
+        <div class="container-buscador px-1 px-sm-2">
+          <button class="btn btn-secondary p-0 px-sm-2"  title="Filtrar Movimientos" (click)="showModalSelectFecha_Todo()"> 
+            Filtrar Movimientos
+            <!-- <span class="px-0 d-flex align-items-center">
+              <img src="../assets/images/icons/icon-options/buscar.png" class="me-1">
+
+            </span> -->
           </button>
         </div>
 
 
         <div class="d-flex">
           <!-- CORREGIR MOVIMIENTOS -->
-          <div class="modificar-movimiento px-2">
-            <button class="btn btn-secondary modificar" (click)="openMenu()">
-              <span class="px-0 d-flex align-items-center">
+          <div class="modificar-movimiento px-1 px-sm-2">
+            <button class="btn btn-secondary p-0 px-sm-2" (click)="openMenu()">
+              Modificar Movimiento
+              <!-- <span class="px-0 d-flex align-items-center">
                 <img src="../assets/images/icons/icon-options/modificar.png" class="me-1">
-                Modificar Movimiento
-              </span>
+                
+              </span> -->
             </button>
             <div class="menu-desplegable" id="venta-menu" [ngStyle]="{'display':corregirMovimiento ? 'block' : 'none'}">
                 <button ngbDropdownItem (click)="obtener_ultimos_Movimientos_y_Detalles(1)">Modificar Ultima Entrada</button>
@@ -37,12 +40,13 @@
           </div>
 
           <!-- BOTON NUEVO MOVIMIENTO -->
-          <div class="container-agregar px-2">
-            <button class="btn btn-secondary" (click)="showModalMovimiento(modalAgregarInsumo)">
-              <span class="px-0 d-flex align-items-center">
+          <div class="container-agregar px-1 px-sm-2">
+            <button class="btn btn-secondary p-0 px-sm-2" (click)="showModalMovimiento(modalAgregarInsumo)">
+              Agregar Movimiento
+              <!-- <span class="px-0 d-flex align-items-center">
                 <img src="../assets/images/icons/icon-options/agregar.png" class="me-1">
-                Agregar Movimiento
-              </span>
+                
+              </span> -->
             </button>
           </div>
         </div>
@@ -53,22 +57,37 @@
 
     <ul class="list-group p-0" style="border: none;">
       <!-- Titulo Principal -->
-      <li class="list-group-item d-flex justify-content-between">
-        <h3 class="m-0 px-2 py-2">Insumos</h3>
-        <div class="m-0 px-2 d-flex">
-          <button class="btn px-3" type="button" style="color: #f4f4f4;font-size: 17px;" (click)="seleccionarOpcion(2)">Todo</button>
-          <button class="btn px-3" type="button" style="color: #f4f4f4;font-size: 17px;" (click)="seleccionarOpcion(0)">Activos</button>
-          <button class="btn px-3" type="button" style="color: #f4f4f4;font-size: 17px;" (click)="seleccionarOpcion(1)">Inactivos</button>
-          <button class="btn px-3" type="button" style="color: #f4f4f4;font-size: 17px;" (click)="seleccionarOpcion(3)">Desabastecidos</button>
-       </div>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <h3 class="m-0 px-2 py-2 desktop">Insumos</h3>
+        <!-- FILTRAR INSUMOS DESKTOP -->
+        <div class="px-2 desktop">
+            <div class="m-0 px-2 d-flex">
+              <button class="btn px-3" type="button" style="color: #f4f4f4;font-size: 17px;" (click)="seleccionarOpcion(2)">Todo</button>
+              <button class="btn px-3" type="button" style="color: #f4f4f4;font-size: 17px;" (click)="seleccionarOpcion(0)">Activos</button>
+              <button class="btn px-3" type="button" style="color: #f4f4f4;font-size: 17px;" (click)="seleccionarOpcion(1)">Inactivos</button>
+              <button class="btn px-3" type="button" style="color: #f4f4f4;font-size: 17px;" (click)="seleccionarOpcion(3)">Desabastecidos</button>
+          </div>
+        </div>
+        <!-- FILTRAR INSUMOS MOVIL -->
+        <div class="filtrar-insumo m-0 px-2 py-2 movil">
+            <select class="form-select" (change)="seleccionarOpcion(+$any($event.target).value )">
+              <option [value]="2">Todo</option>
+              <option [value]="0">Activos</option>
+              <option [value]="1">Inactivos</option>
+              <option [value]="3">Desabastecidos</option>
+            </select>
+        </div>
+
         <div class="d-flex">
           <!-- Buscador -->
-          <div class="container-buscador m-0 px-2 py-2">
-            <input type="text" class="form-control" placeholder="Buscar Insumo" name="filterPost" [(ngModel)]="filterPost" style="background: #39404a;color: #f4f4f4; border: none;">
+          <div class="buscador-insumo m-0 px-2 py-2 d-flex">
+            <input type="text" class="form-control" placeholder="Buscar Insumo" name="filterPost" [(ngModel)]="filterPost">
           </div>
           <!-- Boton Agregar -->
-          <div class="container-agregar m-0 px-2 py-2">
-            <button class="btn btn-secondary" (click)="showModalAgregar(modalAgregarInsumo)">Agregar Insumo</button>
+          <div class="container-agregar m-0 px-0 px-sm-2 py-2">
+            <button class="btn btn-secondary" (click)="showModalAgregar(modalAgregarInsumo)">
+              <span class="desktop">Agregar Insumo</span> <span class="movil">Agregar</span>
+            </button>
           </div>
         </div>
 
@@ -76,46 +95,95 @@
       <!-- Titulos -->
       <li class="list-group-item">
         <div class="row mx-0 d-flex align-items-center" style="min-height: 45px;">
-          <div class="col-2 cell">Nombre</div>
-          <div class="col-2 cell">Medida</div>
-          <div class="col-2 cell">Existencia</div>
-          <div class="col-3 cell">Descripcion</div>
-          <div class="col-1 cell">Activo</div>
-          <div class="col-2 text-center">Opciones</div>
+          <!-- **** DESKTOP  ****-->
+          <div class="desktop col-2">Nombre</div>
+          <div class="desktop col-2">Medida</div>
+          <div class="desktop col-2">Existencia</div>
+          <div class="desktop col-3">Descripcion</div>
+          <div class="desktop col-1">Activo</div>
+          <div class="desktop col-2 text-center">Opciones</div>
+          <!-- **** MOVIL  ****-->
+          <div class="movil col-4 px-0">Insumo</div>
+          <div class="movil col-4 px-0">Descripcion</div>
+          <div class="movil col-2 px-0 text-center">E</div>
+          <div class="movil col-2 px-0 text-center">O</div>
         </div>
       </li>
       <!-- Lista Cajas -->
       <li class="list-group-item" *ngFor="let ins of lista_insumos_filtrados | paginate: { itemsPerPage: 8, currentPage: page } | filter:filterPost: ['nombre']; let i = index">
-        <div class="row mx-0 d-flex align-items-center" style="min-height: 45px;">
-          <!-- Nombre -->
-          <div class="col-2 cell">
-                <div class="col-12 px-0" style="color: #d4da8f">{{ins.nombre}}</div>
-          </div>
-          <!-- Medida -->
-          <div class="col-2 cell">
-                <div class="col-12 px-0">{{ins.nom_medida}}</div>    
-          </div>
-          <!-- Existencia -->
-          <div class="col-2 cell" [ngClass]="{ 'low-stock': ins.minimo >= ins.existencia }">
-            {{ins.existencia}}
-          </div>
-          <!-- Descripcion -->
-          <div class="col-3 cell">{{ins.descripcion}}</div>
-          <!-- Estado -->
-          <div class="col-1 cell">
-            <div class="btn" style="color: #f4f4f4;background: #335843; width: 90%; padding: 2px 5px;" *ngIf="ins.estado==0" (click)="showModalEstado(ins)">Activo</div>
-            <div class="btn" style="color: #f4f4f4;background: #583333; width: 90%; padding: 2px 5px;" *ngIf="ins.estado==1" (click)="showModalEstado(ins)">Inactivo</div>
-          </div>
-          <!-- Opciones -->
-          <div class="col-2 d-flex justify-content-evenly container-btn">
-            <button class="btn p-0" > <span class="px-0" (click)="showModalModificar(modalModificarInsumo,ins)"><img src="../assets/images/icons/icon-options/editar.png"></span></button>
-            <button class="btn p-0" > <span class="px-0" (click)="showModalEliminar(ins)"><img src="../assets/images/icons/icon-options/eliminar.png"></span></button>
-            <button class="btn p-0" > <span class="px-0" (click)="showModalSelectFecha(ins)"><img src="../assets/images/icons/icon-options/ver_reporte.png"></span></button>
+        <!-- **** DESKTOP  ****-->
+        <div class="desktop" style="min-height: 45px;">
+          <div class="row mx-0 d-flex align-items-center">
+              <!-- Nombre -->
+              <div class="col-2" style="color: #d4da8f"> {{ins.nombre}} </div>
+              <!-- Medida -->
+              <div class="col-2"> {{ins.nom_medida}} </div>
+              <!-- Existencia -->
+              <div class="col-2" [ngClass]="{ 'low-stock': ins.minimo >= ins.existencia }">
+                {{ins.existencia}}
+              </div>
+              <!-- Descripcion -->
+              <div class="col-3">{{ins.descripcion}}</div>
+              <!-- Estado -->
+              <div class="col-1">
+                <div class="btn" style="color: #f4f4f4;background: #335843; " *ngIf="ins.estado==0" (click)="showModalEstado(ins)">Activo</div>
+                <div class="btn" style="color: #f4f4f4;background: #583333; " *ngIf="ins.estado==1" (click)="showModalEstado(ins)">Inactivo</div>
+              </div>
+              <!-- Opciones -->
+              <div class="col-2 d-flex justify-content-evenly container-btn">
+                  <button class="btn p-0" > <span class="px-0" (click)="showModalModificar(modalModificarInsumo,ins)"><img src="../assets/images/icons/icon-options/editar.png"></span></button>
+                  <button class="btn p-0" > <span class="px-0" (click)="showModalEliminar(ins)"><img src="../assets/images/icons/icon-options/eliminar.png"></span></button>
+                  <button class="btn p-0" > <span class="px-0" (click)="showModalSelectFecha(ins)"><img src="../assets/images/icons/icon-options/ver_reporte.png"></span></button>          
               <!-- <div class="menu-desplegable" id="venta-menu" [ngStyle]="{'display': currentCardIndex === i && ventaMenuVisible ? 'block' : 'none'}">
-                <button ngbDropdownItem>Registrar Entrada</button>
-                <button ngbDropdownItem >Registrar Salida</button>
-                <button ngbDropdownItem >Registrar Merma</button>
-              </div> -->
+                    <button ngbDropdownItem>Registrar Entrada</button>
+                    <button ngbDropdownItem >Registrar Salida</button>
+                    <button ngbDropdownItem >Registrar Merma</button>
+                  </div> -->
+              </div>
+          </div>
+        </div>
+
+        <!-- **** MOVIL  ****-->
+        <div class="movil" style="min-height: 45px;">
+          <div class="row mx-0 d-flex align-items-center">
+              <!-- Nombre -->
+              <div class="col-4 row m-0 px-0"> 
+                <div class="col-12 px-0" style="color: #d4da8f"> {{ins.nombre}} </div>
+                <div class="col-4 px-0">{{ins.nom_medida}}</div>
+                <div class="col-7 px-2" [ngClass]="{ 'low-stock': ins.minimo >= ins.existencia }">{{ins.existencia}}</div>
+              </div>
+              <!-- Descripcion -->
+              <div class="col-4 px-0">{{ins.descripcion}}</div>
+
+              <!-- Estado -->
+              <div class="col-2 px-0 text-center">
+                <div class="btn" style="color: #f4f4f4;background: #335843; padding: 0px; width: 30px; height: 29px;" *ngIf="ins.estado==0" (click)="showModalEstado(ins)">A</div>
+                <div class="btn" style="color: #f4f4f4;background: #583333; padding: 0px; width: 30px; height: 29px;" *ngIf="ins.estado==1" (click)="showModalEstado(ins)">I</div>
+              </div>
+
+              <div class="col-2 px-0 text-center">
+                <div ngbDropdown class="d-inline-block">
+                <!-- Botón que abre el menú -->
+                  <button class="btn"
+                          id="dropdownOpciones"
+                          ngbDropdownToggle
+                          style="background: #495977; color: #fff; padding: 0px; width: 30px; height: 29px;">
+                  </button>        
+                  <!-- Menú desplegable -->
+                  <div ngbDropdownMenu aria-labelledby="dropdownOpciones" style="min-width: 190px; background: #495977; color: #fff; font-size: 15px; letter-spacing: 1px;">       
+                    <div class="dropdown-item-opcion" (click)="showModalModificar(modalModificarInsumo,ins)">
+                      Modificar
+                    </div>      
+                    <div class="dropdown-item-opcion" (click)="showModalEliminar(ins)">
+                      Eliminar
+                    </div>    
+                    <div class="dropdown-item-opcion" (click)="showModalSelectFecha(ins)">
+                      Reporte
+                    </div>   
+                  </div>
+              
+                </div>           
+              </div>
           </div>
         </div>
       </li>
@@ -157,7 +225,7 @@
 
 <!-- ****************************** MODAL AGREGAR NUEVO INSUMO *****************************************  -->
 <div #modalAgregarInsumo id="modalAgregarInsumo" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" (hidden.bs.modal)="resetearFormularioInsumo()">
-  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom">
+  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom m-0">
     <div class="modal-content content-modal">
       <div class="modal-header">
         <h1 class="modal-title fs-4" id="exampleModalLabel">Nuevo Insumo</h1>
@@ -278,7 +346,7 @@
 
 <!-- ****************************** MODAL MODIFICAR NUEVO INSUMO *****************************************  -->
 <div #modalModificarInsumo id="modalModificarInsumo" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" (hidden.bs.modal)="resetearFormularioInsumo()">
-  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom">
+  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom m-0">
     <div class="modal-content content-modal">
       <div class="modal-header">
         <h1 class="modal-title fs-4" id="exampleModalLabel">Modificar Insumo</h1>
@@ -358,7 +426,7 @@
 
 <!-- ****************************** MODAL CAMBIAR ESTADO DE INSUMO *****************************************  -->
 <div #modalEstadoInsumo id="modalEstadoInsumo" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
-  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom">
+  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom m-0">
     <div class="modal-content content-modal">
       <div class="modal-header">
         <h1 class="modal-title fs-4" id="exampleModalLabel">
@@ -379,7 +447,7 @@
 
 <!-- ****************************** MODAL ELIMINAR INSUMO *****************************************  -->
 <div #modalEliminarInsumo id="modalEliminarInsumo" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
-  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom">
+  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom m-0">
     <div class="modal-content content-modal">
       <div class="modal-header">
         <h1 class="modal-title fs-4" id="exampleModalLabel">Eliminar {{insumoForm.nombre}}</h1>
@@ -402,7 +470,7 @@
 
 <!-- ************************************************** MODAL REGISTRAR NUEVO MOVIMIENTO *************************************************************************  -->
 <div #modalMovimiento id="modalMovimiento" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" (hidden.bs.modal)="resetearFormularioMovimiento()">
-  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom">
+  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom m-0">
     <div class="modal-content content-modal">
       <div class="modal-header">
         <h1 class="modal-title fs-4" id="exampleModalLabel">Nuevo Movimiento</h1>
@@ -661,7 +729,7 @@
 
 <!-- ****************************** MODAL MODIFICAR(CORREGIR) ULTIMO MOVIMIENTO *****************************************  -->
 <div #modalModificarMovimiento id="modalModificarMovimiento" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" (hidden.bs.modal)="resetearFormularioMovimiento()">
-  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom">
+  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom m-0">
   <div class="modal-content content-modal">
     <div class="modal-header">
       <h1 class="modal-title fs-4" id="exampleModalLabel">Modificar Movimiento</h1>
@@ -923,7 +991,7 @@
 
 <!-- ****************************** MODAL ELIMINAR MOVIMIENTO *****************************************  -->
 <div #modalEliminarMovimiento id="modalEliminarMovimiento" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
-  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom">
+  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom m-0">
     <div class="modal-content content-modal">
       <div class="modal-header">
         <h1 class="modal-title fs-4" id="exampleModalLabel">Eliminar Movimiento</h1>
@@ -941,7 +1009,7 @@
 
 <!-- ****************************** 1.- MODAL ESCOGER FECHA DETALLE INSUMO *****************************************  -->
 <div #modalSelectFecha id="modalSelectFecha" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
-  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom">
+  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom m-0">
     <div class="modal-content content-modal">
       <div class="modal-header">
         <h1 class="modal-title fs-4" id="exampleModalLabel">Seleccionar Fecha</h1>
@@ -992,7 +1060,7 @@
 
 <!-- ****************************** 2.- MODAL DETALLE MOVIMIENTO INSUMO *****************************************  -->
 <div #modalDetalleMovimiento id="modalDetalleMovimiento" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" (hidden.bs.modal)="cerrarModal_Reporte()">
-  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom">
+  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom m-0">
     <div class="modal-content content-modal" style="background: #414b56; min-height: max-content; max-height: 90vh;">
       <div class="modal-header">
         <h1 class="modal-title fs-4" id="exampleModalLabel">Reporte Movimientos del Insumo "{{nombre_insumo}}" </h1>
@@ -1096,7 +1164,7 @@
 
 <!-- ****************************** 1.- MODAL ESCOGER FECHA DETALLE TODO *****************************************  -->
 <div #modalSelectFechaTodo id="modalSelectFechaTodo" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
-  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom">
+  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom m-0">
     <div class="modal-content content-modal">
       <div class="modal-header">
         <h1 class="modal-title fs-4" id="exampleModalLabel">Filtrar Movimientos</h1>
@@ -1158,7 +1226,7 @@
 
 <!-- ****************************** 2.- MODAL DETALLE MOVIMIENTO INSUMO *****************************************  -->
 <div #modalDetalleMovimientoTodo id="modalDetalleMovimientoTodo" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" (hidden.bs.modal)="cerrarModal_Reporte()">
-  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom">
+  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom m-0">
     <div class="modal-content content-modal" style="background: #414b56; min-height: max-content; max-height: 90vh;">
       <div class="modal-header">
         <h1 class="modal-title fs-4" id="exampleModalLabel">Reporte Movimientos</h1>
