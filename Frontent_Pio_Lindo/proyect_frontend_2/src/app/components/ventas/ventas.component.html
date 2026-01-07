@@ -107,8 +107,8 @@
                   <ng-container *ngFor="let opcion of detalle.detalle_opcion">
                     <!-- Iterar sobre cada complemento -->
                     <div class="complemento-col me-3 d-flex flex-wrap">
-                      <p class="detalle-producto m-0" *ngFor="let o of opcion">
-                        <span style="font-weight: 400;">{{o.cantidad_op}}</span>  {{ o.nombre }}
+                      <p class="detalle-producto m-0 me-2" *ngFor="let o of opcion"> 
+                        <span style="font-weight: 400;"> {{ o.cantidad_op }} </span> {{ o.nombre }}
                       </p>
                     </div>
                   </ng-container>

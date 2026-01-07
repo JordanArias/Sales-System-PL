@@ -835,7 +835,7 @@ isFormInsumoValid():boolean{
   console.log("Cantidad: ",cantidad, "Precio: ", precio, "DescripcionMov:", descripcionMov);
   
   const validarMovimiento = cantidad>0 && precio>0 && descripcionMov.trim().length>0;
-  const validarInsumo = nombre.trim().length>0 && descripcion.trim().length>0 && this.insumoForm.medida !=0 && minimo > 0;
+  const validarInsumo = nombre.trim().length>0 && descripcion.trim().length>0 && (this.insumoForm.medida !=0 || this.insumoForm.medida !=null) && minimo > 0;
   console.log('validarInsumo: ',validarInsumo);
   console.log('validarMovimiento: ',validarMovimiento);
   // return false;
@@ -846,7 +846,7 @@ isFormInsumoValidMod():boolean{
   const nombre = this.insumoForm.nombre ||''; console.log(nombre);
   const descripcion = this.insumoForm.descripcion || '';
   
-  const validarInsumo = nombre.trim().length>0 && descripcion.trim().length>0 && this.insumoForm.medida !=0;
+  const validarInsumo = nombre.trim().length>0 && descripcion.trim().length>0 && (this.insumoForm.medida !=0 || this.insumoForm.medida !=null);
   console.log('validarInsumo: ',validarInsumo);
   // return false;
   return validarInsumo;

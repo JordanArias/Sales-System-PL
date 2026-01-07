@@ -201,13 +201,10 @@
   #modalEstadoInsumo .modal-lg-custom, #modalEliminarInsumo .modal-lg-custom, #modalEliminarMovimiento .modal-lg-custom{
     max-width: 40%; 
   }
-  /* Diseño para centrear los modales
+  /* Diseño para centrear los modales */
   #modalMovimiento .modal-dialog-centered, #modalModificarMovimiento .modal-dialog-centered, #modalDetalleMovimiento .modal-dialog-centered ,#modalDetalleMovimientoTodo .modal-dialog-centered {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: calc(100% - 1rem);
-  } */
+    margin: auto;
+  }
   #modalMovimiento .modal-content, #modalModificarMovimiento .modal-content, #modalDetalleMovimiento .modal-content, #modalDetalleMovimientoTodo .modal-content {
     width: 100%;
   }
@@ -401,6 +398,14 @@
   }
 
   /* GENERAL */
+  .content-modal form input[type="text"],
+  .content-modal form input[type="password"],
+  .content-modal form input[type="number"],
+  .content-modal form input[type="date"],
+  .custom-select{
+  font-size: 15px;
+  padding: 3px 4px;
+  }
   .content-modal{
     font-size: 15px;
   }

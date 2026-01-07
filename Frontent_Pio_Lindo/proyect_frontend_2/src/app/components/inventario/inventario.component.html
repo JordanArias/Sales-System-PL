@@ -225,7 +225,7 @@
 
 <!-- ****************************** MODAL AGREGAR NUEVO INSUMO *****************************************  -->
 <div #modalAgregarInsumo id="modalAgregarInsumo" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" (hidden.bs.modal)="resetearFormularioInsumo()">
-  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom m-0">
+  <div class="modal-dialog modal-dialog-centered modal-lg-custom">
     <div class="modal-content content-modal">
       <div class="modal-header">
         <h1 class="modal-title fs-4" id="exampleModalLabel">Nuevo Insumo</h1>
@@ -235,7 +235,7 @@
       <div class="modal-body">
         <form #formInsumo="ngForm" class="row g-3" (ngSubmit)="Agregar_Insumo()">
           <!-- NOMBRE DE INSUMO -->
-          <div class="col-4 mb-1 mt-1">
+          <div class="col-12 col-sm-4 mb-1 mt-1">
             <label class="form-label">Nombre</label>
             <input type="text" #nombre="ngModel" [(ngModel)]="insumoForm.nombre"  [class.is-invalid]="mostrarAdvertenciasInsumo && insumoForm.nombre.length == 0" name="nombre" class="form-control" placeholder="Nombre" required>
             <div class="advertencias" *ngIf="mostrarAdvertenciasInsumo && insumoForm.nombre.length == 0">
@@ -244,7 +244,7 @@
             </div>
           </div>
           <!-- MEDIDA -->
-          <div class="col-4 mb-0 mt-1">
+          <div class="col-12 col-sm-4 mb-0 mt-1">
             <label class="form-label">Medida</label>
             <select class="custom-select" #medida="ngModel" [(ngModel)]="insumoForm.medida" [class.is-invalid]="mostrarAdvertenciasInsumo && medida.value == 0" name="medida" [value]="0" required>
               <option value=0>Seleccionar</option>
@@ -254,13 +254,13 @@
               <option value=4>Litros</option>
               <option value=5>Mililitros</option>
             </select>
-            <div class="advertencias" *ngIf="mostrarAdvertenciasInsumo && medida.value==0">
+            <div class="advertencias" *ngIf="mostrarAdvertenciasInsumo && (medida.value==0 || medida.value==null)">
               <img src="../assets/images/icons/icon-options/advertencia.png" style="width: 20px; margin-right: 8px;">
               <p class="m-0">Seleccione una medida</p>
             </div>
           </div>
           <!-- CANTIDAD MINIMA DE INSUMO -->
-          <div class="col-4 mb-2 mt-1">
+          <div class="col-12 col-sm-4 mb-2 mt-1">
             <label class="form-label">Stock mínimo</label>
             <input type="number" #minimo="ngModel" [(ngModel)]="insumoForm.minimo" [class.is-invalid]="mostrarAdvertenciasInsumo && insumoForm.minimo <= 0" name="minimo" class="form-control">
             <div class="advertencias" *ngIf="mostrarAdvertenciasInsumo  && insumoForm.minimo <= 0">
@@ -294,7 +294,7 @@
             </div> -->
           </div>
           <!-- TIPO DE CAMBIO -->
-          <div class="col-4 mb-1 mt-0">
+          <div class="col-12 col-sm-4 mb-1 mt-0">
               <label class="form-label mx-1">Tipo de Cambio</label>
               <input type="number" #tipo_cambio="ngModel" [(ngModel)]="movimientoInsumoForm.tipo_cambio" name="cambio" class="form-control">
             <div class="advertencias" *ngIf="mostrarAdvertenciasInsumo && (movimientoInsumoForm.tipo_cambio!=null && movimientoInsumoForm.tipo_cambio<=0)" title="Tipo de Cambio debe ser > 0 ">
@@ -303,7 +303,7 @@
             </div>
           </div>
           <!-- CANTIDAD INSUMO -->
-          <div class="col-4 mb-1 mt-0">
+          <div class="col-12 col-sm-44 mb-1 mt-0">
               <label class="form-label">Cantidad</label>
               <input type="number" #cantidad="ngModel" [(ngModel)]="detalleMovInsumoForm.cantidad" name="cantidadinsumo" class="form-control">
               <div class="advertencias" *ngIf="mostrarAdvertenciasInsumo && (detalleMovInsumoForm.cantidad ?? 0) <= 0" title="Cantidad debe ser > 0 ">
@@ -312,7 +312,7 @@
               </div>
           </div>
           <!-- PRECIO INSUMO -->
-          <div class="col-4 mb-1 mt-0">
+          <div class="col-12 col-sm-4 mb-1 mt-0">
               <label class="form-label" *ngIf="movimientoInsumoForm.tipo_cambio==null">Precio Bs.</label>
               <label class="form-label" *ngIf="movimientoInsumoForm.tipo_cambio!=null">Precio Arg.</label>
               <input type="number" #precio="ngModel" [(ngModel)]="detalleMovInsumoForm.precio" name="precioinsumo" class="form-control">
@@ -323,7 +323,7 @@
             </div>
           </div>
           <!-- DESCRIPCION MOVIMIENTO-->
-          <div class="col-12 mb-2 mt-0">
+          <div class="col-12mb-2 mt-0">
             <label class="form-label">Descripción Movimiento</label>
             <input type="text" #descripcion="ngModel" [(ngModel)]="movimientoInsumoForm.descripcion" [class.is-invalid]="mostrarAdvertenciasInsumo && movimientoInsumoForm.descripcion.length == 0" name="DescripciónMovimiento" class="form-control">
             <div class="advertencias" *ngIf="mostrarAdvertenciasInsumo  && movimientoInsumoForm.descripcion.length == 0">
@@ -346,7 +346,7 @@
 
 <!-- ****************************** MODAL MODIFICAR NUEVO INSUMO *****************************************  -->
 <div #modalModificarInsumo id="modalModificarInsumo" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" (hidden.bs.modal)="resetearFormularioInsumo()">
-  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom m-0">
+  <div class="modal-dialog modal-dialog-centered modal-lg-custom">
     <div class="modal-content content-modal">
       <div class="modal-header">
         <h1 class="modal-title fs-4" id="exampleModalLabel">Modificar Insumo</h1>
@@ -356,7 +356,7 @@
       <div class="modal-body">
         <form #formInsumo="ngForm" class="row g-3" (ngSubmit)="Modificar_Insumo()">
           <!-- NOMBRE -->
-          <div class="col-4 mb-1 mt-0">
+          <div class="col-12 col-sm-4 mb-1 mt-0">
             <label class="form-label">Nombre:</label>
             <input type="text" #nombre="ngModel" [(ngModel)]="insumoForm.nombre"  [class.is-invalid]="mostrarAdvertenciasInsumo && insumoForm.nombre.length == 0" name="nombre" class="form-control" placeholder="Nombre" required>
             <div class="advertencias" *ngIf="mostrarAdvertenciasInsumo && insumoForm.nombre.length == 0">
@@ -365,7 +365,7 @@
             </div>
           </div>
           <!-- MEDIDA -->
-          <div class="col-4 mb-0 mt-0">
+          <div class="col-12 col-sm-4 mb-0 mt-0">
             <label class="form-label">Medida:</label>
             <select class="custom-select" #medida="ngModel" [(ngModel)]="insumoForm.medida" [class.is-invalid]="mostrarAdvertenciasInsumo && medida.value == 0" name="medida" [value]="0" required>
               <option value=0>Seleccionar</option>
@@ -381,7 +381,7 @@
             </div>
           </div>
           <!-- CANTIDAD MINIMA DE INSUMO -->
-          <div class="col-4 mb-2 mt-1">
+          <div class="col-12 col-sm-4 mb-0 mt-0">
             <label class="form-label">Stock mínimo</label>
             <input type="number" #minimo="ngModel" [(ngModel)]="insumoForm.minimo" [class.is-invalid]="mostrarAdvertenciasInsumo && insumoForm.minimo <= 0" name="minimo" class="form-control">
             <div class="advertencias" *ngIf="mostrarAdvertenciasInsumo  && insumoForm.minimo <= 0">
@@ -426,7 +426,7 @@
 
 <!-- ****************************** MODAL CAMBIAR ESTADO DE INSUMO *****************************************  -->
 <div #modalEstadoInsumo id="modalEstadoInsumo" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
-  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom m-0">
+  <div class="modal-dialog modal-dialog-centered modal-lg-custom">
     <div class="modal-content content-modal">
       <div class="modal-header">
         <h1 class="modal-title fs-4" id="exampleModalLabel">
@@ -447,7 +447,7 @@
 
 <!-- ****************************** MODAL ELIMINAR INSUMO *****************************************  -->
 <div #modalEliminarInsumo id="modalEliminarInsumo" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
-  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom m-0">
+  <div class="modal-dialog modal-dialog-centered modal-lg-custom">
     <div class="modal-content content-modal">
       <div class="modal-header">
         <h1 class="modal-title fs-4" id="exampleModalLabel">Eliminar {{insumoForm.nombre}}</h1>
@@ -470,7 +470,7 @@
 
 <!-- ************************************************** MODAL REGISTRAR NUEVO MOVIMIENTO *************************************************************************  -->
 <div #modalMovimiento id="modalMovimiento" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" (hidden.bs.modal)="resetearFormularioMovimiento()">
-  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom m-0">
+  <div class="modal-dialog modal-dialog-centered modal-lg-custom">
     <div class="modal-content content-modal">
       <div class="modal-header">
         <h1 class="modal-title fs-4" id="exampleModalLabel">Nuevo Movimiento</h1>
@@ -729,7 +729,7 @@
 
 <!-- ****************************** MODAL MODIFICAR(CORREGIR) ULTIMO MOVIMIENTO *****************************************  -->
 <div #modalModificarMovimiento id="modalModificarMovimiento" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" (hidden.bs.modal)="resetearFormularioMovimiento()">
-  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom m-0">
+  <div class="modal-dialog modal-dialog-centered modal-lg-custom">
   <div class="modal-content content-modal">
     <div class="modal-header">
       <h1 class="modal-title fs-4" id="exampleModalLabel">Modificar Movimiento</h1>
@@ -991,7 +991,7 @@
 
 <!-- ****************************** MODAL ELIMINAR MOVIMIENTO *****************************************  -->
 <div #modalEliminarMovimiento id="modalEliminarMovimiento" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
-  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom m-0">
+  <div class="modal-dialog modal-dialog-centered modal-lg-custom">
     <div class="modal-content content-modal">
       <div class="modal-header">
         <h1 class="modal-title fs-4" id="exampleModalLabel">Eliminar Movimiento</h1>
@@ -1009,7 +1009,7 @@
 
 <!-- ****************************** 1.- MODAL ESCOGER FECHA DETALLE INSUMO *****************************************  -->
 <div #modalSelectFecha id="modalSelectFecha" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
-  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom m-0">
+  <div class="modal-dialog modal-dialog-centered modal-lg-custom">
     <div class="modal-content content-modal">
       <div class="modal-header">
         <h1 class="modal-title fs-4" id="exampleModalLabel">Seleccionar Fecha</h1>
@@ -1018,9 +1018,9 @@
       <div class="modal-body">
         <form #formInsumo="ngForm" class="row g-3">
 
-          <div class="col-8 row m-0 mt-4">
+          <div class="col-6 col-sm-8 row m-0 mt-4 px-1">
             <!-- FECHA INICIAL -->
-            <div class="col-6 mb-1 mt-0">
+            <div class="col-12 col-sm-6 mb-1 mt-0 px-0">
               <label class="form-label">Fecha Inicial:</label>
               <input type="date" #fechaIni="ngModel" [(ngModel)]="selectFecha.fechaI" name="fechaIni" [max]="today" [class.is-invalid]="mostrarAdvertenciasFechaI && !isFormValid_Fecha()" required style="width: 100%;" class="form-control">
               <div class="advertencias" *ngIf="mostrarAdvertenciasFechaI && !isFormValid_Fecha()">
@@ -1029,7 +1029,7 @@
               </div>
             </div>
             <!-- FECHA FINAL -->
-            <div class="col-6 mb-1 mt-0">
+            <div class="col-12 col-sm-6 mb-1 mt-0 px-0">
               <label class="form-label">Fecha Final:</label>
               <input type="date" #fechaFin="ngModel" [(ngModel)]="selectFecha.fechaF" [max]="today" [class.is-invalid]="mostrarAdvertenciasFecha && !isFormValid_Fecha()" name="fechaFin" class="form-control"  required style="width: 100%;">
               <div class="advertencias" *ngIf="mostrarAdvertenciasFecha && !isFormValid_Fecha()">
@@ -1040,7 +1040,7 @@
          </div>
 
           <!-- ATAJOS -->
-          <div class="col-4 m-0 atajos mt-4">
+          <div class="col-6 col-sm-4 m-0 atajos mt-4 px-1">
             <button type="button" class="btn btn-secondary" (click)="seleccionar_Atajo(7)">Últimos 7 días</button>
             <button type="button" class="btn btn-secondary" (click)="seleccionar_Atajo(15)">Últimos 15 días</button>
             <button type="button" class="btn btn-secondary" (click)="seleccionar_Atajo(30)">Últimos 30 días</button>
@@ -1060,7 +1060,7 @@
 
 <!-- ****************************** 2.- MODAL DETALLE MOVIMIENTO INSUMO *****************************************  -->
 <div #modalDetalleMovimiento id="modalDetalleMovimiento" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" (hidden.bs.modal)="cerrarModal_Reporte()">
-  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom m-0">
+  <div class="modal-dialog modal-dialog-centered modal-lg-custom">
     <div class="modal-content content-modal" style="background: #414b56; min-height: max-content; max-height: 90vh;">
       <div class="modal-header">
         <h1 class="modal-title fs-4" id="exampleModalLabel">Reporte Movimientos del Insumo "{{nombre_insumo}}" </h1>
@@ -1164,7 +1164,7 @@
 
 <!-- ****************************** 1.- MODAL ESCOGER FECHA DETALLE TODO *****************************************  -->
 <div #modalSelectFechaTodo id="modalSelectFechaTodo" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
-  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom m-0">
+  <div class="modal-dialog modal-dialog-centered modal-lg-custom">
     <div class="modal-content content-modal">
       <div class="modal-header">
         <h1 class="modal-title fs-4" id="exampleModalLabel">Filtrar Movimientos</h1>
@@ -1226,7 +1226,7 @@
 
 <!-- ****************************** 2.- MODAL DETALLE MOVIMIENTO INSUMO *****************************************  -->
 <div #modalDetalleMovimientoTodo id="modalDetalleMovimientoTodo" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" (hidden.bs.modal)="cerrarModal_Reporte()">
-  <div class="modal-dialog modal-dialog-centered d-flex justify-content-center modal-lg-custom m-0">
+  <div class="modal-dialog modal-dialog-centered modal-lg-custom">
     <div class="modal-content content-modal" style="background: #414b56; min-height: max-content; max-height: 90vh;">
       <div class="modal-header">
         <h1 class="modal-title fs-4" id="exampleModalLabel">Reporte Movimientos</h1>
