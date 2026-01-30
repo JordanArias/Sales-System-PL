@@ -67,7 +67,7 @@
           </div>
         </li>
         <!-- Lista Cajas -->
-        <li class="list-group-item" *ngFor="let pro of lista_productos_filtradas | paginate: { itemsPerPage: 8, currentPage: page } | filter:filterPost: ['nombre']; let i = index">
+        <li class="list-group-item" *ngFor="let pro of lista_productos_filtradas | paginate: { itemsPerPage: 6, currentPage: page } | filter:filterPost: ['nombre']; let i = index">
           <div class="row mx-0 d-flex align-items-center">
             <!-- Nombre -->
             <div class="col-4 cell">

@@ -30,14 +30,21 @@
       <!-- Titulos -->
       <li class="list-group-item" style="font-weight: 500;">
         <div class="row mx-0 d-flex align-items-center">
-          <div class="col-3 cell">Nombre</div>
-          <div class="col-4 row m-0 p-0">
-            <div class="col-2 cell">Doc.</div>
-            <div class="col-6 cell">N° Identidad</div>
-            <div class="col-4 cell">Celular</div>
+          <div class="col-3 col-md-3 cell">Nombre</div>
+          <div class="col-3 col-md-4 m-0 p-0">
+            <!-- DESKTOP -->
+            <div class="desktop">
+              <div class="row m-0 p-0">
+                <div class="col-3">Doc.</div>
+                <div class="col-6">N° Identidad</div>
+                <div class="col-3">Celular</div>
+              </div>
+            </div>
+            <!-- MOVIL -->
+            <div class="movil">Datos</div>
           </div>
-          <div class="col-3 cell">Correo</div>
-          <div class="col-1 cell">Estado</div>
+          <div class="col-3 col-md-3">Correo</div>
+          <div class="col-2 col-md-1">Estado</div>
           <div class="col-1 text-center">Op</div>
         </div>
       </li>
@@ -46,40 +53,100 @@
       <li class="list-group-item" *ngFor="let c of lista_clientes_filtradas | paginate: { itemsPerPage: 9, currentPage: page } | filter:filterPost: ['nombre']; let i = index">
         <div class="row mx-0 d-flex align-items-center">
           <!-- NOMBRE -->
-          <div class="col-3 cell">
+          <div class="col-3 col-md-3 cell">
               <div class="col-12 px-0" style="color: #d4da8f">{{c.nombre}}</div>
           </div>
-          <div class="col-4 row m-0 p-0">
-            <!-- DOCUMENTO -->
-            <div class="col-2 cell">
-              <span *ngIf="c.documento == 1">CI</span>
-              <span *ngIf="c.documento == 2">NIT</span>
-              <span *ngIf="c.documento == 3">DNI</span>
-              <span *ngIf="c.documento == 4">S/N</span>
+          <div class="col-3 col-md-4 row m-0 p-0">
+            <!-- ****** DESKTOP ****** -->
+            <div class="desktop">
+              <div class="row m-0 p-0">
+                <!-- DOCUMENTO -->
+                <div class="col-3 cell">
+                  <span *ngIf="c.documento == 1">CI</span>
+                  <span *ngIf="c.documento == 2">NIT</span>
+                  <span *ngIf="c.documento == 3">DNI</span>
+                  <span *ngIf="c.documento == 4">S/N</span>
+                </div>
+                <!-- CODIGO -->
+                <div class="col-6 cell" style="color: #d4da8f">
+                  {{c.identificacion}}
+                </div>
+                <!-- CELULAR -->
+                <div class="col-3 cell">
+                  {{c.celular}}    
+                </div>
+              </div>
             </div>
-            <!-- CODIGO -->
-            <div class="col-6 cell" style="color: #d4da8f">
-              {{c.identificacion}}
+            <!-- ****** MOVIL ****** -->
+            <div class="movil p-0">
+              <div class="row m-0 p-0">
+                <!-- DOCUMENTO -->
+                <div class="col-12 p-0">
+                  <span *ngIf="c.documento == 1">CI {{c.identificacion}}</span>
+                  <span *ngIf="c.documento == 2">NIT {{c.identificacion}}</span>
+                  <span *ngIf="c.documento == 3">DNI {{c.identificacion}}</span>
+                  <span *ngIf="c.documento == 4">S/N {{c.identificacion}}</span>
+                </div>
+                <!-- CELULAR -->
+                <div class="col-12 p-0">
+                  Cel. {{c.celular}}    
+                </div>
+              </div>
             </div>
-            <!-- CELULAR -->
-            <div class="col-4 cell">
-              {{c.celular}}    
-            </div>
+
           </div>
 
+
           <!-- CORREO -->
-          <div class="col-3 cell">
+          <div class="col-3 col-md-3 cell">
               {{c.correo}}  
           </div>
           <!-- ESTADO -->
-          <div class="col-1 cell">
-            <div class="btn py-1" title="Desactivar Opcion" style="color: #f4f4f4;background: #335843;width: 100%; padding: 5px 0;" *ngIf="c.estado==0" (click)="showModal_EstadoCliente(c)">Activo</div>
-            <div class="btn" title="Activar Opcion" style="color: #f4f4f4;background: #583333;width: 100%; padding: 5px 0;" *ngIf="c.estado==1" (click)="showModal_EstadoCliente(c)">Inactivo</div> 
+          <div class="col-2 col-md-1 cell">
+            <div class="btn px-0 px-sm-2" title="Desactivar Cliente" style="color: #f4f4f4;background: #335843; width: 60%;" *ngIf="c.estado==0" (click)="showModal_EstadoCliente(c)">
+              <span class="desktop">Activo</span>
+              <span class="movil">A</span>
+            </div>
+            <div class="btn px-0 px-sm-2" title="Activar Cliente" style="color: #f4f4f4;background: #335843; width: 60%;"  *ngIf="c.estado==1" (click)="showModal_EstadoCliente(c)">
+              <span class="desktop">Inactivo</span>
+              <span class="movil">I</span>
+            </div> 
           </div>
           <!-- Opciones -->
-          <div class="col-1 d-flex justify-content-evenly container-btn">
-            <button class="btn p-0" > <span class="px-0" title="Modificar Opción"><img src="../assets/images/icons/icon-options/editar.png" (click)="showModalFormulario_Cliente(c,2)"></span></button>
-            <button class="btn p-0" > <span class="px-0" title="Eliminar Opción"><img src="../assets/images/icons/icon-options/eliminar.png" (click)="showModal_EliminarCliente(c)"></span></button>
+          <div class="col-1 d-flex justify-content-evenly container-btn">      
+            <div class="desktop">
+              <button class="btn p-0" > <span class="px-0" (click)="showModalFormulario_Cliente(c,2)"><img src="../assets/images/icons/icon-options/editar.png"></span></button>
+              <button class="btn p-0" > <span class="px-0" (click)="showModal_EliminarCliente(c)"><img src="../assets/images/icons/icon-options/eliminar.png"></span></button>            
+            </div>
+
+            <div class="movil">
+                <div ngbDropdown class="d-inline-block">
+
+                  <!-- Botón que abre el menú -->
+                  <button class="btn"
+                          id="dropdownOpciones"
+                          ngbDropdownToggle
+                          style="background: #495977; color: #fff; margin-left: 10px; padding: 0px; width: 30px; height: 29px;">
+                  </button>
+              
+                  <!-- Menú desplegable -->
+                  <div ngbDropdownMenu aria-labelledby="dropdownOpciones" style="min-width: 190px; background: #495977; color: #fff; font-size: 15px; letter-spacing: 1px;">
+              
+                    <div class="dropdown-item-opcion" (click)="showModalFormulario_Cliente(c,2)">
+                      Modificar Usuario
+                    </div>
+              
+                    <div class="dropdown-item-opcion" (click)="showModal_EliminarCliente(c)">
+                      Eliminar Usuario
+                    </div>
+              
+              
+                  </div>
+              
+                </div>           
+            </div>
+          
+          
           </div>
         </div>
       </li>
@@ -89,6 +156,7 @@
         (pageChange)="page = $event" 
         previousLabel="Anterior" 
         nextLabel="Siguiente"        
+        [responsive]="true"
         style="text-align: center;">
        </pagination-controls>
       </li>
