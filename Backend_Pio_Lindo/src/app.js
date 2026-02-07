@@ -25,14 +25,15 @@ const app = express();
 const server = http.createServer(app);
 // Configura CORS para Express
 app.use(cors({
-    origin: ["http://localhost:4200", "http://192.168.3.125:4200", "file://"],
+    // origin: ["http://localhost:4200", "http://192.168.3.125:4200", "file://"],
+    origin: ["http://localhost:4200", "http://192.168.1.100:4200", "file://"],
     methods: ['GET', 'POST','PUT','DELETE'],
     credentials: true
   }));
 const io = socketIo(server, {
   cors: {
-    //origin: "http://localhost:4200", // Cambia esta URL al origen de tu aplicación Angular
-    origin: ["http://localhost:4200", "http://192.168.3.125:4200", "file://"],
+    // origin: ["http://localhost:4200", "http://192.168.3.125:4200", "file://"],
+    origin: ["http://localhost:4200", "http://192.168.1.100:4200", "file://"],
     methods: ["GET", "POST","PUT", "DELETE"],
     allowedHeaders: ["my-custom-header"],
     credentials: true
