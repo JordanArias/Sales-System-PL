@@ -10,7 +10,10 @@
       </div>
       <!-- Boton Agregar -->
       <div class="container-agregar">
-        <button class="btn btn-secondary" (click)="showModalFormulario_Cliente('',1)">Agregar Cliente</button>
+        <button class="btn btn-secondary d-flex" (click)="showModalFormulario_Cliente('',1)"> 
+          <span class="desktop">Agregar Cliente</span>
+          <span class="movil">Agregar</span>
+        </button>
       </div>
 
   </div>
@@ -30,90 +33,73 @@
       <!-- Titulos -->
       <li class="list-group-item" style="font-weight: 500;">
         <div class="row mx-0 d-flex align-items-center">
-          <div class="col-3 col-md-3 cell">Nombre</div>
-          <div class="col-3 col-md-4 m-0 p-0">
-            <!-- DESKTOP -->
+          <div class="col-2 col-md-2 cell">Nombre</div>
+          <!-- DESKTOP: Doc, Identidad, Celular | MOVIL: una columna "Datos" (incluye correo) -->
+          <div class="col-6 col-md-4 m-0 p-0">
             <div class="desktop">
               <div class="row m-0 p-0">
-                <div class="col-3">Doc.</div>
-                <div class="col-6">N° Identidad</div>
-                <div class="col-3">Celular</div>
+                <div class="col-3 cell">Doc.</div>
+                <div class="col-6 cell">N° Identidad</div>
+                <div class="col-3 cell">Celular</div>
               </div>
             </div>
-            <!-- MOVIL -->
-            <div class="movil">Datos</div>
+            <div class="movil">Datos / Correo</div>
           </div>
-          <div class="col-3 col-md-3">Correo</div>
-          <div class="col-2 col-md-1">Estado</div>
-          <div class="col-1 text-center">Op</div>
+          <div class="col-3 col-md-3 cell desktop">Correo</div>
+          <div class="col-2 col-md-1 cell">Estado</div>
+          <div class="col-2 text-center cell">Op</div>
         </div>
       </li>
       <!-- Lista Opciones -->
       <!-- <li class="list-group-item" *ngFor="let op of lista_opciones | paginate: { itemsPerPage: 5, currentPage: p }"> -->
-      <li class="list-group-item" *ngFor="let c of lista_clientes_filtradas | paginate: { itemsPerPage: 9, currentPage: page } | filter:filterPost: ['nombre']; let i = index">
+      <li class="list-group-item" *ngFor="let c of lista_clientes_filtradas | paginate: { itemsPerPage: 7, currentPage: page } | filter:filterPost: ['nombre']; let i = index">
         <div class="row mx-0 d-flex align-items-center">
           <!-- NOMBRE -->
-          <div class="col-3 col-md-3 cell">
+          <div class="col-2 col-md-2 p-0 cell">
               <div class="col-12 px-0" style="color: #d4da8f">{{c.nombre}}</div>
           </div>
-          <div class="col-3 col-md-4 row m-0 p-0">
-            <!-- ****** DESKTOP ****** -->
+          <!-- Columna Datos (desktop) / Datos+Correo en una sola columna (movil) -->
+          <div class="col-6 col-md-4 m-0 p-0">
             <div class="desktop">
               <div class="row m-0 p-0">
-                <!-- DOCUMENTO -->
                 <div class="col-3 cell">
                   <span *ngIf="c.documento == 1">CI</span>
                   <span *ngIf="c.documento == 2">NIT</span>
                   <span *ngIf="c.documento == 3">DNI</span>
                   <span *ngIf="c.documento == 4">S/N</span>
                 </div>
-                <!-- CODIGO -->
-                <div class="col-6 cell" style="color: #d4da8f">
-                  {{c.identificacion}}
-                </div>
-                <!-- CELULAR -->
-                <div class="col-3 cell">
-                  {{c.celular}}    
-                </div>
+                <div class="col-6 cell" style="color: #d4da8f">{{c.identificacion}}</div>
+                <div class="col-3 cell">{{c.celular}}</div>
               </div>
             </div>
-            <!-- ****** MOVIL ****** -->
-            <div class="movil p-0">
-              <div class="row m-0 p-0">
-                <!-- DOCUMENTO -->
-                <div class="col-12 p-0">
-                  <span *ngIf="c.documento == 1">CI {{c.identificacion}}</span>
-                  <span *ngIf="c.documento == 2">NIT {{c.identificacion}}</span>
-                  <span *ngIf="c.documento == 3">DNI {{c.identificacion}}</span>
-                  <span *ngIf="c.documento == 4">S/N {{c.identificacion}}</span>
-                </div>
-                <!-- CELULAR -->
-                <div class="col-12 p-0">
-                  Cel. {{c.celular}}    
-                </div>
+            <div class="movil">
+              <div class="d-flex flex-column">
+                <span *ngIf="c.documento == 1">CI {{c.identificacion}}</span>
+                <span *ngIf="c.documento == 2">NIT {{c.identificacion}}</span>
+                <span *ngIf="c.documento == 3">DNI {{c.identificacion}}</span>
+                <span *ngIf="c.documento == 4">S/N {{c.identificacion}}</span>
+                <span>Cel. {{c.celular}}</span>
+                <span>{{c.correo}}</span>
               </div>
             </div>
-
           </div>
-
-
-          <!-- CORREO -->
-          <div class="col-3 col-md-3 cell">
-              {{c.correo}}  
+          <!-- CORREO solo desktop -->
+          <div class="col-3 col-md-3 p-0 cell desktop">
+              {{c.correo}}
           </div>
           <!-- ESTADO -->
-          <div class="col-2 col-md-1 cell">
-            <div class="btn px-0 px-sm-2" title="Desactivar Cliente" style="color: #f4f4f4;background: #335843; width: 60%;" *ngIf="c.estado==0" (click)="showModal_EstadoCliente(c)">
+          <div class="col-2 col-md-1 p-0">
+            <div class="btn px-0 px-lg-2" title="Desactivar Cliente" style="color: #f4f4f4;background: #335843; width: 100%;" *ngIf="c.estado==0" (click)="showModal_EstadoCliente(c)">
               <span class="desktop">Activo</span>
               <span class="movil">A</span>
             </div>
-            <div class="btn px-0 px-sm-2" title="Activar Cliente" style="color: #f4f4f4;background: #335843; width: 60%;"  *ngIf="c.estado==1" (click)="showModal_EstadoCliente(c)">
+            <div class="btn px-0 px-sm-2" title="Activar Cliente" style="color: #f4f4f4;background: #583333; width: 100%;"  *ngIf="c.estado==1" (click)="showModal_EstadoCliente(c)">
               <span class="desktop">Inactivo</span>
               <span class="movil">I</span>
             </div> 
           </div>
-          <!-- Opciones -->
-          <div class="col-1 d-flex justify-content-evenly container-btn">      
+          <!-- OPCIONES -->
+          <div class="col-2 d-flex justify-content-evenly container-btn p-0">      
             <div class="desktop">
               <button class="btn p-0" > <span class="px-0" (click)="showModalFormulario_Cliente(c,2)"><img src="../assets/images/icons/icon-options/editar.png"></span></button>
               <button class="btn p-0" > <span class="px-0" (click)="showModal_EliminarCliente(c)"><img src="../assets/images/icons/icon-options/eliminar.png"></span></button>            
@@ -192,7 +178,7 @@
       <div class="modal-body">
           <form #formCliente="ngForm" class="row g-3">
             <!-- NOMBRE CLIENTE -->
-            <div class="col-4 mb-1 mt-2">
+            <div class="col-12 col-md-4 mb-1 mt-2">
               <label class="form-label">Nombre</label>
               <input type="text" #nombre="ngModel" [(ngModel)]="clienteForm.nombre" name="nombre" placeholder="" [class.is-invalid]="mostrarAdvertencias && clienteForm.nombre.length==0" class="form-control" required>
               <div class="advertencias" *ngIf="mostrarAdvertencias && clienteForm.nombre.length==0">
@@ -201,7 +187,7 @@
               </div>
             </div> 
             <!-- SELECCIONAR DOCUMENTO -->
-            <div class="col-4 mb-1 mt-2">
+            <div class="col-12 col-md-4 mb-1 mt-2">
               <label class="form-label">Documento</label>
               <select class="custom-select" #documento="ngModel" [(ngModel)]="clienteForm.documento" [class.is-invalid]="mostrarAdvertencias && !clienteForm.documento" name="documento" required>
                 <option value="">Seleccionar</option>
@@ -217,7 +203,7 @@
             </div>
 
             <!-- INDENTIDAD -->
-            <div class="col-4 mb-1 mt-2">
+            <div class="col-12 col-md-4 mb-1 mt-2">
               <label class="form-label">Nro Identificación</label>
               <input type="text" #identificacion="ngModel" [(ngModel)]="clienteForm.identificacion" name="identificacion" placeholder="" [class.is-invalid]="mostrarAdvertencias && clienteForm.identificacion==null" class="form-control" required>
               <div class="advertencias" *ngIf="mostrarAdvertencias && clienteForm.identificacion==null">
@@ -227,12 +213,12 @@
             </div>
 
             <!-- CORREO -->
-            <div class="col-4 mb-1 mt-2">
+            <div class="col-12 col-md-4 mb-1 mt-2">
               <label class="form-label">Correo</label>
               <input type="text" #correo="ngModel" [(ngModel)]="clienteForm.correo" name="correo" class="form-control">
             </div>
             <!-- CELULAR -->
-            <div class="col-4 mb-1 mt-2">
+            <div class="col-12 col-md-4 mb-1 mt-2">
               <label class="form-label">Celular</label>
               <input type="number" #celular="ngModel" [(ngModel)]="clienteForm.celular" name="celular" class="form-control">
             </div>  

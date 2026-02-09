@@ -165,9 +165,9 @@
     padding: 0 5px;
   }
   .container-agregar button,.boton-showdetalles button{
-    padding: 5px 0px;
+    /* padding: 5px 0px; */
     font-size: 14px;
-    width: 80px;
+    /* width: 80px; */
   }
   .container-buscador input{
     font-size: 15px;

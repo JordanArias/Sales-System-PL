@@ -71,7 +71,7 @@
   font-size: 18px;
   font-weight: 400;
   padding: 0px;
-  height: 49px;
+  /* min-height: 49px; */
   color: #dcdcdc;
   background: #252d3c;
   border: none;
@@ -319,7 +319,7 @@
 
   /*** Encabezado ***/
   .container-buscador input{
-    width: 90px;
+    width: 130px;
   }
   .container-agregar button {
     font-size: 15px;
