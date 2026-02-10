@@ -240,7 +240,7 @@
               </div>
           </div>
           <!--****************** BODY FORMULARIO ******************-->
-          <div class="body-form" style="color: #f3f3f3;">
+          <div class="body-form" style="height: 62vh; color: #f3f3f3;">
               <form #formListaProductos="ngForm">
                 <!-- LISTA PRODUCTOS SELECCIONADOS -->
                   <ng-container *ngFor="let producto of lista_Productos_Agregados; let i = index">
@@ -283,9 +283,9 @@
           </div>
 
           <!--****************** FOOTER FORMULARIO ******************-->
-          <div class="footer-form" style="color: #f3f3f3;">
+          <div class="footer-form" style="height: 18vh; color: #f3f3f3;">
             <!-- CUENTA TOTAL -->
-            <div class="botones-venta p-1" style="height: 18vh; display: flex; flex-direction: column; justify-content: flex-end;">
+            <div class="botones-venta p-1" style="display: flex; flex-direction: column; justify-content: flex-end;">
               <div class="pagar mb-1">
                 <!-- <button class="btn btn-danger" style="width:50%; background: #873232;" [disabled]="this.ventaForm.estado_transaccion==0" (click)="showModal_Eliminar(ventaForm)">ELIMINAR</button> -->
                 <button class="btn btn-success d-flex justify-content-center" style="width: 100%;" (click)="showModal_Pagar()">PAGAR            
@@ -425,7 +425,7 @@
 
           </div>
           <!--****************** BODY FORMULARIO ******************-->
-          <div class="body-form" style="color: #f3f3f3;">
+          <div class="body-form" style="height: 62vh; color: #f3f3f3;">
               <form #formListaProductos="ngForm">
                 <!-- LISTA PRODUCTOS SELECCIONADOS -->
                   <ng-container *ngFor="let producto of lista_Productos_Agregados; let i = index">
@@ -468,9 +468,9 @@
           </div>
 
           <!--****************** FOOTER FORMULARIO ******************-->
-          <div class="footer-form" style="color: #f3f3f3;">
+          <div class="footer-form" style="height: 18vh; color: #f3f3f3;">
             <!-- CUENTA TOTAL -->
-            <div class="botones-venta p-1" style="height: 18vh; display: flex; flex-direction: column; justify-content: flex-end;">
+            <div class="botones-venta p-1" style="display: flex; flex-direction: column; justify-content: flex-end;">
               <div class="pagar mb-1">
                 <!-- <button class="btn btn-danger" style="width:50%; background: #873232;" [disabled]="this.ventaForm.estado_transaccion==0" (click)="showModal_Eliminar(ventaForm)">ELIMINAR</button> -->
                 <button class="btn btn-success d-flex justify-content-center" style="width: 100%;" (click)="showModal_Pagar()">PAGAR            
@@ -760,30 +760,34 @@
                     <!-- BOLIVIANOS -->
                     <div class="boliviano row m-0 p-0" *ngIf="divisa_seleccionada == 1">
                       <div class="d-flex col-12 p-0 mb-3">
-                        <label style="width: 25%;">Monto</label>
+                        <label style="min-width: 25%;">Monto</label>
                         <input type="number" #bs_pagado="ngModel" [(ngModel)]="ventaForm.bs_pagado" (input)="actualizarMontos('bs')" name="bs_pagado" class="form-control py-0" style="width: 65%; letter-spacing: 1px;">
                       </div>
                       <div class="col-12 mb-0 p-0 d-flex"> 
-                        <p class="mb-0" style="width: 25%;"> Cambio: </p> 
-                        <p class="mb-0"> {{ventaForm.bs_cambio}} </p>  
+                        <p class="mb-0" style="min-width: 25%;"> Cambio: </p> 
+                        <!-- <p class="mb-0" style="min-width: 25%;"> {{ventaForm.bs_cambio}} </p>  -->
+                        <input type="number" #bs_cambio="ngModel" [(ngModel)]="ventaForm.bs_cambio" name="bs_cambio" class="form-control py-0 me-1" style="width: 35%; letter-spacing: 1px;"> 
+                        <button class="btn p-0 px-2" style="background: #832e2e; color: white;" (click)="cambio_0_bs()"> cambio 0 </button>
                       </div>
                     </div>
 
                     <!-- PESOS ARGENTINOS -->
                     <div class="pesos row m-0 p-0" *ngIf="divisa_seleccionada == 2">
                       <div class="d-flex col-12 p-0 mb-3">
-                        <label style="width: 25%;">Monto</label>
+                        <label style="min-width: 25%;">Monto</label>
                         <input type="number" #ps_pagado="ngModel" [(ngModel)]="ventaForm.ps_pagado"  (input)="actualizarMontos('ps')" name="ps_pagado" class="form-control py-0" style="width: 65%; letter-spacing: 1px;">
                       </div>
                       <div class="col-12 mb-0 p-0 d-flex"> 
-                        <p class="mb-0" style="width: 25%;"> Cambio: </p> 
-                        <p class="mb-0"> {{ventaForm.ps_cambio | number}} </p>  
+                        <p class="mb-0" style="min-width: 25%;"> Cambio: </p> 
+                        <!-- <p class="mb-0" style="min-width: 25%;"> {{ventaForm.ps_cambio | number}} </p>   -->
+                        <input type="number" #ps_cambio="ngModel" [(ngModel)]="ventaForm.ps_cambio" name="ps_cambio" class="form-control py-0 me-1" style="width: 35%; letter-spacing: 1px;"> 
+                        <button class="btn p-0 px-2" style="background: #832e2e; color: white;" (click)="cambio_0_ps()"> cambio 0 </button>
                       </div>
                     </div>
 
                     <!-- BANCA (QR) -->
                     <div class="pesos d-flex" *ngIf="divisa_seleccionada == 3">
-                      <label style="width: 25%;">Monto</label>
+                      <label style="min-width: 25%;">Monto</label>
                       <input type="number" #bs_banca_pagado="ngModel" [(ngModel)]="ventaForm.bs_banca_pagado" (input)="actualizarMontos('banca')" name="bs_banca_pagado" class="form-control py-0" style="width: 65%;">
                     </div>
 

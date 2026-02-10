@@ -221,7 +221,7 @@
 .body-form form{
   position: relative;
   /* background: #212837;  */
-  height: 62vh; 
+  /* height: 62vh;  */
   overflow-y: auto;
 }
 

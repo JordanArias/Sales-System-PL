@@ -557,6 +557,12 @@ limpiar_Datos_Pagar(){
   this.ventaForm.bs_cambio = 0; this.ventaForm.ps_cambio = 0;
   // this.ventaForm.bs_descuento = null; this.ventaForm.ps_descuento = null
 }
+cambio_0_bs(){
+  this.ventaForm.bs_cambio = 0;
+}
+cambio_0_ps(){
+  this.ventaForm.ps_cambio = 0;
+}
 //*************************************  SELECCIONAR DIVISA   ****************************************
 divisa_seleccionada=1;
 seleccionar_divisa(opcion:any){
@@ -674,6 +680,10 @@ actualizarFaltantesBolivianos(){
     this.ventaForm.bs_falta = this.bs_total;
     console.log('14.- this.ventaForm.bs_falta:', this.ventaForm.bs_falta, ' = this.bs_total:', this.bs_total);
   }
+
+    // REDONDEAMOS A MAXIMO 2 DECIMALES
+    this.ventaForm.ps_falta = Math.round((this.ventaForm.ps_falta ?? 0) * 100) / 100;
+    this.ventaForm.bs_cambio = Math.round((this.ventaForm.bs_cambio ?? 0) * 100) / 100;
   console.log('*************************************************************************');
   console.log('FIN DE LA FUNCION actualizarFaltantesBolivianos()');
   console.log('*************************************************************************');
@@ -763,6 +773,9 @@ actualizarFaltantesArgentinos(){
     this.ventaForm.bs_falta = this.bs_total;
     console.log('14.- this.ventaForm.bs_falta:', this.ventaForm.bs_falta, ' = this.bs_total:', this.bs_total);
   }
+  // REDONDEAMOS A MAXIMO 2 DECIMALES
+  this.ventaForm.bs_falta = Math.round((this.ventaForm.bs_falta ?? 0) * 100) / 100;
+  this.ventaForm.ps_cambio = Math.round((this.ventaForm.ps_cambio ?? 0) * 100) / 100;
   console.log('*************************************************************************');
   console.log('FIN DE LA FUNCION actualizarFaltantesArgentinos()');
   console.log('*************************************************************************');
