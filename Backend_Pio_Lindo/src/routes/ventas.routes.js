@@ -12,6 +12,7 @@ router.get('/finalizadas',ventasController.GET_VENTAS_FINALIZADAS);
 router.delete('/:cod_venta',ventasController.ELIMINAR_VENTA);
 
 router.put('/datos',ventasController.MODIFICAR_DATOS_VENTA);
+router.put('/detalle',ventasController.MODIFICAR_ESTADO_DETALLE_VENTA);
 
 // router.get('/item',ventasController.get_Item_Presa);
 

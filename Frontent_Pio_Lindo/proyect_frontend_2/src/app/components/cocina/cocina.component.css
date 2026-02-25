@@ -113,6 +113,39 @@
   border-top: 1px solid #727272;
 }
 
+.botones-detalle-venta .numero{
+  /* font-weight: 500; */
+  font-size: 25px;
+}
+
+.botones-detalle-venta .cantidad{
+  padding: 0px;
+  width: 40px;
+  height: 42px;
+  font-weight: bold;
+  font-size: 20px;
+  background: #828486;
+  color: white;
+  border: none;
+}
+.botones-detalle-venta .circulo{
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  margin-left: 5px;
+  cursor: pointer;
+}
+.circulo-gris{
+  background: #a1a3a6;
+}
+.circulo-proceso{
+  background: #f49212;
+}
+.circulo-finalizado{
+  background: #25cc40;
+}
+
+
 /* MODAL DETALLE FINALIZAR */
 #modalFinalizarVenta .modal-lg-custom{
   max-width: 40%;

@@ -117,7 +117,7 @@
             </div>
 
           </ng-container>
-          <div class="mx-1" *ngIf="v.venta.descripcion.length>0">
+          <div class="mx-1" *ngIf="v.venta.descripcion && v.venta.descripcion.length>0">
             Obs: {{v.venta.descripcion}}
           </div>
         </div>
@@ -767,7 +767,7 @@
                         <p class="mb-0" style="min-width: 25%;"> Cambio: </p> 
                         <!-- <p class="mb-0" style="min-width: 25%;"> {{ventaForm.bs_cambio}} </p>  -->
                         <input type="number" #bs_cambio="ngModel" [(ngModel)]="ventaForm.bs_cambio" name="bs_cambio" class="form-control py-0 me-1" style="width: 35%; letter-spacing: 1px;"> 
-                        <button class="btn p-0 px-2" style="background: #832e2e; color: white;" (click)="cambio_0_bs()"> cambio 0 </button>
+                        <button class="btn p-0 px-2" style="background: #575f65; color: white;" (click)="cambio_0_bs()"> cambio 0 </button>
                       </div>
                     </div>
 
@@ -781,7 +781,7 @@
                         <p class="mb-0" style="min-width: 25%;"> Cambio: </p> 
                         <!-- <p class="mb-0" style="min-width: 25%;"> {{ventaForm.ps_cambio | number}} </p>   -->
                         <input type="number" #ps_cambio="ngModel" [(ngModel)]="ventaForm.ps_cambio" name="ps_cambio" class="form-control py-0 me-1" style="width: 35%; letter-spacing: 1px;"> 
-                        <button class="btn p-0 px-2" style="background: #832e2e; color: white;" (click)="cambio_0_ps()"> cambio 0 </button>
+                        <button class="btn p-0 px-2" style="background: #575f65; color: white;" (click)="cambio_0_ps()"> cambio 0 </button>
                       </div>
                     </div>
 
@@ -870,9 +870,9 @@
       </div>
 
       <!-- BOTONES AGREGAR Y MODIFICAR -->
-      <div class="modal-footer btn-principal">
+      <div class="modal-footer btn-principal px-1">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CERRAR</button>
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" *ngIf="ventaForm.estado_transaccion == 0 || ventaForm.estado_transaccion == 1" (click)="limpiar_Datos_Pagar()">BORRAR DATOS</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" *ngIf="ventaForm.estado_transaccion == 0 || ventaForm.estado_transaccion == 1" (click)="limpiar_Datos_Pagar()">BORRAR</button>
         <button class="btn btn-primary" *ngIf="ventaForm.estado_transaccion == 0" (click)="AGREGAR_VENTA('Finalizar venta')" >FINALIZAR VENTA</button>
         <button class="btn btn-primary" *ngIf="ventaForm.estado_transaccion == 1" (click)="MODIFICAR_VENTA('Finalizar venta')">FINALIZAR VENTA</button>
         <!-- <button class="btn btn-success" data-bs-dismiss="modal">PAGO RALIZADO</button> -->

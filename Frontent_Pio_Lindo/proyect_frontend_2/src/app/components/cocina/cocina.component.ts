@@ -183,6 +183,92 @@ MODIFICAR_SOLO_DATOS_VENTA(venta:any, mover:any, index:any){
   ) 
 }
 
+//***************************************************************************************************************************************************************************************
+//**********************************************************************  MODIFICAR DETALLE VENTA   **********************************************************************************
+//***************************************************************************************************************************************************************************************
+
+MODIFICAR_DETALLE_VENTA(d:any, accion:any){
+  console.log('::::::::::::::: MODIFICAR SOLO DATOS de DETALLE_VENTA :::::::::::::::');
+  console.log('Detalle Venta: ',d);
+
+  if (accion == '+proceso') {
+    if ((d.cant_proceso + d.cant_finalizado) == d.cantidad_item) {
+      return;
+    }
+    console.log('proceso++');
+    
+    d.cant_proceso++;
+    if (d.cant_finalizado==d.cantidad_item) {
+      d.cant_finalizado--;
+    }
+
+  }
+  else if (accion == '-proceso') {
+    // if (d.cant_finalizado == d.cantidad_item) {
+    //   d.cant_finalizado++;
+    // }
+    d.cant_proceso--;
+  }
+  else if (accion == '+finalizado') {
+    d.cant_finalizado++;
+    d.cant_proceso--;
+  }
+  else if (accion == '-finalizado') {
+    d.cant_finalizado--;
+    d.cant_proceso++;
+  }
+
+  if (d.cant_proceso <= 0) { d.cant_proceso = 0; }
+  if (d.cant_finalizado <= 0) { d.cant_finalizado = 0; }
+
+  if (d.cant_proceso >= d.cantidad_item) { d.cant_proceso = d.cantidad_item; }
+  if (d.cant_finalizado >= d.cantidad_item) { d.cant_finalizado = d.cantidad_item; }
+
+  this.ventaService.put_Detalle_Venta_Api(d)
+  .subscribe(
+    res => {
+      console.log('DETALLE VENTA MODIFICADA');
+
+    },
+    err =>{
+      console.log('Error al modificar Detalle Venta ', err);
+      this.mostrarToast('Error al cambiar el estado de detalle venta','rojo');
+    }
+  ) 
+}
+
+// Igualamos la cantidad procesada o finalizada a la cantidad total del item directamente
+igualar_Todo(d:any, accion:any){
+  if (accion=='proceso') {
+    if (d.cant_proceso > 0) {
+      d.cant_proceso = 0;
+    }
+    else if (d.cant_finalizado == 0) {
+      d.cant_proceso = d.cantidad_item;
+    }
+  }
+  else if (accion=='finalizado') {
+    if (d.cant_finalizado > 0) {
+      d.cant_finalizado = 0;
+    }
+    else{
+      d.cant_finalizado = d.cantidad_item;
+      d.cant_proceso = 0;
+    }
+  }
+
+  this.ventaService.put_Detalle_Venta_Api(d)
+  .subscribe(
+    res => {
+      console.log('DETALLE VENTA MODIFICADA');
+
+    },
+    err =>{
+      console.log('Error al modificar Detalle Venta ', err);
+      this.mostrarToast('Error al cambiar el estado de detalle venta','rojo');
+    }
+  ) 
+}
 
 //*************************************************************************************************************************************************************************************
 //*******************************************************************************  LISTAR VENTAS   ************************************************************************************
@@ -200,13 +286,13 @@ LISTAR_VENTAS_NUEVAS(){
   this.ventaService.get_Ventas_Nuevas_Api(this.last_caja.cod_caja, fecha)
   .subscribe(
     res => {
-      // Filtrar detalle_venta donde cocina sea true
-      this.lista_Ventas = res.map((ventaObj: any) => {
-          return {
-            ...ventaObj,
-            detalle_venta: ventaObj.detalle_venta.filter((detalle: any) => detalle.cocina === true)
-          };
-      });
+      // Filtrar detalle_venta donde cocina sea true y excluir ventas que queden sin detalles
+      this.lista_Ventas = res
+        .map((ventaObj: any) => ({
+          ...ventaObj,
+          detalle_venta: (ventaObj.detalle_venta || []).filter((detalle: any) => detalle.cocina === true)
+        }))
+        .filter((venta: any) => venta.detalle_venta.length > 0);
       console.log('VENTAS NUEVAS: ', this.lista_Ventas);
     },
     err =>{
@@ -228,7 +314,8 @@ LISTAR_VENTAS_EN_PROCESO(){
             ...ventaObj,
             detalle_venta: ventaObj.detalle_venta.filter((detalle: any) => detalle.cocina === true)
           };
-      });
+      })
+      .filter((venta: any) => venta.detalle_venta.length > 0);
       console.log('VENTAS EN PROCESO: ', this.lista_Ventas);
     },
     err =>{
@@ -249,7 +336,8 @@ LISTAR_VENTAS_FINALIZADAS(){
           ...ventaObj,
           detalle_venta: ventaObj.detalle_venta.filter((detalle: any) => detalle.cocina === true)
         };
-    });
+    })
+    .filter((venta: any) => venta.detalle_venta.length > 0);
       console.log('VENTAS FINALIZADAS: ', this.lista_Ventas);
     },
     err =>{

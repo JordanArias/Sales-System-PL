@@ -47,9 +47,12 @@ export class VentaService {
     return this.http.get<any>(`${this.URL}/ventas/finalizadas?cod_caja=${cod_caja}&fecha=${fecha}&limite=${limite}`);
   }
 
-  //AGREGAR VENTA
+  //MODIFICAR VENTA
   put_Datos_Venta_Api(venta:unknown){
     return this.http.put<any>(this.URL+'/ventas/datos',venta);
+  }
+  put_Detalle_Venta_Api(detalle:unknown){
+    return this.http.put<any>(this.URL+'/ventas/detalle',detalle);
   }
 }
   

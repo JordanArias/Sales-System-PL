@@ -20,13 +20,13 @@
                 </span>
               </button>
             </div>
-            <div class="btn-ventas_proceso">
+            <!-- <div class="btn-ventas_proceso">
               <button class="btn" type="button" style="color: #f3f3f3;" [ngStyle]="{'background-color': vista_ventas === 2 ? '#667c8e' : ''}" (click)="LISTAR_VENTAS_EN_PROCESO()">
                 <span class="px-0 d-flex align-items-center">
                   En proceso
                 </span>
               </button>
-            </div>
+            </div> -->
             <div class="btn-ventas_nuevas">
               <button class="btn" type="button" style="color: #f3f3f3;" [ngStyle]="{'background-color': vista_ventas === 1 ? '#667c8e' : ''}" (click)="LISTAR_VENTAS_NUEVAS()">
                 <span class="px-0 d-flex align-items-center">
@@ -68,15 +68,39 @@
           <div class="card-body p-0" style="overflow: auto;">
             <ng-container *ngFor="let detalle of v.detalle_venta; let i = index">
               <!-- Contenedor flex para organizar el producto y complementos en fila -->
-              <div style="border-bottom: 1px solid #636363; padding:4px 10px;">
+              <div style="border-bottom: 2px solid #636363; padding:4px 10px;">
                 <!-- Contenedor flex para producto y complementos -->
                 <div class="container-producto-complemento align-items-start">
                   <!-- Producto Nombre -->
-                  <p class="producto m-0 me-2" style="font-weight: bold; letter-spacing: 1px;">
-                    {{detalle.cantidad_item}} x {{ detalle.nombre }}
-                    <span *ngIf="detalle.item_llevar" style="color: #c17927;"> P/LL</span>
+                  <p class="producto m-0 me-2" style="font-weight: bold; letter-spacing: 1px; font-size: 25px;">
+                    {{detalle.cantidad_item}} * {{ detalle.nombre }}
+                    <span *ngIf="detalle.item_llevar" style="color: #f38508;"> (P/LL)</span>
                   </p>
-          
+                  <!-- CONTENEDOR DE BOTONES PROCESO Y FINALIZADO -->
+                  <div class="botones-detalle-venta row m-0 mb-2">
+                    <div class="col-6 p-0 btn-proceso d-flex">
+                        <!-- BOTONES + Y - -->
+                        <button class="cantidad btn me-2" (click)="MODIFICAR_DETALLE_VENTA(detalle,'-proceso')">-</button>
+                        <button class="cantidad btn me-3" (click)="MODIFICAR_DETALLE_VENTA(detalle,'+proceso')">+</button>
+                        <!-- CIRCULO -->
+                        <div class="d-flex align-items-center numero"> {{detalle.cant_proceso}} 
+                          <div class="circulo" (click)="igualar_Todo(detalle, 'proceso')" [ngClass]="{
+                            'circulo-proceso': detalle.cant_proceso > 0 && detalle.cant_finalizado < detalle.cantidad_item,
+                            'circulo-gris': detalle.cant_proceso === 0 || detalle.cant_finalizado === detalle.cantidad_item
+                          }">
+                          </div> 
+                        </div>
+                    </div>
+                    <div class="col-6 p-0 btn-finalizado d-flex">
+                        <!-- BOTONES + Y - -->
+                        <button class="cantidad btn me-2" (click)="MODIFICAR_DETALLE_VENTA(detalle,'-finalizado')">-</button>
+                        <button class="cantidad btn me-2" (click)="MODIFICAR_DETALLE_VENTA(detalle,'+finalizado')">+</button>
+                        <!-- CIRCULO -->
+                        <div class="d-flex align-items-center numero"> {{detalle.cant_finalizado}} 
+                          <div class="circulo" (click)="igualar_Todo(detalle, 'finalizado')" [ngClass]="detalle.cant_finalizado> 0 ? 'circulo-finalizado' : 'circulo-gris'"></div> 
+                        </div>
+                    </div>
+                  </div>
                   <!-- Contenedor de complementos en una fila -->
                   <div class="d-flex flex-wrap">
                     <ng-container *ngFor="let opcion of detalle.detalle_opcion">
@@ -89,11 +113,12 @@
                       </div>
                     </ng-container>
                   </div>
+
                 </div>
               </div>
   
             </ng-container>
-            <div class="mx-1" *ngIf="v.venta.descripcion.length>0">
+            <div class="mx-1" *ngIf="v.venta.descripcion && v.venta.descripcion.length>0">
               Obs: {{v.venta.descripcion}}
             </div>
           </div>
@@ -101,17 +126,18 @@
       
           <!--************** FOOTER CARD VENTA **************-->
           <div class="card-footer d-flex justify-content-between p-0">
-              <div class="finalizar">
-                <button class="btn btn-danger" *ngIf="v.venta.estado == 0 || v.venta.estado == 1" (click)="showModal_Finalizar(v,i)">Finalizar</button>
-                <!-- <button class="btn btn-primary" *ngIf="v.venta.estado == 1" (click)="showModal_Finalizar(v,i)">Finalizar</button> -->
-              </div>
               <div class="no-pagado d-flex align-items-center px-1" style="font-weight: 700; color: #b64848;" *ngIf="v.venta.estado_transaccion == 1">
                 NO CANCELADO
               </div>
-              <div class="iniciar">
+              <div class="finalizar">
+                <button class="btn btn-danger" *ngIf="v.venta.estado == 0 || v.venta.estado == 1" (click)="showModal_Finalizar(v,i)">Finalizar</button>
+                <button class="btn btn-success" *ngIf="v.venta.estado == 2" (click)="MODIFICAR_SOLO_DATOS_VENTA(v, 3, i)">Nuevo -></button>
+                <!-- <button class="btn btn-primary" *ngIf="v.venta.estado == 1" (click)="showModal_Finalizar(v,i)">Finalizar</button> -->
+              </div>
+              <!-- <div class="iniciar">
                 <button class="btn btn-success" *ngIf="v.venta.estado == 0" (click)="MODIFICAR_SOLO_DATOS_VENTA(v, 1, i)">Iniciar</button>
                 <button class="btn btn-success" *ngIf="v.venta.estado == 1" (click)="MODIFICAR_SOLO_DATOS_VENTA(v, 3, i)">Nuevo -></button>
-              </div>
+              </div> -->
           </div>
         </div>
       </ng-container>     

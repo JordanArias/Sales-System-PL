@@ -94,8 +94,8 @@ const CREAR_VENTA = async (req, res) =>{
 const crear_Detalles_venta = async (client, cod_venta, detalles) => {
     const text_crear_detalles = `
         INSERT INTO public.detalle_venta(
-            cod_venta, cantidad_item, cod_producto, item_llevar)
-        VALUES ($1, $2, $3, $4)
+            cod_venta, cantidad_item, cod_producto, item_llevar, estado, cant_proceso, cant_finalizado)
+        VALUES ($1, $2, $3, $4, 0, 0, 0)
         RETURNING cod_item;
     `;
     
@@ -945,7 +945,7 @@ const Get_Ventas_Detalles = async (client, cod_caja, fecha, estado) => {
                                                     WHERE v.cod_caja = $1
                                                     AND v.estado = $2
                                                     AND TO_DATE(v.fecha, 'DD/MM/YYYY') = TO_DATE($3, 'DD/MM/YYYY')
-                                                    ORDER BY v.fecha DESC; `;
+                                                    ORDER BY dv.cod_item; `;
 
             const text_lista_detalle_opcion = ` SELECT dop.* , dv.cod_item, o.nombre, c.cod_complemento 
                                                     FROM public.detalle_opcion AS dop
@@ -1062,7 +1062,29 @@ const MODIFICAR_DATOS_VENTA = async (req, res) => {
 }
   
 
-  
+const MODIFICAR_ESTADO_DETALLE_VENTA = async (req, res) => {
+    console.log('MODIFICAR DETALLE VENTA');
+    
+    const client = await pool.connect();
+    try {
+        // COMIENZA LA TRANSACCIÓN
+        await client.query('BEGIN');
+        const {estado, cant_proceso, cant_finalizado, cod_item} = req.body;  console.log(req.body);
+        
+        const update_Venta = `UPDATE detalle_venta SET estado = $1, cant_proceso = $2, cant_finalizado = $3 WHERE cod_item = $4`;
+        
+        //CONSULTA
+        await client.query(update_Venta, [estado, cant_proceso, cant_finalizado, cod_item]);
+        await client.query('COMMIT'); // Confirma la transacción
+        res.status(200).json('Datos de Detalle_Venta Actualiza');
+    } catch (error) {
+        console.log(error);
+        await client.query('ROLLBACK'); // Si hay un error, realiza un rollback
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }finally {
+        client.release(); // Libera la conexión al pool
+    }
+} 
 
 
 
@@ -1079,6 +1101,7 @@ module.exports = {
     GET_VENTAS_EN_PROCESO,
     GET_VENTAS_FINALIZADAS,
     //
-    MODIFICAR_DATOS_VENTA
+    MODIFICAR_DATOS_VENTA,
+    MODIFICAR_ESTADO_DETALLE_VENTA
 
 }
