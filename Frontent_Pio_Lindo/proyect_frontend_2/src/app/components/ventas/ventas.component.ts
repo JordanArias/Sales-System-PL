@@ -936,7 +936,27 @@ verificar_Invalidos(tipo_venta:string):boolean{
   return true;
 }
 
+//*************************************************************************************************************************************************************************************
+//*****************************************************************  ESTADOS POR DETALLES PARA CARD   *********************************************************************************
+//*************************************************************************************************************************************************************************************
 
+// Retorna true si al menos un item de la venta está en preparación (cant_proceso > 0)
+tieneItemsEnPreparacion(ventaCard: any): boolean {
+  const detalles = ventaCard?.detalle_venta || [];
+  return detalles.some((d: any) => (d.cant_proceso ?? 0) > 0);
+}
+
+// Retorna true si todos los items de la venta están finalizados
+// es decir, cant_finalizado == cantidad_item para cada detalle
+todosItemsFinalizados(ventaCard: any): boolean {
+  const detalles = ventaCard?.detalle_venta || [];
+  if (detalles.length === 0) {
+    return false;
+  }
+  return detalles.every(
+    (d: any) => (d.cant_finalizado ?? 0) === (d.cantidad_item ?? 0)
+  );
+}
 
 //*************************************************************************************************************************************************************************************
 //*******************************************************************************  LISTAR VENTAS   ************************************************************************************

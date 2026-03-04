@@ -45,7 +45,23 @@
         <!--******************************** CARD VENTA PRINCIPAL **************************-->
         <div class="card" [ngClass]="{'selected-card': selectedCardIndex === i}">
           <!-- *********** TITULO CARD VENTA **************-->
-          <div class="card-header d-flex justify-content-between p-0" [ngStyle]="{'background-color': v.venta.estado_documento === 2 ? '#592f34' : v.venta.estado === 0 ? '#28526b' : (v.venta.estado === 1 ? '#835e32' : '#333c4e')}">
+          <div
+            class="card-header d-flex justify-content-between p-0"
+            [ngStyle]="{
+              'background-color':
+                v.venta.estado_documento === 2
+                  ? '#592f34'
+                  : tieneItemsEnPreparacion(v)
+                  ? '#da820f'
+                  : todosItemsFinalizados(v)
+                  ? '#595959'
+                  : v.venta.estado === 0
+                  ? '#28526b'
+                  : v.venta.estado === 1
+                  ? '#835e32'
+                  : '#333c4e'
+            }"
+          >
               <!-- TICKET -->
               <div class="numero-ticket px-1">
                 T - <strong> {{v.venta.ticket}} </strong>

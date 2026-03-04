@@ -65,7 +65,8 @@ const CREAR_VENTA = async (req, res) =>{
         
         //:::: TERCERO :::: LUEGO CREAMOS DETALLES DE LA VENTA
         console.log(":::: TERCERO :::: LUEGO CREAMOS DETALLES DE LA VENTA");
-        await crear_Detalles_venta(client, cod_venta, detalles);
+        // En una venta nueva no existen detalles previos, por eso enviamos null
+        await crear_Detalles_venta(client, cod_venta, detalles, null);
 
         //:::: CUARTO :::: SI LA VENTA SE PAGO ENTONCES
         console.log(":::: CUARTO :::: SI LA VENTA SE PAGO ENTONCES");
@@ -91,11 +92,13 @@ const CREAR_VENTA = async (req, res) =>{
 
 // ******************************** 1.- CREAR DETALLES VENTA **********************************
 //*********************************************************************************************
-const crear_Detalles_venta = async (client, cod_venta, detalles) => {
+// detallesPrevios: lista opcional de detalles anteriores de la venta
+//                  usada para preservar estado, cant_proceso y cant_finalizado
+const crear_Detalles_venta = async (client, cod_venta, detalles, detallesPrevios) => {
     const text_crear_detalles = `
         INSERT INTO public.detalle_venta(
             cod_venta, cantidad_item, cod_producto, item_llevar, estado, cant_proceso, cant_finalizado)
-        VALUES ($1, $2, $3, $4, 0, 0, 0)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
         RETURNING cod_item;
     `;
     
@@ -105,12 +108,48 @@ const crear_Detalles_venta = async (client, cod_venta, detalles) => {
         VALUES ($1, $2, $3);
     `;
 
+    // Normalizamos la lista de detalles previos y marcamos cuáles ya se usaron
+    const listaPrevios = Array.isArray(detallesPrevios)
+        ? detallesPrevios.map(previo => ({ ...previo, _usado: false }))
+        : [];
+
     // Recorremos todos los detalles
     for (let detalle of detalles) {
         const { cantidad_item, cod_producto, item_llevar, complementos } = detalle;
+
+        // Valores por defecto (venta nueva o item nuevo)
+        let estado = 0;
+        let cant_proceso = 0;
+        let cant_finalizado = 0;
+
+        // Si hay detalles previos, intentamos encontrar uno compatible para copiar su estado
+        if (listaPrevios.length > 0) {
+            const idx = listaPrevios.findIndex(
+                p =>
+                    !p._usado &&
+                    p.cod_producto === cod_producto &&
+                    p.item_llevar === item_llevar
+            );
+
+            if (idx !== -1) {
+                const previo = listaPrevios[idx];
+                estado = previo.estado ?? 0;
+                cant_proceso = previo.cant_proceso ?? 0;
+                cant_finalizado = previo.cant_finalizado ?? 0;
+                previo._usado = true;
+            }
+        }
         
-        // Agregamos el detalle de la venta
-        const result = await client.query(text_crear_detalles, [cod_venta, cantidad_item, cod_producto, item_llevar]);
+        // Agregamos el detalle de la venta preservando el estado cuando aplica
+        const result = await client.query(text_crear_detalles, [
+            cod_venta,
+            cantidad_item,
+            cod_producto,
+            item_llevar,
+            estado,
+            cant_proceso,
+            cant_finalizado
+        ]);
         let cod_item = result.rows[0].cod_item;
         
         // Ahora recorremos los complementos y sus opciones
@@ -395,29 +434,37 @@ const MODIFICAR_VENTA = async (req, res) =>{
 
         console.log('COD_VENTA: ', venta.cod_venta);
 
-        //:::: PRIMERO :::: ELIMINARMOS DETALLES DE LA VENTA ANTERIORES
-        console.log(':::: PRIMERO :::: ELIMINARMOS DETALLES DE LA VENTA ANTERIORES');
+        //:::: PRIMERO :::: OBTENEMOS DETALLES ANTERIORES PARA PRESERVAR ESTADOS
+        console.log(':::: PRIMERO :::: OBTENEMOS DETALLES ANTERIORES PARA PRESERVAR ESTADOS');
+        const res_detalles_previos = await client.query(
+            'SELECT cod_producto, item_llevar, estado, cant_proceso, cant_finalizado FROM public.detalle_venta WHERE cod_venta = $1;',
+            [venta.cod_venta]
+        );
+        const detalles_previos = res_detalles_previos.rows;
+
+        //:::: SEGUNDO :::: ELIMINARMOS DETALLES DE LA VENTA ANTERIORES
+        console.log(':::: SEGUNDO :::: ELIMINARMOS DETALLES DE LA VENTA ANTERIORES');
         await eliminar_Detalles_venta(client, venta.cod_venta);
 
-        //:::: SEGUNDO ::::CREAMOS DETALLES DE LA VENTA NUEVAMENTE
-        console.log(':::: SEGUNDO :::: CREAMOS DETALLES DE LA VENTA NUEVAMENTE');
-        await crear_Detalles_venta(client, venta.cod_venta, detalles);
+        //:::: TERCERO :::: CREAMOS DETALLES DE LA VENTA NUEVAMENTE
+        console.log(':::: TERCERO :::: CREAMOS DETALLES DE LA VENTA NUEVAMENTE');
+        await crear_Detalles_venta(client, venta.cod_venta, detalles, detalles_previos);
 
-        //:::: TERCERO :::: OBTENER VENTA ANTERIOR
-        console.log(':::: TERCERO :::: OBTENER VENTA ANTERIOR');
+        //:::: CUARTO :::: OBTENER VENTA ANTERIOR
+        console.log(':::: CUARTO :::: OBTENER VENTA ANTERIOR');
         const venta_res = await client.query('SELECT * FROM public.venta where cod_venta = $1;',[venta.cod_venta]);
         const venta_anterior = venta_res.rows[0];
 
-        //:::: CUARTO ::::  VERIFICAMOS SI ANTERIOR VENTA FUE PAGADA, PARA RESTAURAR INSUMO Y CAJA
-        console.log(':::: CUARTO :::: VERIFICAMOS SI ANTERIOR VENTA FUE PAGADA, PARA RESTAURAR INSUMO Y CAJA');
+        //:::: QUINTO ::::  VERIFICAMOS SI ANTERIOR VENTA FUE PAGADA, PARA RESTAURAR INSUMO Y CAJA
+        console.log(':::: QUINTO :::: VERIFICAMOS SI ANTERIOR VENTA FUE PAGADA, PARA RESTAURAR INSUMO Y CAJA');
         if (venta_anterior.estado_transaccion == 2) {
             await actualizar_MovimientoInsumo(client, venta, detalles);
             //Actualizamos Montos Caja
             await actualizar_MontosCaja(client, venta, venta_anterior);
         }
 
-        //:::: QUINTO :::: SI VENTA ANTERIOR NO FUE PAGADA Y AHORA SE PAGO ENTONCES
-        console.log(':::: QUINTO :::: SI VENTA ANTERIOR NO FUE PAGADA Y AHORA SE PAGO ENTONCES');
+        //:::: SEXTO :::: SI VENTA ANTERIOR NO FUE PAGADA Y AHORA SE PAGO ENTONCES
+        console.log(':::: SEXTO :::: SI VENTA ANTERIOR NO FUE PAGADA Y AHORA SE PAGO ENTONCES');
 
         if (venta_anterior.estado_transaccion == 1 && venta.estado_transaccion == 2) {
             const listaInsumos = await obtenerInsumosVenta(client, detalles);    console.log('Lista Insumos Obtenidos: ',listaInsumos);
@@ -425,8 +472,8 @@ const MODIFICAR_VENTA = async (req, res) =>{
             await agregar_MontosCaja(client, venta, venta.cod_venta);
         }
 
-        //:::: SEXTO :::: SI VENTA ANTERIOR NO TENIA FACTURA , FUE PAGADA Y AHORA SE EMITIO FACTURA
-        console.log(':::: SEXTO :::: SI VENTA ANTERIOR NO TENIA FACTURA , FUE PAGADA Y AHORA SE EMITIO FACTURA');
+        //:::: SEPTIMO :::: SI VENTA ANTERIOR NO TENIA FACTURA , FUE PAGADA Y AHORA SE EMITIO FACTURA
+        console.log(':::: SEPTIMO :::: SI VENTA ANTERIOR NO TENIA FACTURA , FUE PAGADA Y AHORA SE EMITIO FACTURA');
         if (venta_anterior.estado_documento == 0 && venta.estado_transaccion == 2 && venta.estado_documento == 1) {
             const iva = Math.floor(venta.bs_total * 0.13 * 100) / 100; 
             await client.query('UPDATE caja SET bs_iva=bs_iva + $1, bs_saldo_final=bs_saldo_final + $2 WHERE cod_caja=$3',[iva,iva,venta.cod_caja])
@@ -956,7 +1003,7 @@ const Get_Ventas_Detalles = async (client, cod_caja, fecha, estado) => {
                                                     WHERE v.cod_caja = $1
                                                     AND v.estado = $2
                                                     AND TO_DATE(v.fecha, 'DD/MM/YYYY') = TO_DATE($3, 'DD/MM/YYYY')
-                                                    ORDER BY v.fecha DESC; `;
+                                                    ORDER BY c.cod_complemento; `;
 
             // Ejecutar la consulta
             const lista_detalle_venta = await client.query(text_lista_detalle_venta, [cod_caja, estado, fecha]);

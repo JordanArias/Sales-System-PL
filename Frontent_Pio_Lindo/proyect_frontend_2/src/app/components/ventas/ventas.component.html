@@ -70,10 +70,21 @@
       <!--******************************** CARD VENTA PRINCIPAL **************************-->
       <div class="card">
         <!-- *********** TITULO CARD VENTA **************-->
-        <div class="card-header d-flex justify-content-between p-0" style="background: #333c4e;" [ngStyle]="{
-          'background-color': v.venta.estado_documento === 2 ? '#592f34' :
-                              v.venta.estado === 0 ? '#28526b' : 
-                             (v.venta.estado === 1 ? '#835e32' : '#333c4e')}">
+        <div class="card-header d-flex justify-content-between p-0" style="background: #333c4e;" 
+        [ngStyle]="{
+          'background-color':
+            v.venta.estado_documento === 2
+              ? '#592f34'
+              : tieneItemsEnPreparacion(v)
+              ? '#da820f'
+              : todosItemsFinalizados(v)
+              ? '#595959'
+              : v.venta.estado === 0
+              ? '#28526b'
+              : v.venta.estado === 1
+              ? '#835e32'
+              : '#333c4e'
+        }">
           <div class="numero-ticket px-1" style="font-size: 16px;">
             Ticket [<strong> {{v.venta.ticket}} </strong>]
           </div>
@@ -107,7 +118,7 @@
                   <ng-container *ngFor="let opcion of detalle.detalle_opcion">
                     <!-- Iterar sobre cada complemento -->
                     <div class="complemento-col me-3 d-flex flex-wrap">
-                      <p class="detalle-producto m-0 me-2" *ngFor="let o of opcion"> 
+                      <p class="detalle-producto m-0 me-2 px-1" *ngFor="let o of opcion"> 
                         <span style="font-weight: 400;"> {{ o.cantidad_op }} </span> {{ o.nombre }}
                       </p>
                     </div>
