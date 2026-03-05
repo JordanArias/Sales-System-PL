@@ -994,12 +994,13 @@ const Get_Ventas_Detalles = async (client, cod_caja, fecha, estado) => {
                                                     AND TO_DATE(v.fecha, 'DD/MM/YYYY') = TO_DATE($3, 'DD/MM/YYYY')
                                                     ORDER BY dv.cod_item; `;
 
-            const text_lista_detalle_opcion = ` SELECT dop.* , dv.cod_item, o.nombre, c.cod_complemento 
+            const text_lista_detalle_opcion = ` SELECT dop.* , dv.cod_item, o.nombre, c.cod_complemento, complemento.color_fondo 
                                                     FROM public.detalle_opcion AS dop
                                                     JOIN public.detalle_venta AS dv ON dop.cod_item = dv.cod_item
                                                     JOIN public.venta AS v ON dv.cod_venta = v.cod_venta
                                                     JOIN public.opcion AS o ON dop.cod_opcion = o.cod_opcion
                                                     JOIN public.complemento_opcion AS c ON dop.cod_opcion = c.cod_opcion        
+                                                    JOIN public.complemento AS complemento ON c.cod_complemento = complemento.cod_complemento
                                                     WHERE v.cod_caja = $1
                                                     AND v.estado = $2
                                                     AND TO_DATE(v.fecha, 'DD/MM/YYYY') = TO_DATE($3, 'DD/MM/YYYY')
@@ -1027,12 +1028,13 @@ const Get_Ventas_Detalles_Limite = async (client, cod_ventas, estado) => {
     `;
 
     const text_lista_detalle_opcion = `
-        SELECT dop.*, dv.cod_item, o.nombre, c.cod_complemento 
+        SELECT dop.*, dv.cod_item, o.nombre, c.cod_complemento, complemento.color_fondo
         FROM public.detalle_opcion AS dop
         JOIN public.detalle_venta AS dv ON dop.cod_item = dv.cod_item
         JOIN public.venta AS v ON dv.cod_venta = v.cod_venta
         JOIN public.opcion AS o ON dop.cod_opcion = o.cod_opcion
         JOIN public.complemento_opcion AS c ON dop.cod_opcion = c.cod_opcion 
+        JOIN public.complemento AS complemento ON c.cod_complemento = complemento.cod_complemento
         WHERE v.cod_venta IN (${cod_ventas_placeholder})
         AND v.estado =2;
     `;

@@ -1,4 +1,5 @@
 import { Component, HostListener , Renderer2  } from '@angular/core';
+import { forkJoin } from 'rxjs';
 
 import { VentaService } from "../../services/ventas.service";
 import { CajaService } from "../../services/caja.service";
@@ -46,10 +47,10 @@ setItemsPerPage() {
       this.itemsPerPage = 2;
     } else if (width < 800) {
       // tablet
-      this.itemsPerPage = 4;
+      this.itemsPerPage = 3;
     } else {
       // desktop
-      this.itemsPerPage = 6;
+      this.itemsPerPage = 3;
     }
     // PARA MOSTRAR INTERFAZ VENTA EN MOVIL
     if (width<600) {
@@ -60,59 +61,59 @@ setItemsPerPage() {
 }
 
 
-selectedCardIndex: number = -1; // Índice de la tarjeta seleccionada
-@HostListener('document:keydown', ['$event'])
-handleKeyboardEvent(event: KeyboardEvent) {
-  // Manejo de navegación de páginas
-  if (event.key === 'ArrowRight') {
-    var total_pag = Math.ceil(this.lista_Ventas.length / 6);
-    if (this.page_v == total_pag) {
-      this.page_v = 1;
-    } else {
-      this.page_v++;
-    }
-  } else if (event.key === 'ArrowLeft' && this.page_v > 1) {
-    this.page_v--;
-  }
+// selectedCardIndex: number = -1; // Índice de la tarjeta seleccionada
+// @HostListener('document:keydown', ['$event'])
+// handleKeyboardEvent(event: KeyboardEvent) {
+//   // Manejo de navegación de páginas
+//   if (event.key === 'ArrowRight') {
+//     var total_pag = Math.ceil(this.lista_Ventas.length / 6);
+//     if (this.page_v == total_pag) {
+//       this.page_v = 1;
+//     } else {
+//       this.page_v++;
+//     }
+//   } else if (event.key === 'ArrowLeft' && this.page_v > 1) {
+//     this.page_v--;
+//   }
 
-  // Manejo de selección de tarjetas
-  switch (event.key) {
-    case 'ArrowUp':
-      if (this.selectedCardIndex > 0) {
-        this.selectedCardIndex--;
-      }
-      break;
-    case 'ArrowDown':
-      if (this.selectedCardIndex < this.lista_Ventas.length - 1) {
-        this.selectedCardIndex++;
-      }
-      break;
-    case 'z':
-      if (this.selectedCardIndex >= 0) {
-        this.showModal_Finalizar(this.lista_Ventas[this.selectedCardIndex], this.selectedCardIndex);
-      }
-      break;
-    case 'x':
-      if (this.selectedCardIndex >= 0) {
-        this.MODIFICAR_SOLO_DATOS_VENTA(this.lista_Ventas[this.selectedCardIndex], 2, this.selectedCardIndex); // En Proceso
-      }
-      break;
-    case 'c':
-      if (this.selectedCardIndex >= 0) {
-        this.MODIFICAR_SOLO_DATOS_VENTA(this.lista_Ventas[this.selectedCardIndex], 1, this.selectedCardIndex); // Nuevo
-      }
-      break;
-    case 'a':
-      this.LISTAR_VENTAS_FINALIZADAS();
-      break;
-    case 's':
-      this.LISTAR_VENTAS_EN_PROCESO();
-      break;
-    case 'd':
-      this.LISTAR_VENTAS_NUEVAS();
-      break;
-  }
-}
+//   // Manejo de selección de tarjetas
+//   switch (event.key) {
+//     case 'ArrowUp':
+//       if (this.selectedCardIndex > 0) {
+//         this.selectedCardIndex--;
+//       }
+//       break;
+//     case 'ArrowDown':
+//       if (this.selectedCardIndex < this.lista_Ventas.length - 1) {
+//         this.selectedCardIndex++;
+//       }
+//       break;
+//     case 'z':
+//       if (this.selectedCardIndex >= 0) {
+//         this.showModal_Finalizar(this.lista_Ventas[this.selectedCardIndex], this.selectedCardIndex);
+//       }
+//       break;
+//     case 'x':
+//       if (this.selectedCardIndex >= 0) {
+//         this.MODIFICAR_SOLO_DATOS_VENTA(this.lista_Ventas[this.selectedCardIndex], 2, this.selectedCardIndex); // En Proceso
+//       }
+//       break;
+//     case 'c':
+//       if (this.selectedCardIndex >= 0) {
+//         this.MODIFICAR_SOLO_DATOS_VENTA(this.lista_Ventas[this.selectedCardIndex], 1, this.selectedCardIndex); // Nuevo
+//       }
+//       break;
+//     case 'a':
+//       this.LISTAR_VENTAS_FINALIZADAS();
+//       break;
+//     case 's':
+//       this.LISTAR_VENTAS_EN_PROCESO();
+//       break;
+//     case 'd':
+//       this.LISTAR_VENTAS_NUEVAS();
+//       break;
+//   }
+// }
 
 
   ventaF:any; indexF:any
@@ -244,6 +245,7 @@ tieneItemsEnPreparacion(ventaCard: any): boolean {
   return detalles.some((d: any) => (d.cant_proceso ?? 0) > 0);
 }
 
+
 // Retorna true si todos los items de la venta están finalizados
 // es decir, cant_finalizado == cantidad_item para cada detalle
 todosItemsFinalizados(ventaCard: any): boolean {
@@ -254,6 +256,30 @@ todosItemsFinalizados(ventaCard: any): boolean {
   return detalles.every(
     (d: any) => (d.cant_finalizado ?? 0) === (d.cantidad_item ?? 0)
   );
+}
+
+//***********************************  ITEMS EN PROCESO  ***********************************
+// Pone todos los ítems de la venta en estado "en proceso" (cant_proceso = cantidad_item, cant_finalizado = 0)
+ponerTodosEnProceso(ventaCard: any, index: number) {
+  const detalles = ventaCard?.detalle_venta || [];
+  if (detalles.length === 0) {
+    this.mostrarToast('No hay ítems para actualizar', 'rojo');
+    return;
+  }
+  detalles.forEach((d: any) => {
+    d.cant_proceso = d.cantidad_item ?? 0;
+    d.cant_finalizado = 0;
+  });
+  const updates = detalles.map((d: any) => this.ventaService.put_Detalle_Venta_Api(d));
+  forkJoin(updates).subscribe({
+    next: () => {
+      this.mostrarToast('Todos los ítems en proceso', 'verde');
+    },
+    error: (err) => {
+      console.log('Error al poner ítems en proceso ', err);
+      this.mostrarToast('Error al actualizar ítems', 'rojo');
+    }
+  });
 }
 
 // Igualamos la cantidad procesada o finalizada a la cantidad total del item directamente

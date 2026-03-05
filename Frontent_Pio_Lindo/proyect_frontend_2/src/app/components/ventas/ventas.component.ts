@@ -949,7 +949,7 @@ tieneItemsEnPreparacion(ventaCard: any): boolean {
 // Retorna true si todos los items de la venta están finalizados
 // es decir, cant_finalizado == cantidad_item para cada detalle
 todosItemsFinalizados(ventaCard: any): boolean {
-  const detalles = ventaCard?.detalle_venta || [];
+  const detalles = (ventaCard?.detalle_venta || []).filter((d: any) => d.cocina === true);
   if (detalles.length === 0) {
     return false;
   }

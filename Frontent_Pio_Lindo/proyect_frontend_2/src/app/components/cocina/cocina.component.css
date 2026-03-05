@@ -79,7 +79,7 @@
 }
 .container-lista .card-header {
   background: rgb(40, 82, 107);
-  color: #ffff;
+  /* color: #ffff; */
   font-weight: bold;
   font-size: 20px;
 }
@@ -93,8 +93,8 @@
 }
 .finalizar button{
   /* padding: 3px 0px; */
-  width: 100px;
-  background: #2d3643;
+  /* width: 100px; */
+  /* background: #2d3643; */
   border: none;
   border-radius: 0px;
 }
@@ -124,8 +124,8 @@
   height: 42px;
   font-weight: bold;
   font-size: 20px;
-  background: #828486;
-  color: white;
+  background: #efefef;
+  /* color: white; */
   border: none;
 }
 .botones-detalle-venta .circulo{
@@ -136,13 +136,13 @@
   cursor: pointer;
 }
 .circulo-gris{
-  background: #a1a3a6;
+  background: #efefef;
 }
 .circulo-proceso{
-  background: #f49212;
+  background: #ffbf00;
 }
 .circulo-finalizado{
-  background: #25cc40;
+  background: #71777c;
 }
 
 

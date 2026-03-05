@@ -34,12 +34,12 @@ const crearComplemento = async (req, res) =>{
     const client = await pool.connect();
     try {
         await client.query('BEGIN'); // Comienza la transacción
-        const addComplemento = ` INSERT INTO complemento(cod_complemento, nombre, descripcion, estado)
-                            VALUES ($1, $2, $3, $4); `;
-        const {cod_complemento, nombre, descripcion, estado} = req.body[0];
+        const addComplemento = ` INSERT INTO complemento(cod_complemento, nombre, descripcion, estado, color_fondo)
+                            VALUES ($1, $2, $3, $4, $5); `;
+        const {cod_complemento, nombre, descripcion, estado, color_fondo} = req.body[0];
 
         //AGREGAMOS EL COMPLEMENTO
-        await client.query(addComplemento, [cod_complemento, nombre, descripcion, estado]);
+        await client.query(addComplemento, [cod_complemento, nombre, descripcion, estado, color_fondo]);
         //AGREGAMOS COMPLEMENTOS_OPCIONES
         await crear_Complemento_Opcion(client, req.body[1],cod_complemento)
         await client.query('COMMIT'); // Confirma la transacción
@@ -69,12 +69,12 @@ const modificarComplemento = async (req, res) =>{
     const client = await pool.connect();
     try {
         await client.query('BEGIN'); // Comienza la transacción
-        const modificar_complemento = ` UPDATE complemento SET nombre=$1, descripcion=$2, estado=$3
-                                        WHERE cod_complemento=$4; `;
+        const modificar_complemento = ` UPDATE complemento SET nombre=$1, descripcion=$2, estado=$3, color_fondo=$4
+                                        WHERE cod_complemento=$5; `;
         const elminar_complemento_opcion = 'DELETE FROM complemento_opcion WHERE cod_complemento = $1';
-        const {cod_complemento, nombre, descripcion, estado} = req.body[0];
+        const {cod_complemento, nombre, descripcion, estado, color_fondo} = req.body[0];
         //PRIMERO: MODIFICAMOS LA OPCION
-        await client.query(modificar_complemento,[nombre, descripcion, estado, cod_complemento]);
+        await client.query(modificar_complemento,[nombre, descripcion, estado, color_fondo, cod_complemento]);
         //SEGUNDO: ELIMINAMOS LOS COMPLEMENTO-OPCION
         await client.query(elminar_complemento_opcion,[cod_complemento]); console.log('2.- ELIMINAMOS INSUMO-OPCION');
         //TERCERO AGREGAMOS NUEVAMENTE LOS COMPLEMENTO-OPCION

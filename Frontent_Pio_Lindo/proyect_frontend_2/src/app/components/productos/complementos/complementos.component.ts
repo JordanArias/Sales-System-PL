@@ -90,7 +90,7 @@ listar_Complementos(){
 //************************************************  AGREGAR COMPLEMENTO  ****************************************************
 //***************************************************************************************************************************
 mostrarAdvertencias: boolean = false; 
-complementoForm={cod_complemento:0, nombre:'', descripcion:'',estado:0};
+complementoForm={cod_complemento:0, nombre:'', descripcion:'',estado:0, color_fondo:''};
 //AGREGAMOS LOS INSUMOS-SUBRECETAS SELECCIONADOS
 mostrarAdvertenciasInsumo: boolean = false;
 
@@ -149,7 +149,7 @@ agregar_Complemento(){
     .subscribe(
       res => {
         console.log(res);
-        this.complementoForm={cod_complemento:0, nombre:'', descripcion:'',estado:0};
+        this.complementoForm={cod_complemento:0, nombre:'', descripcion:'',estado:0, color_fondo:''};
         this.listar_Complementos();
         this.mostrarToast('Complemento agregado','verde');
         $("#modalAgregarComplemento").modal('hide');
@@ -186,7 +186,7 @@ modificar_Complemento(){
     .subscribe(
       res => {
         console.log(res);
-        this.complementoForm={cod_complemento:0, nombre:'', descripcion:'',estado:0};
+        this.complementoForm={cod_complemento:0, nombre:'', descripcion:'',estado:0, color_fondo:''};
         this.listar_Complementos();
         this.mostrarToast('Complemento modificado','verde');
         $("#modalAgregarComplemento").modal('hide');
@@ -204,7 +204,7 @@ eliminar_Complemento(){
   this.productoService.deleteComplementoApi(this.complementoForm.cod_complemento)
   .subscribe(
     res => {
-      this.complementoForm={cod_complemento:0, nombre:'', descripcion:'',estado:0};
+      this.complementoForm={cod_complemento:0, nombre:'', descripcion:'',estado:0, color_fondo:''};
       this.listar_Complementos();
       this.mostrarToast('Complemento eliminado','verde');
     },
@@ -228,7 +228,7 @@ estado_Complemento(){
   .subscribe(
     res => {
       //LIMPIAMOS LA COMPLEMENTO FORM
-      this.complementoForm={cod_complemento:0, nombre:'', descripcion:'',estado:0};
+      this.complementoForm={cod_complemento:0, nombre:'', descripcion:'',estado:0, color_fondo:''};
       this.listar_Complementos();
       this.mostrarToast('Estado del complemento modificado','verde');
     },
@@ -270,7 +270,7 @@ limpiar_Datos(){
   this.opcion_Seleccionada = null;
   this.complemento_opcion = []; 
   this.complemento_opcion_Seleccionado={cod_opcion:0, nom_opcion:'',descripcion:'', cod_complemento:0};
-  this.complementoForm={cod_complemento:0, nombre:'', descripcion:'',estado:0};
+  this.complementoForm={cod_complemento:0, nombre:'', descripcion:'',estado:0, color_fondo:''};
 }
 
 

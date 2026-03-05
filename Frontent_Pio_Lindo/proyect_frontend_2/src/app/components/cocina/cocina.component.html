@@ -43,7 +43,8 @@
   
       <ng-container *ngFor="let v of lista_Ventas | paginate: { itemsPerPage: itemsPerPage, currentPage: page_v } ; let i = index">
         <!--******************************** CARD VENTA PRINCIPAL **************************-->
-        <div class="card" [ngClass]="{'selected-card': selectedCardIndex === i}">
+        <!-- <div class="card" [ngClass]="{'selected-card': selectedCardIndex === i}"> -->
+          <div class="card">
           <!-- *********** TITULO CARD VENTA **************-->
           <div
             class="card-header d-flex justify-content-between p-0"
@@ -52,14 +53,14 @@
                 v.venta.estado_documento === 2
                   ? '#592f34'
                   : tieneItemsEnPreparacion(v)
-                  ? '#da820f'
+                  ? '#f0b505'
                   : todosItemsFinalizados(v)
-                  ? '#595959'
+                  ? '#6d6d6d'
                   : v.venta.estado === 0
-                  ? '#28526b'
+                  ? '#e4e6e7'
                   : v.venta.estado === 1
                   ? '#835e32'
-                  : '#333c4e'
+                  : '#f0b505'
             }"
           >
               <!-- TICKET -->
@@ -92,7 +93,7 @@
                     {{detalle.cantidad_item}} * {{ detalle.nombre }}
                     <span *ngIf="detalle.item_llevar" style="color: #f38508;"> (P/LL)</span>
                   </p>
-                  <!-- CONTENEDOR DE BOTONES PROCESO Y FINALIZADO -->
+                  <!-- CONTENEDOR DE BOTONES(+) Y (-) PROCESO Y FINALIZADO -->
                   <div class="botones-detalle-venta row m-0 mb-2">
                     <div class="col-6 p-0 btn-proceso d-flex">
                         <!-- BOTONES + Y - -->
@@ -117,12 +118,13 @@
                         </div>
                     </div>
                   </div>
+
                   <!-- Contenedor de complementos en una fila -->
                   <div class="d-flex flex-wrap">
                     <ng-container *ngFor="let opcion of detalle.detalle_opcion">
                       <!-- Iterar sobre cada complemento -->
                       <div class="complemento-col me-3 d-flex flex-wrap">
-                        <p style="background: #ececec;border-radius: 10px;" class="detalle-producto m-0 me-2 mb-2" *ngFor="let o of opcion; let last = last">
+                        <p style=" border-radius: 10px;" [ngStyle]="{'background': o.color_fondo}" class="detalle-producto m-0 me-2 mb-2 px-1" *ngFor="let o of opcion; let last = last">
                           <span>{{o.cantidad_op}} </span>  {{ o.nombre }}
                           <!-- <span style="font-weight: 500;" *ngIf="!last"> | </span> -->
                         </p>
@@ -130,6 +132,15 @@
                     </ng-container>
                   </div>
 
+                  <!-- CONTENEDOR DE BOTONES PROCESO Y FINALIZADO -->
+                  <!-- <div class="botones-detalle-venta row m-0 mb-2">
+                    <div class="col-6 p-0 btn d-flex" (click)="igualar_Todo(detalle, 'proceso')" [ngClass]="{
+                      'circulo-proceso': detalle.cant_proceso > 0 && detalle.cant_finalizado < detalle.cantidad_item,
+                      'circulo-gris': detalle.cant_proceso === 0 || detalle.cant_finalizado === detalle.cantidad_item
+                    }">Preparar</div>
+                    <div class="col-6 p-0 btn d-flex" (click)="igualar_Todo(detalle, 'finalizado')" [ngClass]="detalle.cant_finalizado> 0 ? 'circulo-finalizado' : 'circulo-gris'">Finalizar</div>
+                  </div> -->
+                  
                 </div>
               </div>
   
@@ -142,12 +153,13 @@
       
           <!--************** FOOTER CARD VENTA **************-->
           <div class="card-footer d-flex justify-content-between p-0">
-              <div class="no-pagado d-flex align-items-center px-1" style="font-weight: 700; color: #b64848;" *ngIf="v.venta.estado_transaccion == 1">
-                NO CANCELADO
-              </div>
-              <div class="finalizar">
-                <button class="btn btn-danger" *ngIf="v.venta.estado == 0 || v.venta.estado == 1" (click)="showModal_Finalizar(v,i)">Finalizar</button>
-                <button class="btn btn-success" *ngIf="v.venta.estado == 2" (click)="MODIFICAR_SOLO_DATOS_VENTA(v, 3, i)">Nuevo -></button>
+              <div class="finalizar d-flex">
+                <button class="btn btn-warning" [ngStyle]="{'background-color': todosItemsFinalizados(v) ? '#828b94' : '#ffc107'}" *ngIf="v.venta.estado == 0 || v.venta.estado == 1" (click)="ponerTodosEnProceso(v, i)">En Proceso</button>
+                <button class="btn btn-secondary" *ngIf="v.venta.estado == 0 || v.venta.estado == 1" (click)="showModal_Finalizar(v,i)">Finalizar</button>
+                <button class="btn btn-secondary" *ngIf="v.venta.estado == 2" (click)="MODIFICAR_SOLO_DATOS_VENTA(v, 3, i)">Nuevo -></button>
+                <div class="no-pagado px-1" style="font-weight: 700; color: #b64848;" *ngIf="v.venta.estado_transaccion == 1">
+                  NO CANCELADO
+                </div>
                 <!-- <button class="btn btn-primary" *ngIf="v.venta.estado == 1" (click)="showModal_Finalizar(v,i)">Finalizar</button> -->
               </div>
               <!-- <div class="iniciar">
