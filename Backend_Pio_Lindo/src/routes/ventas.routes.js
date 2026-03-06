@@ -7,7 +7,7 @@ const ventasController = require('../controllers/ventas.controller');
 router.post('/',ventasController.CREAR_VENTA);
 router.put('/',ventasController.MODIFICAR_VENTA);
 router.get('/nuevas',ventasController.GET_VENTAS_NUEVAS);
-router.get('/proceso',ventasController.GET_VENTAS_EN_PROCESO);
+router.get('/proceso',ventasController.GET_VENTAS_EXTRA);
 router.get('/finalizadas',ventasController.GET_VENTAS_FINALIZADAS);
 router.delete('/:cod_venta',ventasController.ELIMINAR_VENTA);
 

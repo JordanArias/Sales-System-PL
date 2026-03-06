@@ -22,7 +22,8 @@ export class CocinaComponent {
   constructor(
     private ventaService:VentaService,
     private cajaService:CajaService,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private socketService: SocketService
   ){
     this.listar_Last_Caja();
   }
@@ -31,11 +32,26 @@ export class CocinaComponent {
     this.setItemsPerPage();
   
     window.addEventListener('resize', () => this.setItemsPerPage());
+
+    this.socketService.receiveEvent((data:any)=>{
+
+      console.log("Evento recibido:", data);
+  
+      const paginaActual = this.page_v;   // guardar página actual
+  
+      this.LISTAR_VENTAS_NUEVAS();
+  
+      setTimeout(() => {
+        this.page_v = paginaActual;       // restaurar página
+      }, 0);
+  
+    });
   }
   // page_v: number = 1;
 
 // filterPost:any;
 page_v:any
+
 // page_p:any
 itemsPerPage = 6; // valor por defecto (desktop)
 mostrar_movil=false;
@@ -44,10 +60,10 @@ setItemsPerPage() {
     // PARA LISTAR VENTA CARDS
     if (width < 600) {
       // móvil
-      this.itemsPerPage = 2;
+      this.itemsPerPage = 1;
     } else if (width < 800) {
       // tablet
-      this.itemsPerPage = 3;
+      this.itemsPerPage = 4;
     } else {
       // desktop
       this.itemsPerPage = 3;
@@ -323,6 +339,7 @@ min_totay:any
 today:any;
 lista_Ventas:any[] = [];
 vista_ventas:any
+page_actual_nueva:any;
 LISTAR_VENTAS_NUEVAS(){
   this.page_v = 1;
   this.lista_Ventas = [];
@@ -337,6 +354,7 @@ LISTAR_VENTAS_NUEVAS(){
           ...ventaObj,
           detalle_venta: (ventaObj.detalle_venta || []).filter((detalle: any) => detalle.cocina === true)
         }))
+        // Excluir ventas sin detalles luego del filtro
         .filter((venta: any) => venta.detalle_venta.length > 0);
       console.log('VENTAS NUEVAS: ', this.lista_Ventas);
     },
@@ -345,23 +363,31 @@ LISTAR_VENTAS_NUEVAS(){
     }
   ) 
 }
-LISTAR_VENTAS_EN_PROCESO(){
+
+page_actual_extra:any;
+LISTAR_VENTAS_EXTRA(){
   this.page_v = 1;
   this.lista_Ventas = [];
-  this.vista_ventas =2;
+  this.vista_ventas =0;
   const fecha = this.transformar_Fecha(this.select_Fecha);
   this.ventaService.get_Ventas_en_Proceso_Api(this.last_caja.cod_caja, fecha)
   .subscribe(
     res => {
       // Filtrar detalle_venta donde cocina sea true
-      this.lista_Ventas = res.map((ventaObj: any) => {
-          return {
-            ...ventaObj,
-            detalle_venta: ventaObj.detalle_venta.filter((detalle: any) => detalle.cocina === true)
-          };
-      })
-      .filter((venta: any) => venta.detalle_venta.length > 0);
-      console.log('VENTAS EN PROCESO: ', this.lista_Ventas);
+      this.lista_Ventas = res
+        // .map((ventaObj: any) => ({
+        //   ...ventaObj,
+        //   // Solo ítems cuyo flag cocina NO esté en true
+        //   detalle_venta: (ventaObj.detalle_venta || []).filter((detalle: any) => detalle.cocina != true)
+        // }))
+        // // Excluir ventas sin detalles luego del filtro
+        // .filter((venta: any) => venta.detalle_venta.length > 0);
+      console.log('VENTAS EXTRA: ', this.lista_Ventas);
+
+      // calcular última página
+      const totalPaginas = Math.ceil(this.lista_Ventas.length / this.itemsPerPage);
+      this.page_v = totalPaginas || 1;
+
     },
     err =>{
       console.log('Error al agregar Productos: ', err);
@@ -384,6 +410,11 @@ LISTAR_VENTAS_FINALIZADAS(){
     })
     .filter((venta: any) => venta.detalle_venta.length > 0);
       console.log('VENTAS FINALIZADAS: ', this.lista_Ventas);
+
+    // calcular última página
+    const totalPaginas = Math.ceil(this.lista_Ventas.length / this.itemsPerPage);
+    this.page_v = totalPaginas || 1;
+
     },
     err =>{
       console.log('Error al agregar Productos: ', err);

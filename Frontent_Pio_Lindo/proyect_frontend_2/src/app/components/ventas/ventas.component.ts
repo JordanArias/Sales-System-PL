@@ -33,6 +33,7 @@ export class VentasComponent {
     private cajaService:CajaService,
     private clienteService: ClientesService,
     private renderer: Renderer2,
+    private socketService: SocketService
 
   ){
     this.listar_Last_Caja();
@@ -839,6 +840,9 @@ AGREGAR_VENTA(tipo_venta:string){
       
       this.ventaForm.cod_venta = res.cod_venta;
       this.ventaForm.ticket = res.ticket
+
+      // ENVIAR SOCKET
+      this.socketService.sendEvent(res);
       // console.log('COD_VENTA', res);
       $("#modalPagar").modal('hide');
     },
@@ -892,6 +896,8 @@ MODIFICAR_VENTA(tipo_venta:string){
       }else{
         this.mostrarToast('Venta agregada sin pagar','verde');
       }
+      // ENVIAR SOCKET
+      this.socketService.sendEvent(res);
       $("#modalPagar").modal('hide');
     },
     err =>{
@@ -1010,6 +1016,11 @@ LISTAR_VENTAS_FINALIZADAS(){
       this.lista_Ventas = res;
       console.log('VENTAS FINALIZADAS: ', this.lista_Ventas);
       console.log('Ultima Caja',res);
+
+      // calcular última página
+      const totalPaginas = Math.ceil(this.lista_Ventas.length / this.itemsPerPage);
+      this.page_v = totalPaginas || 1;
+  
     },
     err =>{
       console.log('Error al agregar Productos: ', err);

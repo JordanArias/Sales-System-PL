@@ -878,11 +878,11 @@ const GET_VENTAS_NUEVAS = async (req, res) => {
         client.release();
     }
 };
-// ******************************* 1.- OBTENER VENTAS EN PROCESO **********************************
+// ******************************* 1.- OBTENER VENTAS EXTRA **********************************
 //*********************************************************************************************
-const GET_VENTAS_EN_PROCESO = async (req, res) => {
+const GET_VENTAS_EXTRA = async (req, res) => {
     console.log('------------------------------------------------------------');
-    console.log('GET_VENTAS_EN_PROCESO');
+    console.log('GET_VENTAS_EXTRA');
     console.log('------------------------------------------------------------');
     const cod_caja = req.query.cod_caja || 0;
     const fecha = req.query.fecha || '';
@@ -894,22 +894,48 @@ const GET_VENTAS_EN_PROCESO = async (req, res) => {
 
         const text_get_ventas_proceso = `
             SELECT * FROM public.venta
-            WHERE cod_caja = $1 AND estado = 1
+            WHERE cod_caja = $1
             AND TO_DATE(fecha, 'DD/MM/YYYY') = TO_DATE($2, 'DD/MM/YYYY')
             ORDER BY ticket ASC;
         `;
 
         // Ejecutar la consulta
-        const lista_en_proceso = await client.query(text_get_ventas_proceso, [cod_caja, fecha]);
-        //OBTENER DETALLES
-        const detalles = await Get_Ventas_Detalles(client, cod_caja,fecha, 1)
+        const lista_en_extra = await client.query(text_get_ventas_proceso, [cod_caja, fecha]);
+    // 1.- ********************************** OBTENER DETALLES **********************************
+        const text_lista_detalle_venta = `  SELECT dv.*, v.cod_venta, p.nombre, p.cocina  
+                            FROM public.detalle_venta AS dv
+                            JOIN public.venta AS v ON dv.cod_venta = v.cod_venta
+                            JOIN public.producto AS p ON dv.cod_producto = p.cod_producto
+                            WHERE v.cod_caja = $1
+                            AND TO_DATE(v.fecha, 'DD/MM/YYYY') = TO_DATE($2, 'DD/MM/YYYY')
+                            ORDER BY dv.cod_item; `;
+
+        const text_lista_detalle_opcion = ` SELECT dop.* , dv.cod_item, o.nombre, c.cod_complemento, complemento.color_fondo 
+                FROM public.detalle_opcion AS dop
+                JOIN public.detalle_venta AS dv ON dop.cod_item = dv.cod_item
+                JOIN public.venta AS v ON dv.cod_venta = v.cod_venta
+                JOIN public.opcion AS o ON dop.cod_opcion = o.cod_opcion
+                JOIN public.complemento_opcion AS c ON dop.cod_opcion = c.cod_opcion        
+                JOIN public.complemento AS complemento ON c.cod_complemento = complemento.cod_complemento
+                WHERE v.cod_caja = $1
+                AND TO_DATE(v.fecha, 'DD/MM/YYYY') = TO_DATE($2, 'DD/MM/YYYY')
+                ORDER BY c.cod_complemento; `;
+
+        // Ejecutar la consulta
+        const lista_detalle_venta = await client.query(text_lista_detalle_venta, [cod_caja, fecha]);
+        // Ejecutar la consulta
+        const lista_detalle_opcion = await client.query(text_lista_detalle_opcion, [cod_caja, fecha]);
+
+
+        const detalles = {detalle_venta:lista_detalle_venta.rows, detalle_opcion: lista_detalle_opcion.rows}
         // console.log('Ventas:',lista_en_proceso.rows );
         // console.log('Detalles: ', detalles);
 
-        // UNIMOS LAS DETALLES Y VENTAS
-        const lista_ventas = unirVentasConDetalles(lista_en_proceso.rows, detalles);
+        //  2.- ********************************** UNIMOS LAS DETALLES Y VENTAS **********************************
+        const lista_ventas = unirVentasConDetalles(lista_en_extra.rows, detalles);
+        
         console.log(lista_ventas);
-
+        console.log("LISTA EXTRAS:");
         // Confirmar la transacción
         await client.query('COMMIT');
         
@@ -1147,7 +1173,7 @@ module.exports = {
     ELIMINAR_VENTA,
     // LISTAR VENTAS
     GET_VENTAS_NUEVAS,
-    GET_VENTAS_EN_PROCESO,
+    GET_VENTAS_EXTRA,
     GET_VENTAS_FINALIZADAS,
     //
     MODIFICAR_DATOS_VENTA,

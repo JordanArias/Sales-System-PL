@@ -10,7 +10,8 @@
            <div class="container-agregar">
               <!-- <button class="btn btn-secondary" (click)="showModal_SelectFecha()">Elegir Fecha</button>  [min]="min_totay" -->
               <!-- <input type="date" #fecha="ngModel" [(ngModel)]="select_Fecha" name="fecha"  [max]="today"  required style="width: 100%;" class="form-control"> -->
-           </div>
+              <button class="btn" style="background: #425a88; color: #f3f3f3;" (click)="LISTAR_VENTAS_EXTRA()">Extra</button>
+            </div>
           <!-- FILTRAR -->
           <div class="container-filtrar d-flex">
             <div class="btn-ventas_finalizadas">
@@ -70,7 +71,7 @@
               <!-- NUMERO DE MESA - VENTA LLEVAR -->
               <div class="numero-mesa d-flex"  *ngIf="v.venta.estado_documento!=2">
                 <p class="m-0 p-0 px-2" *ngIf="v.venta.venta_llevar == false">Mesa : {{ v.venta.mesa }}</p>
-                <p class="m-0 p-0 px-2" *ngIf="v.venta.venta_llevar == true"><span style="color: #d0842e;font-weight: 500;">Para Llevar </span> <span *ngIf="v.venta.mesa!=null"> #{{ v.venta.mesa }}</span></p>
+                <p class="m-0 p-0 px-2" *ngIf="v.venta.venta_llevar == true"><span style="color: #ff7200;font-weight: 900;">T/Para Llevar </span> <span *ngIf="v.venta.mesa!=null"> #{{ v.venta.mesa }}</span></p>
               </div>
               <!-- ANULADO -->
               <div class="numero-mesa d-flex" *ngIf="v.venta.estado_documento==2">
@@ -85,7 +86,7 @@
           <div class="card-body p-0" style="overflow: auto;">
             <ng-container *ngFor="let detalle of v.detalle_venta; let i = index">
               <!-- Contenedor flex para organizar el producto y complementos en fila -->
-              <div style="border-bottom: 2px solid #636363; padding:4px 10px;">
+              <div style="border-bottom: 2px solid #636363; padding:4px 10px;" [ngStyle]="{'background':detalle.cocina == false ? '#dadada' : '#f4f4f4'}">
                 <!-- Contenedor flex para producto y complementos -->
                 <div class="container-producto-complemento align-items-start">
                   <!-- Producto Nombre -->
@@ -94,7 +95,7 @@
                     <span *ngIf="detalle.item_llevar" style="color: #f38508;"> (P/LL)</span>
                   </p>
                   <!-- CONTENEDOR DE BOTONES(+) Y (-) PROCESO Y FINALIZADO -->
-                  <div class="botones-detalle-venta row m-0 mb-2">
+                  <div class="botones-detalle-venta row m-0 mb-2" *ngIf="this.vista_ventas != 0">
                     <div class="col-6 p-0 btn-proceso d-flex">
                         <!-- BOTONES + Y - -->
                         <button class="cantidad btn me-2" (click)="MODIFICAR_DETALLE_VENTA(detalle,'-proceso')">-</button>
@@ -153,7 +154,7 @@
       
           <!--************** FOOTER CARD VENTA **************-->
           <div class="card-footer d-flex justify-content-between p-0">
-              <div class="finalizar d-flex">
+              <div class="finalizar d-flex" *ngIf="this.vista_ventas != 0">
                 <button class="btn btn-warning" [ngStyle]="{'background-color': todosItemsFinalizados(v) ? '#828b94' : '#ffc107'}" *ngIf="v.venta.estado == 0 || v.venta.estado == 1" (click)="ponerTodosEnProceso(v, i)">En Proceso</button>
                 <button class="btn btn-secondary" *ngIf="v.venta.estado == 0 || v.venta.estado == 1" (click)="showModal_Finalizar(v,i)">Finalizar</button>
                 <button class="btn btn-secondary" *ngIf="v.venta.estado == 2" (click)="MODIFICAR_SOLO_DATOS_VENTA(v, 3, i)">Nuevo -></button>
