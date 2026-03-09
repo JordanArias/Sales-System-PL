@@ -9,7 +9,7 @@ const pool = new Pool({
     host: 'localhost',
     port: '5432',
     password: '1234567',
-    database: 'sistema_version_bs1'
+    database: 'venta_smart_pos'
 });
 
 

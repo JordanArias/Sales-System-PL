@@ -1,7 +1,17 @@
+// export const configuration = {
+//     // url: `http://${window.location.hostname}:3000/api`
+//       // url: `http://${location.hostname}:3000/api`
+//     url: 'http://192.168.1.17:3000/api' //Villa
+//   };
+
+
+
+
+
+
+// Angular configuration
 export const configuration = {
-   // url: 'http://192.168.1.100:3000/api'  //Tja
-    url: 'http://192.168.3.125:3000/api' //Villa
-    // url: 'http://localhost:3000/api'
-    //url: 'http://jordanariasmarca.com:3000/api'
-    //url: 'http:// 192.168.0.125:3000/api', 
-  };
+  url: navigator.userAgent.toLowerCase().includes('electron')
+    ? 'http://localhost:3000/api'
+    : 'http://192.168.3.125:3000/api' // otros dispositivos
+};

@@ -22,18 +22,36 @@ const http = require('http'); // Importa el módulo http para crear el servidor
 const app = express();
 
 // Crear un servidor HTTP
+// Crear servidor HTTP
 const server = http.createServer(app);
+
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, '0.0.0.0', () => {
+  console.log(`Servidor escuchando en:${PORT}`);
+});
 // Configura CORS para Express
 app.use(cors({
-    origin: ["http://localhost:4200", "http://192.168.3.125:4200", "file://"],
-    //origin: ["http://localhost:4200", "http://192.168.1.100:4200", "file://"],
+    // origin: [
+    //   "http://localhost:4200",
+    //   "http://192.168.3.125:4200",
+    //   "http://localhost:4201",
+    //   "http://192.168.3.125:4201",
+    //   "file://"
+    // ],
+    origin: true,
     methods: ['GET', 'POST','PUT','DELETE'],
     credentials: true
   }));
 const io = socketIo(server, {
   cors: {
-    origin: ["http://localhost:4200", "http://192.168.3.125:4200", "file://"],
-   // origin: ["http://localhost:4200", "http://192.168.1.100:4200", "file://"],
+    // origin: [
+    //   "http://localhost:4200",
+    //   "http://192.168.3.125:4200",
+    //   "http://localhost:4201",
+    //   "http://192.168.3.125:4201",
+    //   "file://"
+    // ],
+    origin: true,
     methods: ["GET", "POST","PUT", "DELETE"],
     allowedHeaders: ["my-custom-header"],
     credentials: true
@@ -55,10 +73,6 @@ const io = socketIo(server, {
     });
   });
   
-  const PORT = process.env.PORT || 3000;
-  server.listen(PORT, '0.0.0.0', () => {
-    console.log(`Servidor escuchando en http://192.168.3.125:${PORT}`);
-  });
  
   
 app.set('pkg', pkg);

@@ -30,7 +30,7 @@ const isDev = process.argv.includes('--dev');
 // Función para iniciar el backend
 function startBackend() {
   const backendPath = path.join(__dirname, '..', 'Backend_Pio_Lindo');
-  
+
   // En desarrollo, usar src/app.js directamente (ya inicia el servidor)
   // En producción, usar build/app.js
   let backendFile;
@@ -46,36 +46,18 @@ function startBackend() {
     }
   }
 
-  // Iniciar el servidor backend
-  backendProcess = spawn('node', [backendFile], {
-    cwd: backendPath,
-    env: {
-      ...process.env,
-      PORT: BACKEND_PORT.toString(),
-      NODE_ENV: isDev ? 'development' : 'production'
-    },
-    stdio: ['ignore', 'pipe', 'pipe']
-  });
+  // En la app empaquetada ejecutamos el backend en el mismo proceso de Electron.
+  // Ajustamos variables de entorno y requerimos el archivo.
+  process.env.PORT = BACKEND_PORT.toString();
+  process.env.NODE_ENV = isDev ? 'development' : 'production';
 
-  backendProcess.stdout.on('data', (data) => {
-    console.log(`Backend: ${data}`);
-  });
-
-  backendProcess.stderr.on('data', (data) => {
-    console.error(`Backend Error: ${data}`);
-  });
-
-  backendProcess.on('error', (error) => {
+  try {
+    require(backendFile);
+    console.log('Backend iniciado dentro del proceso principal.');
+  } catch (error) {
     console.error('Error al iniciar backend:', error);
     app.quit();
-  });
-
-  backendProcess.on('exit', (code) => {
-    console.log(`Backend terminó con código ${code}`);
-    if (code !== 0 && code !== null) {
-      app.quit();
-    }
-  });
+  }
 }
 
 // Función para esperar a que el backend esté listo
@@ -135,10 +117,16 @@ function startFrontendServer() {
       }
     });
 
-    frontendServer = frontendApp.listen(FRONTEND_PORT, () => {
-      console.log(`Frontend servidor iniciado en http://localhost:${FRONTEND_PORT}`);
+    // frontendServer = frontendApp.listen(FRONTEND_PORT, () => {
+    //   console.log(`Frontend servidor iniciado en http://localhost:${FRONTEND_PORT}`);
+    //   resolve();
+    // });
+  
+    frontendServer = frontendApp.listen(FRONTEND_PORT, '0.0.0.0', () => {
+      console.log(`Frontend servidor iniciado en ip:${FRONTEND_PORT}`);
       resolve();
     });
+    
 
     frontendServer.on('error', (error) => {
       if (error.code === 'EADDRINUSE') {
@@ -176,12 +164,19 @@ function createWindow() {
     show: false // No mostrar hasta que esté listo
   });
 
+
+  const FRONTEND_IP = '192.168.3.125'; // IP estática de tu PC
   // Cargar el frontend
   if (isDev) {
     // En modo desarrollo, usar el servidor de desarrollo de Angular
     // Esperar un poco para que Angular esté listo
     setTimeout(() => {
-      mainWindow.loadURL('http://localhost:4200');
+      // mainWindow.loadURL(`http://${require('os').hostname()}:4200`);
+      // Para Electron usar localhost en vez de IP
+      const loadUrl = isDev
+      ? (isElectron ? 'http://localhost:4200' : `http://${FRONTEND_IP}:4200`)
+      : `http://localhost:${FRONTEND_PORT}`;
+       mainWindow.loadURL(loadUrl);
     }, 2000);
   } else {
     // En producción, cargar desde el servidor local

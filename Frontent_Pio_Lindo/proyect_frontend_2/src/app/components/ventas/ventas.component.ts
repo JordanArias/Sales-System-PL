@@ -1182,6 +1182,10 @@ ELIMINAR_VENTA(venta:any){
       }else{
         this.mostrarToast('Venta eliminada','verde');
       }
+      
+      // ENVIAR SOCKET
+      this.socketService.sendEvent(res);
+
       $("#modalEliminarVenta").modal('hide');
       this.cambiar_Pantalla();
     },
