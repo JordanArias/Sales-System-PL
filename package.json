@@ -1,7 +1,7 @@
 {
-  "name": "pio-lindo-desktop",
+  "name": "venta-smart-desktop",
   "version": "1.0.0",
-  "description": "Sistema Pio Lindo - Aplicación de Escritorio",
+  "description": "Sistema Venta Smart Pos - Aplicación de Escritorio",
   "main": "electron/main.js",
   "author": "Fabrizio Arias Marca",
   "license": "MIT",

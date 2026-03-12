@@ -109,6 +109,11 @@ agregar_Producto_Unico(){
   }
 
   //LOG
+  if (this.producto.cod_subcategoria === 0) {
+    console.log('Subcategoria == 0');
+    
+    this.producto.cod_subcategoria = null;
+  }
   console.log('Producto a Agregar',this.producto);
   console.log('Producto Insumo:: ',this.producto_insumo);
   //Guardamos ambos datos
@@ -185,7 +190,11 @@ modificar_Producto_Unico(){
     this.producto_insumo[0].cod_producto = this.producto.cod_producto;
     this.producto_insumo[0].cod_insumo = this.insumo_Seleccionado.cod_insumo;
   }
-
+  if (this.producto.cod_subcategoria === 0) {
+    console.log('Subcategoria == 0');
+    
+    this.producto.cod_subcategoria = null;
+  }
   console.log('Producto a Modificar',this.producto);
   console.log('Producto Insumo a Modificar:: ',this.producto_insumo);
   //Guardamos ambos datos

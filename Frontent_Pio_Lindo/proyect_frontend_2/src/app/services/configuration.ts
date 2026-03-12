@@ -13,5 +13,5 @@
 export const configuration = {
   url: navigator.userAgent.toLowerCase().includes('electron')
     ? 'http://localhost:3000/api'
-    : 'http://192.168.3.125:3000/api' // otros dispositivos
+    : 'http://192.168.1.12:3000/api' // otros dispositivos
 };

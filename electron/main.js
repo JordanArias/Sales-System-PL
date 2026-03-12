@@ -165,7 +165,7 @@ function createWindow() {
   });
 
 
-  const FRONTEND_IP = '192.168.3.125'; // IP estática de tu PC
+  const FRONTEND_IP = '192.168.1.12'; // IP estática de tu PC
   // Cargar el frontend
   if (isDev) {
     // En modo desarrollo, usar el servidor de desarrollo de Angular

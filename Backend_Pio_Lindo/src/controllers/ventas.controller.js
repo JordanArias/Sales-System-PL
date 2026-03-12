@@ -578,9 +578,17 @@ const actualizar_MovimientoInsumo = async (client, venta, detalles) => {
 
     //:::: PASO 4 :::: AGREGAMOS NUEVAMENTE LOS NUEVOS LOTES
     console.log('\x1b[36m%s\x1b[0m', ':::: PASO 4 :::: AGREGAMOS NUEVAMENTE LOS NUEVOS LOTES');
-    const listaInsumos = await obtenerInsumosVenta(client, detalles); console.log('listaInsumos: ', listaInsumos);
-    
-    console.log('lista_lotes_anteriores[0].cod_mov: ', lista_lotes_anteriores[0].cod_mov);
+    const listaInsumos = await obtenerInsumosVenta(client, detalles);
+    console.log('listaInsumos: ', listaInsumos);
+
+    // Si no hay insumos o no hay lotes anteriores, no hay nada que rehacer.
+    if (!listaInsumos || listaInsumos.length === 0 || !lista_lotes_anteriores || lista_lotes_anteriores.length === 0) {
+        console.log('No hay insumos o lotes anteriores para actualizar, se omite recrear salidas de insumo.');
+        console.log('\x1b[36m%s\x1b[0m', '********************************* FIN ACTUALIZAR MOVIMIENTO INSUMO *********************************');
+        console.log('\x1b[36m%s\x1b[0m', '****************************************************************************************************');
+        return;
+    }
+
     await crear_Salida_de_Detalles(client, listaInsumos, lista_lotes_anteriores[0].cod_mov);
 
     console.log('\x1b[36m%s\x1b[0m', '********************************* FIN ACTUALIZAR MOVIMIENTO INSUMO *********************************');
